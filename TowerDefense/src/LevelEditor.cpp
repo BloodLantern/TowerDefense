@@ -3,8 +3,8 @@
 #include <imgui.h>
 
 #include "Globals.h"
-#include "imgui_utils.hpp"
 #include "AStar.h"
+#include "Gui.h"
 
 int32_t LevelEditor::m_currentBlockType;
 bool LevelEditor::m_dragEnabled;
@@ -25,6 +25,8 @@ std::vector<SquareType> LevelEditor::m_selectionCopyData;
 
 PlayField* LevelEditor::m_playField;
 
+Texture LevelEditor::m_tileset;
+
 static const char* const sBlockTypes[] = {
 	"Empty",
 	"Nothing",
@@ -38,14 +40,14 @@ void LevelEditor::bindPlayField(PlayField* field)
 	m_playField = field;
 }
 
-void LevelEditor::loadTileset()
+void LevelEditor::loadTileset(const char* name)
 {
-	ImGuiUtils::LoadTexture("assets/tilesets/forest.png");
+	m_tileset = ImGuiUtils::LoadTexture(std::string("assets/tilesets/").append(name).c_str());
 }
 
 void LevelEditor::update()
 {
-	if (ImGui::Begin("Level editor"))
+	if (ImGui::Begin("Level editor", &Gui::m_openedWindows[GUI_WINDOW_ID_LEVEL_EDITOR]))
 	{
 		LevelEditor::handleMisc();
 
@@ -56,8 +58,10 @@ void LevelEditor::update()
 
 		LevelEditor::verticalSpace();
 		LevelEditor::handleCursor();
-
 		LevelEditor::handleSelection();
+
+		LevelEditor::handleTileset();
+
 		LevelEditor::handleHotkeys();
 	}
 
@@ -80,6 +84,7 @@ void LevelEditor::handleMisc()
 	ImGui::Checkbox("Enable dragging", &LevelEditor::m_dragEnabled);
 	ImGui::Checkbox("Update A* live", &LevelEditor::m_updateAStar);
 }
+
 
 void LevelEditor::handleClear()
 {
@@ -242,6 +247,30 @@ void LevelEditor::handleSelection()
 	ImGui::Text("\tStart: (%d ; %d)", m_selectionStartX, m_selectionStartY);
 	ImGui::Text("\tEnd:   (%d ; %d)", m_selectionEndX, m_selectionEndY);
 	ImGui::Text("\tSize:  (%d ; %d)", m_selectionWidth, m_selectionHeight);
+}
+
+void LevelEditor::handleTileset()
+{
+	if (ImGui::Begin("Tileset", nullptr, ImGuiWindowFlags_NoDecoration))
+	{
+		ImGui::SetScrollY(GRID_SQUARE_SIZE * (int)(ImGui::GetScrollY() / GRID_SQUARE_SIZE));
+		ImVec2 mousePos = Globals::gIO->MousePos;
+		ImVec2 winPos = ImGui::GetWindowPos();
+		ImDrawList* dl = ImGui::GetForegroundDrawList();
+		uint32_t tileX = (mousePos.x - 8 - winPos.x) / GRID_SQUARE_SIZE;
+		uint32_t tileY = (mousePos.y - 8 - winPos.y) / GRID_SQUARE_SIZE;
+
+		tileX = (tileX * GRID_SQUARE_SIZE) + winPos.x + 8;
+		tileY = (tileY * GRID_SQUARE_SIZE) + winPos.y + 8;
+
+		printf("%d ; %d\n", tileX, tileY);
+		printf("%d ; %d\n", tileX / GRID_SQUARE_SIZE, tileY / GRID_SQUARE_SIZE);
+
+		ImGui::Image(LevelEditor::m_tileset.id, ImVec2(LevelEditor::m_tileset.width, LevelEditor::m_tileset.height));
+		dl->AddRect(ImVec2(tileX, tileY), ImVec2(tileX + GRID_SQUARE_SIZE, tileY + GRID_SQUARE_SIZE), IM_COL32(0xFF, 0, 0, 0xFF));
+	}
+
+	ImGui::End();
 }
 
 void LevelEditor::handleHotkeys()

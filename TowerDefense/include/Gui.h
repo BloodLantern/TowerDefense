@@ -10,11 +10,12 @@ enum GuiWindowsid
 class Gui
 {
 private:
-	static bool m_openedWindows[GUI_WINDOW_ID_COUNT];
 
 	static void handleMenuBar();
 
 public:
+	static bool m_openedWindows[GUI_WINDOW_ID_COUNT];
+
 	static void createWindow(enum GuiWindowsid id);
 	static void update();
 };
