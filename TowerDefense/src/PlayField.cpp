@@ -10,21 +10,6 @@ PlayField::PlayField()
 	: maxR(true), r(0)
 {
 	AStar::bindField(this);
-	/*FILE* f;
-	fopen_s(&f, "TestField.bin", "rb");
-	if (!f)
-	{
-		std::cout << "Failed to open file" << std::endl;
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
-			for (int32_t y = 0; y < GRID_HEIGHT; y++)
-				m_grid[y][x] = SQUARE_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
-	}
-	else
-	{
-		fread_s(m_grid, sizeof(m_grid), sizeof(SquareType), GRID_HEIGHT * GRID_WIDTH, f);
-
-		fclose(f);
-	}*/
 	
 	if (!RLE::decompress(m_grid, MAPS_PATH "Default.bin"))
 	{
@@ -147,10 +132,10 @@ SquareType PlayField::getGridTile(uint8_t x, uint8_t y)
 	return m_grid[y][x];
 }
 
-void PlayField::getGridPositionFromCoords(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY)
+void PlayField::getGridPositionFromCoords(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
 {
-	uint8_t x = (screenX - Globals::gWindowX) / GRID_SQUARE_SIZE;
-	uint8_t y = (screenY - Globals::gWindowY) / GRID_SQUARE_SIZE;
+	uint8_t x = (mouseX - Globals::gWindowX) / GRID_SQUARE_SIZE;
+	uint8_t y = (mouseY - Globals::gWindowY) / GRID_SQUARE_SIZE;
 
 	if (x >= GRID_WIDTH)
 		tileX = UCHAR_MAX;

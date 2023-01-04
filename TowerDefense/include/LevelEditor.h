@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "PlayField.h"
+#include "imgui_utils.hpp"
 
 class LevelEditor
 {
@@ -26,20 +27,26 @@ private:
 	
 	static PlayField* m_playField;
 
-	static void verticalSpace();
+	static Texture m_tileset;
 
-	static void loadTileset();
+
+	static void verticalSpace();
 
 	static void handleMisc();
 	static void handleClear();
 	static void handleFile();
 	static void handleCursor();
 
+	static void handleTileset();
+
 	static void handleSelection();
 	static void handleHotkeys();
 
+
 public:
+	static void loadTileset(const char* name);
 	static void bindPlayField(PlayField* field);
+	
 	static void update();
 };
 

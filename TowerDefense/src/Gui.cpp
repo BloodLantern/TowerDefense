@@ -16,7 +16,10 @@ void Gui::handleMenuBar()
 	if (ImGui::BeginMenu("Editors"))
 	{
 		if (ImGui::MenuItem("Level editor"))
+		{
 			Gui::createWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
+			LevelEditor::loadTileset("forest.png");
+		}
 		ImGui::EndMenu();
 	}
 
