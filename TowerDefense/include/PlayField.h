@@ -1,7 +1,8 @@
 #pragma once
 
-#include <stdint.h>
 #include "Entity.h"
+#include "TowerBarUI.h"
+#include <stdint.h>
 
 #define GRID_WIDTH 50
 #define GRID_HEIGHT 25
@@ -27,7 +28,7 @@ private:
 
 	bool maxR;
 	size_t r;
-	Entity e;
+	TowerBarUI towerBarUI;
 
 public:
 	PlayField();

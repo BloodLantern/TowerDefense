@@ -39,6 +39,6 @@ void Entity::setPixelPosition(Point2 newPixelPosition)
 void Entity::setTilePosition(Point2 newTilePosition)
 {
 	m_tilePosition = newTilePosition;
-
+	
 	m_pixelPosition = newTilePosition * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f;
 }

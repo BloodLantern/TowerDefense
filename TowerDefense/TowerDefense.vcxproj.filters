@@ -87,6 +87,12 @@
     <ClCompile Include="src\entities\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TowerBarUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestTower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\maths\Point2.h">
@@ -120,6 +126,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\entities\Tower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TowerBarUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestTower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,8 @@
 
 #include <chrono>
 
+#define WINDOW_TITLE "Fourmi Defense"
+
 int main(int argc, char** argv)
 {
 	std::srand((uint32_t)std::chrono::system_clock::now().time_since_epoch().count());
@@ -32,8 +34,24 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1350, 720, "Fourmi Defense", NULL, NULL);
+	GLFWwindow* window;
+	if (Globals::fullscreen)
+	{
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+		glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+		window = glfwCreateWindow(mode->width, mode->height, WINDOW_TITLE, monitor, NULL);
+	}
+	else
+	{
+		window = glfwCreateWindow(Globals::gWindowWidth, Globals::gWindowWidth,
+			WINDOW_TITLE, NULL, NULL);
+	}
 	if (window == NULL)
 		return 1;
 
@@ -67,7 +85,7 @@ int main(int argc, char** argv)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		Globals::UpdateGlobals();
+		Globals::updateGlobals();
 		pf.draw();
 		LevelEditor::update();
 

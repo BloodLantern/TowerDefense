@@ -7,7 +7,7 @@
 #include <iostream>
 
 PlayField::PlayField()
-	: maxR(true), r(0), e(Entity(GRID_WIDTH - 1, GRID_HEIGHT - 1))
+	: maxR(true), r(0)
 {
 	AStar::bindField(this);
 	/*FILE* f;
@@ -88,6 +88,9 @@ void PlayField::draw()
 		Globals::gDrawList->AddLine(ImVec2(Globals::gWindowX + (x + 1) * GRID_SQUARE_SIZE - 1.f, (float_t)Globals::gWindowY),
 			ImVec2(Globals::gWindowX + (x + 1) * GRID_SQUARE_SIZE - 1.f, (float_t)Globals::gWindowY + GRID_HEIGHT * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
 
+	towerBarUI.draw();
+
+
 	if (ImGui::Begin("A*"))
 	{
 		if (ImGui::Button("Test"))
@@ -111,7 +114,6 @@ void PlayField::draw()
 			}
 		}
 	}
-	e.draw();
 	ImGui::End();
 }
 

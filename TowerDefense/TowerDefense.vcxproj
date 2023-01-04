@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;include;include\entities;externals\include\maths;$(ProjectDir);$(ProjectDir)ImGui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4098</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +153,8 @@
     <ClCompile Include="src\Globals.cpp" />
     <ClCompile Include="src\RLE.cpp" />
     <ClCompile Include="src\entities\Tower.cpp" />
+    <ClCompile Include="src\TowerBarUI.cpp" />
+    <ClCompile Include="TestTower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AStar.h" />
@@ -165,6 +168,8 @@
     <ClInclude Include="include\Globals.h" />
     <ClInclude Include="include\RLE.h" />
     <ClInclude Include="include\entities\Projectile.h" />
+    <ClInclude Include="include\TowerBarUI.h" />
+    <ClInclude Include="TestTower.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

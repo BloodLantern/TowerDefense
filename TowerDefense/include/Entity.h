@@ -5,12 +5,6 @@
 
 class Entity
 {
-private:
-	Point2 m_pixelPosition;
-	Point2 m_tilePosition;
-	float_t m_scale;
-	float_t m_rotation;
-
 public:
 	Entity();
 	Entity(Point2 pixelPosition);
@@ -18,7 +12,7 @@ public:
 	Entity(int32_t tilePositionX, int32_t tilePositionY);
 	~Entity() {};
 
-	virtual void draw();
+	virtual void draw() = 0;
 
 	Point2 getPixelPosition() { return m_pixelPosition; };
 	void setPixelPosition(Point2 newPixelPosition);
@@ -33,5 +27,11 @@ public:
 	float_t getRotation() { return m_rotation; };
 	void setRotation(float_t newRotation) { m_rotation = newRotation; };
 	void addRotation(float_t rotation) { m_rotation += rotation; };
+
+private:
+	Point2 m_pixelPosition;
+	Point2 m_tilePosition;
+	float_t m_scale = 1;
+	float_t m_rotation = 0;
 };
 

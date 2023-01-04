@@ -7,6 +7,8 @@
 
 class Enemy : public Entity
 {
+public:
+
 private:
 	Vector2 m_velocity;
 	uint32_t m_health;

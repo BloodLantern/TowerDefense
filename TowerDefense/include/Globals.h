@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Vector2.h>
 #include <imgui.h>
 #include <stdint.h>
 
@@ -11,8 +12,10 @@ public:
 
 	static int32_t gWindowX;
 	static int32_t gWindowY;
+	static int32_t gWindowWidth;
+	static int32_t gWindowHeight;
 
-	static void UpdateGlobals();
+	static bool fullscreen;
 
-	
+	static void updateGlobals();
 };
