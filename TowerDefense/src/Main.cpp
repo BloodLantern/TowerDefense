@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "PlayField.h"
 #include "LevelEditor.h"
+#include "Gui.h"
 
 #include <chrono>
 
@@ -87,7 +88,7 @@ int main(int argc, char** argv)
 
 		Globals::updateGlobals();
 		pf.draw();
-		LevelEditor::update();
+		Gui::update();
 
 		// Rendering
 		ImGui::Render();

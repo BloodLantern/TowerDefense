@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include "Globals.h"
+#include "imgui_utils.hpp"
 #include "AStar.h"
 
 int32_t LevelEditor::m_currentBlockType;
@@ -35,6 +36,11 @@ static const char* const sBlockTypes[] = {
 void LevelEditor::bindPlayField(PlayField* field)
 {
 	m_playField = field;
+}
+
+void LevelEditor::loadTileset()
+{
+	ImGuiUtils::LoadTexture("assets/tilesets/forest.png");
 }
 
 void LevelEditor::update()

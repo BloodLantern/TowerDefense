@@ -28,6 +28,8 @@ private:
 
 	static void verticalSpace();
 
+	static void loadTileset();
+
 	static void handleMisc();
 	static void handleClear();
 	static void handleFile();
