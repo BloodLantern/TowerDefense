@@ -24,7 +24,8 @@ enum SquareType : uint8_t
 class PlayField
 {
 private:
-	SquareType m_grid[GRID_HEIGHT][GRID_WIDTH];
+	SquareType m_collisionGrid[GRID_HEIGHT][GRID_WIDTH];
+	uint8_t m_tilemap[GRID_HEIGHT][GRID_WIDTH];
 
 	bool maxR;
 	size_t r;

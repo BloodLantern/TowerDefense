@@ -134,6 +134,9 @@ void LevelEditor::handleFile()
 
 void LevelEditor::handleCursor()
 {
+	if (Globals::gIO->WantCaptureMouse)
+		return;
+
 	ImVec2 mouse = Globals::gIO->MousePos;
 	uint8_t tileX;
 	uint8_t tileY;

@@ -14,6 +14,8 @@
 #include <chrono>
 
 #define WINDOW_TITLE "Fourmi Defense"
+#define WINDOW_WIDTH 1350
+#define WINDOW_HEIGHT 700
 
 int main(int argc, char** argv)
 {
@@ -50,8 +52,7 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		window = glfwCreateWindow(Globals::gWindowWidth, Globals::gWindowWidth,
-			WINDOW_TITLE, NULL, NULL);
+		window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
 	}
 	if (window == NULL)
 		return 1;
@@ -80,6 +81,7 @@ int main(int argc, char** argv)
 		glfwPollEvents();
 
 		glfwGetWindowPos(window, &Globals::gWindowX, &Globals::gWindowY);
+		glfwGetWindowSize(window, &Globals::gWindowWidth, &Globals::gWindowHeight);
 
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
