@@ -254,20 +254,23 @@ void LevelEditor::handleTileset()
 	if (ImGui::Begin("Tileset", nullptr, ImGuiWindowFlags_NoDecoration))
 	{
 		ImGui::SetScrollY(GRID_SQUARE_SIZE * (int)(ImGui::GetScrollY() / GRID_SQUARE_SIZE));
-		ImVec2 mousePos = Globals::gIO->MousePos;
-		ImVec2 winPos = ImGui::GetWindowPos();
-		ImDrawList* dl = ImGui::GetForegroundDrawList();
-		uint32_t tileX = (mousePos.x - 8 - winPos.x) / GRID_SQUARE_SIZE;
-		uint32_t tileY = (mousePos.y - 8 - winPos.y) / GRID_SQUARE_SIZE;
-
-		tileX = (tileX * GRID_SQUARE_SIZE) + winPos.x + 8;
-		tileY = (tileY * GRID_SQUARE_SIZE) + winPos.y + 8;
-
-		printf("%d ; %d\n", tileX, tileY);
-		printf("%d ; %d\n", tileX / GRID_SQUARE_SIZE, tileY / GRID_SQUARE_SIZE);
 
 		ImGui::Image(LevelEditor::m_tileset.id, ImVec2(LevelEditor::m_tileset.width, LevelEditor::m_tileset.height));
-		dl->AddRect(ImVec2(tileX, tileY), ImVec2(tileX + GRID_SQUARE_SIZE, tileY + GRID_SQUARE_SIZE), IM_COL32(0xFF, 0, 0, 0xFF));
+		
+		ImVec2 mousePos = Globals::gIO->MousePos;
+		ImVec2 winPos = ImGui::GetWindowPos();
+		ImVec2 winSize = ImGui::GetWindowSize();
+		if (mousePos.x > winPos.x && mousePos.x < winPos.x + winSize.x && mousePos.y > winPos.y && mousePos.y < winPos.y + winSize.y)
+		{
+			ImDrawList* dl = ImGui::GetForegroundDrawList();
+			uint32_t tileX = (mousePos.x - 8 - winPos.x) / GRID_SQUARE_SIZE;
+			uint32_t tileY = (mousePos.y - 8 - winPos.y) / GRID_SQUARE_SIZE;
+
+			tileX = (tileX * GRID_SQUARE_SIZE) + winPos.x + 8;
+			tileY = (tileY * GRID_SQUARE_SIZE) + winPos.y + 8;
+
+			dl->AddRect(ImVec2(tileX, tileY), ImVec2(tileX + GRID_SQUARE_SIZE, tileY + GRID_SQUARE_SIZE), IM_COL32(0xFF, 0, 0, 0xFF));
+		}
 	}
 
 	ImGui::End();
