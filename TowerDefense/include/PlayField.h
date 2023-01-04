@@ -4,9 +4,9 @@
 #include "TowerBarUI.h"
 #include <stdint.h>
 
-#define GRID_WIDTH 50
-#define GRID_HEIGHT 25
-#define GRID_SQUARE_SIZE 26
+#define GRID_WIDTH 42
+#define GRID_HEIGHT 18
+#define GRID_SQUARE_SIZE 32
 
 #define GRID_LINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 
