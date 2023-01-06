@@ -151,11 +151,11 @@ void LevelEditor::handleCursor()
 	uint8_t tileX;
 	uint8_t tileY;
 
-	m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+	PlayField::getGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
 	if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
 	{
-		ImVec2 pMin((float_t)Globals::gWindowX + tileX * GRID_SQUARE_SIZE, (float_t)Globals::gWindowY + tileY * GRID_SQUARE_SIZE);
-		ImVec2 pMax((float_t)Globals::gWindowX + (tileX + 1) * GRID_SQUARE_SIZE, (float_t)Globals::gWindowY + (tileY + 1) * GRID_SQUARE_SIZE);
+		ImVec2 pMin((float_t)Globals::gGridX + tileX * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + tileY * GRID_SQUARE_SIZE);
+		ImVec2 pMax((float_t)Globals::gGridX + (tileX + 1) * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + (tileY + 1) * GRID_SQUARE_SIZE);
 
 		Globals::gDrawList->AddRectFilled(pMin, pMax, IM_COL32(0xFF, 0, 0, 0x50));
 		ImGui::Text("Cursor position : (%d ; %d)", tileX, tileY);
@@ -185,7 +185,7 @@ void LevelEditor::handleSelection()
 	// Update selection positions
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 	{
-		m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, m_selectionStartX, m_selectionStartY);
+		PlayField::getGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, m_selectionStartX, m_selectionStartY);
 		if (m_selectionStartX == UCHAR_MAX || m_selectionStartY == UCHAR_MAX)
 			return;
 	}
@@ -195,7 +195,7 @@ void LevelEditor::handleSelection()
 		uint8_t prevEndX = m_selectionEndX;
 		uint8_t prevEndY = m_selectionEndY;
 
-		m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, m_selectionEndX, m_selectionEndY);
+		PlayField::getGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, m_selectionEndX, m_selectionEndY);
 		if (m_selectionEndX == UCHAR_MAX)
 			m_selectionEndX = prevEndX;
 		if (m_selectionEndY == UCHAR_MAX)
@@ -245,10 +245,10 @@ void LevelEditor::handleSelection()
 
 
 	// Draw outline
-	ImVec2 start((float_t)Globals::gWindowX + m_selectionStartX * GRID_SQUARE_SIZE,
-		(float_t)Globals::gWindowY + m_selectionStartY * GRID_SQUARE_SIZE);
-	ImVec2 end(Globals::gWindowX + m_selectionEndX * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f,
-		Globals::gWindowY + m_selectionEndY * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f);
+	ImVec2 start((float_t)Globals::gGridX + m_selectionStartX * GRID_SQUARE_SIZE,
+		(float_t)Globals::gGridY + m_selectionStartY * GRID_SQUARE_SIZE);
+	ImVec2 end(Globals::gGridX + m_selectionEndX * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f,
+		Globals::gGridY + m_selectionEndY * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f);
 
 	Globals::gDrawList->AddRect(start, end, IM_COL32(0x80, 0x80, 0xB0, 0xC0), 0, 0, 4);
 
@@ -303,10 +303,10 @@ void LevelEditor::handleHotkeys()
 			uint8_t tileY;
 			ImVec2 mouse = Globals::gIO->MousePos;
 
-			LevelEditor::m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+			PlayField::getGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
 
 			if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
-				LevelEditor::m_currentBlockType = LevelEditor::m_playField->getClipdataTile(tileX, tileY);
+				LevelEditor::m_currentBlockType = m_playField->getClipdataTile(tileX, tileY);
 			return;
 		}
 
@@ -315,8 +315,8 @@ void LevelEditor::handleHotkeys()
 			uint8_t tileX;
 			uint8_t tileY;
 			ImVec2 mouse = Globals::gIO->MousePos;
-			
-			m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+
+			PlayField::getGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
 
 			if (tileX == UCHAR_MAX || tileY == UCHAR_MAX)
 				return;

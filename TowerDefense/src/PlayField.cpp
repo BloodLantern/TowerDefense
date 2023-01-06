@@ -70,14 +70,14 @@ void PlayField::drawClipdata()
 					color = IM_COL32(0x50, 0x50, 0x50, 0x50);
 			}
 
-			ImVec2 pMin((float_t)Globals::gWindowX + x * GRID_SQUARE_SIZE, (float_t)Globals::gWindowY + y * GRID_SQUARE_SIZE);
-			ImVec2 pMax(Globals::gWindowX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gWindowY + (y + 1.f) * GRID_SQUARE_SIZE);
+			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
+			ImVec2 pMax(Globals::gGridX + (x + GRID_SQUARE_LINE_SIZE) * GRID_SQUARE_SIZE, Globals::gGridY + (y + GRID_SQUARE_LINE_SIZE) * GRID_SQUARE_SIZE);
 
 			Globals::gDrawList->AddRectFilled(pMin, pMax, color);
 		}
 
-		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gWindowX, Globals::gWindowY + (y + 1) * GRID_SQUARE_SIZE - 1.f),
-			ImVec2((float_t)Globals::gWindowX + GRID_WIDTH * GRID_SQUARE_SIZE, Globals::gWindowY + (y + 1) * GRID_SQUARE_SIZE - 1.f), GRID_LINE_COLOR);
+		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
+			ImVec2((float_t)Globals::gGridX + GRID_WIDTH * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
 	}
 }
 
@@ -128,8 +128,8 @@ void PlayField::draw()
 	//drawClipdata();
 
 	for (int32_t x = 0; x < GRID_WIDTH; x++)
-		Globals::gDrawList->AddLine(ImVec2(Globals::gWindowX + (x + 1) * GRID_SQUARE_SIZE - 1.f, (float_t)Globals::gWindowY),
-			ImVec2(Globals::gWindowX + (x + 1) * GRID_SQUARE_SIZE - 1.f, (float_t)Globals::gWindowY + GRID_HEIGHT * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+		Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
+			ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + GRID_HEIGHT * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
 
 	towerBarUI.draw();
 
@@ -150,8 +150,8 @@ void PlayField::draw()
 
 			for (int32_t i = 0; i < std::min((int32_t)AStar::recordPositions.size(), (int32_t)r); i++)
 			{
-				ImVec2 pos(Globals::gWindowX + AStar::recordPositions[i].x,
-					Globals::gWindowY + AStar::recordPositions[i].y);
+				ImVec2 pos(Globals::gGridX + AStar::recordPositions[i].x,
+					Globals::gGridY + AStar::recordPositions[i].y);
 
 				Globals::gDrawList->AddCircleFilled(pos, GRID_SQUARE_SIZE / 2, IM_COL32(0x0, 0x0, 0xFF, 0xA0));
 			}
@@ -212,10 +212,10 @@ void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value
 	}
 }
 
-void PlayField::getGridPositionFromCoords(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
+void PlayField::getGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
 {
-	uint8_t x = (mouseX - Globals::gWindowX) / GRID_SQUARE_SIZE;
-	uint8_t y = (mouseY - Globals::gWindowY) / GRID_SQUARE_SIZE;
+	uint8_t x = (mouseX - Globals::gGridX) / GRID_SQUARE_SIZE;
+	uint8_t y = (mouseY - Globals::gGridY) / GRID_SQUARE_SIZE;
 
 	if (x >= GRID_WIDTH)
 		tileX = UCHAR_MAX;
@@ -226,4 +226,10 @@ void PlayField::getGridPositionFromCoords(int32_t mouseX, int32_t mouseY, uint8_
 		tileY = UCHAR_MAX;
 	else
 		tileY = y;
+}
+
+void PlayField::getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY)
+{
+	screenX = tileX * GRID_SQUARE_SIZE;
+	screenY = tileY * GRID_SQUARE_SIZE;
 }

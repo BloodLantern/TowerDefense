@@ -15,6 +15,9 @@ public:
 	static int32_t gWindowWidth;
 	static int32_t gWindowHeight;
 
+	static int32_t gGridX;
+	static int32_t gGridY;
+
 	static bool fullscreen;
 
 	static void updateGlobals();

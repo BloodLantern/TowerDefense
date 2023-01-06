@@ -20,6 +20,13 @@ private:
 	Projectile& m_projectileTemplate;
 	Enemy* m_target;
 
+	uint8_t m_width;
+	uint8_t m_height;
+
 	uint8_t m_genericUpgradeLevel;
 	uint8_t m_customUpgradeLevel;
+
+	uint32_t m_damageDealt;
+	uint32_t m_killCount;
+	uint32_t m_moneyGenerated;
 };

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <Vector2.h>
 
-#define PROJECTILE_DEFAULT_POSITION Point2(-150, -150)
+#define PROJECTILE_DEFAULT_POSITION Point2(NAN, NAN)
 
 class Projectile : public Entity
 {

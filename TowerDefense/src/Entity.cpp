@@ -33,12 +33,16 @@ void Entity::setPixelPosition(Point2 newPixelPosition)
 {
 	m_pixelPosition = newPixelPosition;
 
-	m_tilePosition = newPixelPosition / GRID_SQUARE_SIZE;
+	uint8_t tileX, tileY;
+	PlayField::getGridPositionFromPixels(newPixelPosition.x, newPixelPosition.y, tileX, tileY);
+	m_tilePosition = Point2(tileX, tileY);
 };
 
 void Entity::setTilePosition(Point2 newTilePosition)
 {
 	m_tilePosition = newTilePosition;
-	
-	m_pixelPosition = newTilePosition * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f;
+
+	int32_t pixelX, pixelY;
+	PlayField::getPixelPositionFromGrid(newTilePosition.x, newTilePosition.y, pixelX, pixelY);
+	m_tilePosition = Point2(pixelX, pixelY);
 }

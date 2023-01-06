@@ -12,6 +12,8 @@ public:
 	static const Vector2 UnitY;
 	static const Vector2 UnitX;
 
+	Vector2();
+
 	Vector2(float x, float y);
 
 	Vector2(Point2 p);

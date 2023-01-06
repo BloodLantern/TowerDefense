@@ -1,5 +1,6 @@
 #include "TowerBarUI.h"
 #include "Globals.h"
+#include "PlayField.h"
 
 #define TOWER_BAR_TOWER_SIZE 64
 
@@ -33,9 +34,9 @@ void TowerBarUI::handleMouse()
 	int32_t height = TOWER_BAR_HEIGHT;
 
 	// Overlay
-
 	ImVec2 pos = Globals::gIO->MousePos;
-	if (pos.x > x && pos.y > y && pos.x < x + width && pos.y < y + height)
+	// If on the tower bar
+	if (pos.x > x && pos.y > y && pos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && pos.y < y + height)
 	{
 		ImVec2 topLeft(pos.x - x, y + TOWER_BAR_Y_OFFSET / 2);
 		topLeft.x = (((int) topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
@@ -45,11 +46,29 @@ void TowerBarUI::handleMouse()
 
 
 	// Drag and drop
-
 	ImVec2 clickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
-
-	if (clickedPos.y > Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_HEIGHT && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+	// If the click started on the tower bar and dragging
+	if (clickedPos.y > y && clickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 	{
+		// TODO Get tower texture and display it under the mouse
+		//int selectedTower = ((int) clickedPos.x) / TOWER_BAR_TOWER_SIZE; 
 
+		// Temp
+		ImVec2 mousePos = Globals::gIO->MousePos;
+		ImVec2 topLeft = ImVec2(mousePos.x - TOWER_BAR_TOWER_SIZE / 2,
+			mousePos.y - TOWER_BAR_TOWER_SIZE / 2);
+		ImVec2 bottomRight = ImVec2(mousePos.x + TOWER_BAR_TOWER_SIZE / 2,
+			mousePos.y + TOWER_BAR_TOWER_SIZE / 2);
+
+		// If on the playfield
+		if (pos.y < PLAYFIELD_HEIGHT && pos.x < PLAYFIELD_WIDTH)
+		{
+			topLeft.x -= fmod(mousePos.x, GRID_OFFSET_X + GRID_SQUARE_SIZE);
+			topLeft.y -= fmod(mousePos.y, GRID_OFFSET_Y + GRID_SQUARE_SIZE);
+			bottomRight.x -= fmod(mousePos.x, GRID_OFFSET_X + GRID_SQUARE_SIZE);
+			bottomRight.y -= fmod(mousePos.y, GRID_OFFSET_Y + GRID_SQUARE_SIZE);
+		}
+
+		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR, 10.f);
 	}
 }

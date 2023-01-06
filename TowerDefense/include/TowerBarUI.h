@@ -13,13 +13,12 @@ class TowerBarUI
 {
 public:
 	void draw();
-	void handleMouse();
 
 private:
 	const Tower* towerTemplates[TOWER_COUNT]{
 		new TestTower(Point2(150, 150))
 	};
-	bool extended;
+	bool extended = false;
 
-
+	void handleMouse();
 };
