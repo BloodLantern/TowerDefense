@@ -7,6 +7,9 @@
 #include "Gui.h"
 
 int32_t LevelEditor::m_currentBlockType;
+int32_t LevelEditor::m_currentLayer;
+uint16_t LevelEditor::m_currentTileValue;
+
 bool LevelEditor::m_dragEnabled;
 bool LevelEditor::m_canPlaceTile;
 bool LevelEditor::m_updateAStar;
@@ -25,9 +28,7 @@ std::vector<ClipdataType> LevelEditor::m_selectionCopyData;
 
 PlayField* LevelEditor::m_playField;
 
-Texture LevelEditor::m_tileset;
-
-static const char* const sBlockTypes[] = {
+static const char* const sClipdataNames[] = {
 	"Empty",
 	"Nothing",
 	"Enemy only",
@@ -38,11 +39,6 @@ static const char* const sBlockTypes[] = {
 void LevelEditor::bindPlayField(PlayField* field)
 {
 	m_playField = field;
-}
-
-void LevelEditor::loadTileset(const char* name)
-{
-	m_tileset = ImGuiUtils::LoadTexture(std::string("assets/tilesets/").append(name).c_str());
 }
 
 void LevelEditor::update()
@@ -77,9 +73,18 @@ void LevelEditor::verticalSpace()
 
 void LevelEditor::handleMisc()
 {
-	ImGui::Text("Block type");
+	ImGui::Text("Clipdata");
 	ImGui::SameLine();
-	ImGui::Combo("##", &LevelEditor::m_currentBlockType, sBlockTypes, IM_ARRAYSIZE(sBlockTypes));
+	ImGui::Combo("##", &LevelEditor::m_currentBlockType, sClipdataNames, IM_ARRAYSIZE(sClipdataNames));
+
+	LevelEditor::verticalSpace();
+
+	ImGui::RadioButton("Layer 0", &LevelEditor::m_currentLayer, 0);
+	ImGui::RadioButton("Layer 1", &LevelEditor::m_currentLayer, 1);
+
+	ImGui::Text("Layer : %d ; Tile : %d", LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
+
+	LevelEditor::verticalSpace();
 
 	ImGui::Checkbox("Enable dragging", &LevelEditor::m_dragEnabled);
 	ImGui::Checkbox("Update A* live", &LevelEditor::m_updateAStar);
@@ -162,6 +167,9 @@ void LevelEditor::handleCursor()
 			(LevelEditor::m_dragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
 			m_playField->setClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::m_currentBlockType));
+
+			m_playField->setLayertile(tileX, tileY, LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
+
 			if (LevelEditor::m_updateAStar)
 				AStar::findBestPath(0, 0, GRID_WIDTH - 1, GRID_HEIGHT - 1);
 		}
@@ -258,7 +266,7 @@ void LevelEditor::handleTileset()
 	{
 		ImGui::SetScrollY(GRID_SQUARE_SIZE * (int)(ImGui::GetScrollY() / GRID_SQUARE_SIZE));
 
-		ImGui::Image(LevelEditor::m_tileset.id, ImVec2(LevelEditor::m_tileset.width, LevelEditor::m_tileset.height));
+		ImGui::Image(m_playField->m_tileset.id, ImVec2(m_playField->m_tileset.width, m_playField->m_tileset.height));
 		
 		ImVec2 mousePos = Globals::gIO->MousePos;
 		ImVec2 winPos = ImGui::GetWindowPos();
@@ -269,10 +277,15 @@ void LevelEditor::handleTileset()
 			uint32_t tileX = (mousePos.x - 8 - winPos.x) / GRID_SQUARE_SIZE;
 			uint32_t tileY = (mousePos.y - 8 - winPos.y) / GRID_SQUARE_SIZE;
 
-			tileX = (tileX * GRID_SQUARE_SIZE) + winPos.x + 8;
-			tileY = (tileY * GRID_SQUARE_SIZE) + winPos.y + 8;
+			uint32_t x = (tileX * GRID_SQUARE_SIZE) + winPos.x + 8;
+			uint32_t y = (tileY * GRID_SQUARE_SIZE) + winPos.y + 8;
 
-			dl->AddRect(ImVec2(tileX, tileY), ImVec2(tileX + GRID_SQUARE_SIZE, tileY + GRID_SQUARE_SIZE), IM_COL32(0xFF, 0, 0, 0xFF));
+			dl->AddRect(ImVec2(x, y), ImVec2(x + GRID_SQUARE_SIZE, y + GRID_SQUARE_SIZE), IM_COL32(0xFF, 0, 0, 0xFF));
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left, false))
+			{
+				LevelEditor::m_currentTileValue = tileY * (m_playField->m_tileset.width / GRID_SQUARE_SIZE) + tileX;
+			}
 		}
 	}
 

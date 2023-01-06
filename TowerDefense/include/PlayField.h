@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "TowerBarUI.h"
+#include "imgui_utils.hpp"
 #include <stdint.h>
 
 #define GRID_WIDTH 42
@@ -25,14 +26,20 @@ class PlayField
 {
 private:
 	ClipdataType m_clipdata[GRID_HEIGHT][GRID_WIDTH];
-	uint8_t m_layer0Tilemap[GRID_HEIGHT][GRID_WIDTH];
-	uint8_t m_layer1Tilemap[GRID_HEIGHT][GRID_WIDTH];
+	uint16_t m_layer0Tilemap[GRID_HEIGHT][GRID_WIDTH];
+	uint16_t m_layer1Tilemap[GRID_HEIGHT][GRID_WIDTH];
+
 
 	bool maxR;
 	size_t r;
 	TowerBarUI towerBarUI;
+	
+	void drawClipdata();
+	void drawLayers();
 
 public:
+	Texture m_tileset;
+
 	PlayField();
 	~PlayField();
 
@@ -43,7 +50,8 @@ public:
 	void setClipdataTile(uint8_t x, uint8_t y, ClipdataType type);
 	ClipdataType getClipdataTile(uint8_t x, uint8_t y);
 
-	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint8_t value);
+	void loadTileset(const char* name);
+	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
 
 	void getGridPositionFromCoords(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
 };

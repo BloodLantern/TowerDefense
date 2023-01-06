@@ -8,6 +8,9 @@ class LevelEditor
 {
 private:
 	static int32_t m_currentBlockType;
+	static int32_t m_currentLayer;
+	static uint16_t m_currentTileValue;
+		
 	static bool m_dragEnabled;
 	static bool m_canPlaceTile;
 	static bool m_updateAStar;
@@ -26,8 +29,6 @@ private:
 
 	
 	static PlayField* m_playField;
-
-	static Texture m_tileset;
 
 
 	static void verticalSpace();
