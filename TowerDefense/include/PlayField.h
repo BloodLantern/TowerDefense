@@ -42,5 +42,8 @@ public:
 
 	void setClipdataTile(uint8_t x, uint8_t y, ClipdataType type);
 	ClipdataType getClipdataTile(uint8_t x, uint8_t y);
+
+	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint8_t value);
+
 	void getGridPositionFromCoords(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
 };

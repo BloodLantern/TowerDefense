@@ -16,7 +16,7 @@ PlayField::PlayField()
 		std::cout << "Failed to open file" << std::endl;
 		for (int32_t x = 0; x < GRID_WIDTH; x++)
 			for (int32_t y = 0; y < GRID_HEIGHT; y++)
-				m_clipdata[y][x] = CLIPDATA_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
+				m_clipdata[y][x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
 }
 
@@ -130,6 +130,22 @@ ClipdataType PlayField::getClipdataTile(uint8_t x, uint8_t y)
 		return CLIPDATA_TYPE_NOTHING;
 
 	return m_clipdata[y][x];
+}
+
+void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint8_t value)
+{
+	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
+		return;
+
+	switch (layer)
+	{
+		case 0:
+			m_layer0Tilemap[y][x] = value;
+			break;
+
+		case 1:
+			m_layer1Tilemap[y][x] = value;
+	}
 }
 
 void PlayField::getGridPositionFromCoords(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)

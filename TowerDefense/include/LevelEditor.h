@@ -22,7 +22,7 @@ private:
 	static uint8_t m_selectionHeight;;
 	static uint8_t m_selectionCopyWidth;
 	static uint8_t m_selectionCopyHeight;
-	static std::vector<SquareType> m_selectionCopyData;
+	static std::vector<ClipdataType> m_selectionCopyData;
 
 	
 	static PlayField* m_playField;

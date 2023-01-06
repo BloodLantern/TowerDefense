@@ -31,7 +31,7 @@ private:
 		{
 		}
 
-		AStarNode(uint8_t x, uint8_t y, double_t local, double_t global, SquareType type)
+		AStarNode(uint8_t x, uint8_t y, double_t local, double_t global, ClipdataType type)
 			: x(x), y(y), localGoal(local), globalGoal(global), type(type)
 		{
 		}
