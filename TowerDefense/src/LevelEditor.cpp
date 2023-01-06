@@ -21,7 +21,7 @@ uint8_t LevelEditor::m_selectionWidth;
 uint8_t LevelEditor::m_selectionHeight;
 uint8_t LevelEditor::m_selectionCopyWidth;
 uint8_t LevelEditor::m_selectionCopyHeight;
-std::vector<SquareType> LevelEditor::m_selectionCopyData;
+std::vector<ClipdataType> LevelEditor::m_selectionCopyData;
 
 PlayField* LevelEditor::m_playField;
 
@@ -99,7 +99,7 @@ void LevelEditor::handleClear()
 		{
 			for (int32_t x = 0; x < GRID_WIDTH; x++)
 				for (int32_t y = 0; y < GRID_HEIGHT; y++)
-					m_playField->setClipdataTile(x, y, SQUARE_TYPE_EMPTY);
+					m_playField->setClipdataTile(x, y, CLIPDATA_TYPE_EMPTY);
 
 			AStar::findBestPath(0, 0, GRID_WIDTH - 1, GRID_HEIGHT - 1);
 			ImGui::CloseCurrentPopup();
@@ -161,7 +161,7 @@ void LevelEditor::handleCursor()
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
 			(LevelEditor::m_dragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
-			m_playField->setClipdataTile(tileX, tileY, static_cast<SquareType>(LevelEditor::m_currentBlockType));
+			m_playField->setClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::m_currentBlockType));
 			if (LevelEditor::m_updateAStar)
 				AStar::findBestPath(0, 0, GRID_WIDTH - 1, GRID_HEIGHT - 1);
 		}
@@ -226,7 +226,7 @@ void LevelEditor::handleSelection()
 		{
 			for (int32_t x = 0; x < m_selectionWidth; x++)
 			{
-				SquareType tile = m_playField->getClipdataTile(startX + x, startY + y);
+				ClipdataType tile = m_playField->getClipdataTile(startX + x, startY + y);
 				size_t offset = y * m_selectionCopyWidth + x;
 				m_selectionCopyData[offset] = tile;
 			}
@@ -318,7 +318,7 @@ void LevelEditor::handleHotkeys()
 			{
 				for (int32_t x = 0; x < m_selectionCopyWidth; x++)
 				{
-					SquareType tile = m_selectionCopyData[y * m_selectionCopyWidth + x];
+					ClipdataType tile = m_selectionCopyData[y * m_selectionCopyWidth + x];
 					m_playField->setClipdataTile(tileX + x, tileY + y, tile);
 				}
 			}

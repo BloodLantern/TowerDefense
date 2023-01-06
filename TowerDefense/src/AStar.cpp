@@ -84,7 +84,7 @@ bool AStar::findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 		{
 			AStarNode* neighbour = *_neighbour;
 			
-			if (!neighbour->visited && (neighbour->type == SQUARE_TYPE_ENEMY_ONLY || neighbour->type == SQUARE_TYPE_EMPTY))
+			if (!neighbour->visited && (neighbour->type == CLIPDATA_TYPE_ENEMY_ONLY || neighbour->type == CLIPDATA_TYPE_EMPTY))
 				notTestedNodes.push_back(neighbour);
 
 			double_t possiblyLowerGoal = curr->localGoal + getDistance(curr, neighbour);

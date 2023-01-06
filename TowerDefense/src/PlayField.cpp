@@ -16,7 +16,7 @@ PlayField::PlayField()
 		std::cout << "Failed to open file" << std::endl;
 		for (int32_t x = 0; x < GRID_WIDTH; x++)
 			for (int32_t y = 0; y < GRID_HEIGHT; y++)
-				m_clipdata[y][x] = SQUARE_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
+				m_clipdata[y][x] = CLIPDATA_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
 	}
 }
 
@@ -34,23 +34,23 @@ void PlayField::draw()
 			ImU32 color;
 			switch (m_clipdata[y][x])
 			{
-				case SQUARE_TYPE_EMPTY:
+				case CLIPDATA_TYPE_EMPTY:
 					// WHITE
 					color = IM_COL32(0xFF, 0xFF, 0xFF, 0xFF);
 					break;
-				case SQUARE_TYPE_NOTHING:
+				case CLIPDATA_TYPE_NOTHING:
 					// BLACK
 					color = IM_COL32(0x0, 0x0, 0x0, 0xFF);
 					break;
-				case SQUARE_TYPE_ENEMY_ONLY:
+				case CLIPDATA_TYPE_ENEMY_ONLY:
 					// RED
 					color = IM_COL32(0xFF, 0x0, 0x0, 0xFF);
 					break;
-				case SQUARE_TYPE_OCCUPIED:
+				case CLIPDATA_TYPE_OCCUPIED:
 					// GRAY
 					color = IM_COL32(0xC0, 0xC0, 0xC0, 0xFF);
 					break;
-				case SQUARE_TYPE_PLAYER_ONLY:
+				case CLIPDATA_TYPE_PLAYER_ONLY:
 					// GREEN
 					color = IM_COL32(0x0, 0xFF, 0x0, 0xFF);
 					break;
@@ -116,7 +116,7 @@ void PlayField::load(std::string src)
 	RLE::decompress(m_clipdata, _src.c_str());
 }
 
-void PlayField::setClipdataTile(uint8_t x, uint8_t y, SquareType type)
+void PlayField::setClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
 {
 	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
 		return;
@@ -124,10 +124,10 @@ void PlayField::setClipdataTile(uint8_t x, uint8_t y, SquareType type)
 	m_clipdata[y][x] = type;
 }
 
-SquareType PlayField::getClipdataTile(uint8_t x, uint8_t y)
+ClipdataType PlayField::getClipdataTile(uint8_t x, uint8_t y)
 {
 	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
-		return SQUARE_TYPE_NOTHING;
+		return CLIPDATA_TYPE_NOTHING;
 
 	return m_clipdata[y][x];
 }
