@@ -11,12 +11,12 @@ PlayField::PlayField()
 {
 	AStar::bindField(this);
 	
-	if (!RLE::decompress(m_collisionGrid, MAPS_PATH "Default.bin"))
+	if (!RLE::decompress(m_clipdata, MAPS_PATH "Default.bin"))
 	{
 		std::cout << "Failed to open file" << std::endl;
 		for (int32_t x = 0; x < GRID_WIDTH; x++)
 			for (int32_t y = 0; y < GRID_HEIGHT; y++)
-				m_collisionGrid[y][x] = SQUARE_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
+				m_clipdata[y][x] = SQUARE_TYPE_EMPTY; // static_cast<SquareType>(std::rand() % 5);
 	}
 }
 
@@ -32,7 +32,7 @@ void PlayField::draw()
 		for (int32_t x = 0; x < GRID_WIDTH; x++)
 		{
 			ImU32 color;
-			switch (m_collisionGrid[y][x])
+			switch (m_clipdata[y][x])
 			{
 				case SQUARE_TYPE_EMPTY:
 					// WHITE
@@ -106,30 +106,30 @@ void PlayField::save(std::string dst)
 {
 	std::string _dst = MAPS_PATH;
 	_dst += dst;
-	RLE::compress(m_collisionGrid, sizeof(m_collisionGrid), _dst.c_str());
+	RLE::compress(m_clipdata, sizeof(m_clipdata), _dst.c_str());
 }
 
 void PlayField::load(std::string src)
 {
 	std::string _src = MAPS_PATH;
 	_src += src;
-	RLE::decompress(m_collisionGrid, _src.c_str());
+	RLE::decompress(m_clipdata, _src.c_str());
 }
 
-void PlayField::setGridTile(uint8_t x, uint8_t y, SquareType type)
+void PlayField::setClipdataTile(uint8_t x, uint8_t y, SquareType type)
 {
 	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
 		return;
 
-	m_collisionGrid[y][x] = type;
+	m_clipdata[y][x] = type;
 }
 
-SquareType PlayField::getGridTile(uint8_t x, uint8_t y)
+SquareType PlayField::getClipdataTile(uint8_t x, uint8_t y)
 {
 	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
 		return SQUARE_TYPE_NOTHING;
 
-	return m_collisionGrid[y][x];
+	return m_clipdata[y][x];
 }
 
 void PlayField::getGridPositionFromCoords(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)

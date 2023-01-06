@@ -99,7 +99,7 @@ void LevelEditor::handleClear()
 		{
 			for (int32_t x = 0; x < GRID_WIDTH; x++)
 				for (int32_t y = 0; y < GRID_HEIGHT; y++)
-					m_playField->setGridTile(x, y, SQUARE_TYPE_EMPTY);
+					m_playField->setClipdataTile(x, y, SQUARE_TYPE_EMPTY);
 
 			AStar::findBestPath(0, 0, GRID_WIDTH - 1, GRID_HEIGHT - 1);
 			ImGui::CloseCurrentPopup();
@@ -161,7 +161,7 @@ void LevelEditor::handleCursor()
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
 			(LevelEditor::m_dragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
-			m_playField->setGridTile(tileX, tileY, static_cast<SquareType>(LevelEditor::m_currentBlockType));
+			m_playField->setClipdataTile(tileX, tileY, static_cast<SquareType>(LevelEditor::m_currentBlockType));
 			if (LevelEditor::m_updateAStar)
 				AStar::findBestPath(0, 0, GRID_WIDTH - 1, GRID_HEIGHT - 1);
 		}
@@ -170,6 +170,9 @@ void LevelEditor::handleCursor()
 
 void LevelEditor::handleSelection()
 {
+	if (Globals::gIO->WantCaptureMouse)
+		return;
+
 	ImVec2 mouse = Globals::gIO->MousePos;
 	// Update selection positions
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
@@ -223,7 +226,7 @@ void LevelEditor::handleSelection()
 		{
 			for (int32_t x = 0; x < m_selectionWidth; x++)
 			{
-				SquareType tile = m_playField->getGridTile(startX + x, startY + y);
+				SquareType tile = m_playField->getClipdataTile(startX + x, startY + y);
 				size_t offset = y * m_selectionCopyWidth + x;
 				m_selectionCopyData[offset] = tile;
 			}
@@ -290,7 +293,7 @@ void LevelEditor::handleHotkeys()
 			LevelEditor::m_playField->getGridPositionFromCoords((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
 
 			if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
-				LevelEditor::m_currentBlockType = LevelEditor::m_playField->getGridTile(tileX, tileY);
+				LevelEditor::m_currentBlockType = LevelEditor::m_playField->getClipdataTile(tileX, tileY);
 			return;
 		}
 
@@ -316,7 +319,7 @@ void LevelEditor::handleHotkeys()
 				for (int32_t x = 0; x < m_selectionCopyWidth; x++)
 				{
 					SquareType tile = m_selectionCopyData[y * m_selectionCopyWidth + x];
-					m_playField->setGridTile(tileX + x, tileY + y, tile);
+					m_playField->setClipdataTile(tileX + x, tileY + y, tile);
 				}
 			}
 

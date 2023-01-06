@@ -33,7 +33,7 @@ bool AStar::findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 	{
 		for (int32_t x = 0; x < GRID_WIDTH; x++)
 		{
-			nodesField[y][x] = AStarNode(x, y, AStar::field->getGridTile(x, y));
+			nodesField[y][x] = AStarNode(x, y, AStar::field->getClipdataTile(x, y));
 		}
 	}
 

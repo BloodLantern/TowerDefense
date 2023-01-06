@@ -24,7 +24,7 @@ enum SquareType : uint8_t
 class PlayField
 {
 private:
-	SquareType m_collisionGrid[GRID_HEIGHT][GRID_WIDTH];
+	SquareType m_clipdata[GRID_HEIGHT][GRID_WIDTH];
 	uint8_t m_tilemap[GRID_HEIGHT][GRID_WIDTH];
 
 	bool maxR;
@@ -39,7 +39,7 @@ public:
 	void save(std::string dst);
 	void load(std::string src);
 
-	void setGridTile(uint8_t x, uint8_t y, SquareType type);
-	SquareType getGridTile(uint8_t x, uint8_t y);
+	void setClipdataTile(uint8_t x, uint8_t y, SquareType type);
+	SquareType getClipdataTile(uint8_t x, uint8_t y);
 	void getGridPositionFromCoords(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
 };
