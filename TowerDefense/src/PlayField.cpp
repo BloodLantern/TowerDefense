@@ -179,14 +179,14 @@ void PlayField::save(std::string dst)
 {
 	std::string _dst = MAPS_PATH;
 	_dst += dst;
-	RLE::compress(m_clipdata.data(), m_clipdata.size(), _dst.c_str());
+	RLE::compressLevel(this, _dst.c_str());
 }
 
 void PlayField::load(std::string src)
 {
 	std::string _src = MAPS_PATH;
 	_src += src;
-	RLE::decompress(m_clipdata.data(), _src.c_str());
+	RLE::decompressLevel(this, _src.c_str());
 }
 
 void PlayField::setClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
@@ -225,6 +225,21 @@ void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value
 		case 1:
 			m_layer1Tilemap[y * m_gridWidth + x] = value;
 	}
+}
+
+ClipdataType* PlayField::getClipdataPointer()
+{
+	return m_clipdata.data();
+}
+
+uint16_t* PlayField::getTilemapPointer(uint8_t layer)
+{
+	uint16_t* pLayers[] = {
+		m_layer0Tilemap.data(),
+		m_layer1Tilemap.data(),
+	};
+
+	return pLayers[layer];
 }
 
 void PlayField::getGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)

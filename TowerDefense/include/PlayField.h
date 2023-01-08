@@ -62,6 +62,9 @@ public:
 	void loadTileset(const char* name);
 	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
 
+	ClipdataType* getClipdataPointer();
+	uint16_t* getTilemapPointer(uint8_t layer);
+
 	void getGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
 	void getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
 };
