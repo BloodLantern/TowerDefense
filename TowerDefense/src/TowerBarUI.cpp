@@ -55,18 +55,18 @@ void TowerBarUI::handleMouse()
 
 		// Temp
 		ImVec2 mousePos = Globals::gIO->MousePos;
-		ImVec2 topLeft = ImVec2(mousePos.x - TOWER_BAR_TOWER_SIZE / 2,
-			mousePos.y - TOWER_BAR_TOWER_SIZE / 2);
-		ImVec2 bottomRight = ImVec2(mousePos.x + TOWER_BAR_TOWER_SIZE / 2,
-			mousePos.y + TOWER_BAR_TOWER_SIZE / 2);
+		ImVec2 topLeft = ImVec2(mousePos.x - TOWER_BAR_TOWER_SIZE / 2, mousePos.y - TOWER_BAR_TOWER_SIZE / 2);
+		ImVec2 bottomRight = ImVec2(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
 
 		// If on the playfield
-		if (pos.y < Globals::gPlayField->m_gridHeight && pos.x < Globals::gPlayField->m_gridWidth)
+		if (pos.y < Globals::gGridY + Globals::gPlayField->m_gridHeight * GRID_SQUARE_SIZE && pos.x < Globals::gGridX + Globals::gPlayField->m_gridWidth * GRID_SQUARE_SIZE)
 		{
-			topLeft.x -= fmod(mousePos.x, GRID_OFFSET_X + GRID_SQUARE_SIZE);
-			topLeft.y -= fmod(mousePos.y, GRID_OFFSET_Y + GRID_SQUARE_SIZE);
-			bottomRight.x -= fmod(mousePos.x, GRID_OFFSET_X + GRID_SQUARE_SIZE);
-			bottomRight.y -= fmod(mousePos.y, GRID_OFFSET_Y + GRID_SQUARE_SIZE);
+			double xSnap = fmod(mousePos.x, GRID_SQUARE_SIZE);
+			double ySnap = fmod(mousePos.y, GRID_SQUARE_SIZE);
+			topLeft.x = topLeft.x + (GRID_SQUARE_SIZE - xSnap) / 2;
+			topLeft.y = topLeft.y + (GRID_SQUARE_SIZE - ySnap) / 2;
+			bottomRight.x = topLeft.x + TOWER_BAR_TOWER_SIZE;
+			bottomRight.y = topLeft.y + TOWER_BAR_TOWER_SIZE;
 		}
 
 		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR, 10.f);
