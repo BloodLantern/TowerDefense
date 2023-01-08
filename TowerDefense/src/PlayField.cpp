@@ -9,24 +9,29 @@
 PlayField::PlayField()
 	: maxR(true), r(0)
 {
-	AStar::bindField(this);
+	m_gridWidth = 42;
+	m_gridHeight = 18;
+
+	m_clipdata.resize(m_gridWidth * m_gridHeight);
+	m_layer0Tilemap.resize(m_gridWidth * m_gridHeight);
+	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
 
 	loadTileset("forest.png");
 	
-	if (!RLE::decompress(m_clipdata, MAPS_PATH "Default.bin"))
+	if (!RLE::decompress(m_clipdata.data(), MAPS_PATH "Default.bin"))
 	{
 		std::cout << "Failed to open file" << std::endl;
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
-			for (int32_t y = 0; y < GRID_HEIGHT; y++)
-				m_clipdata[y][x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
+		for (int32_t x = 0; x < m_gridWidth; x++)
+			for (int32_t y = 0; y < m_gridHeight; y++)
+				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
 
-	for (int32_t x = 0; x < GRID_WIDTH; x++)
+	for (int32_t x = 0; x < m_gridWidth; x++)
 	{
-		for (int32_t y = 0; y < GRID_HEIGHT; y++)
+		for (int32_t y = 0; y < m_gridHeight; y++)
 		{
-			m_layer0Tilemap[y][x] = 25;
-			m_layer1Tilemap[y][x] = 25;
+			m_layer0Tilemap[y * m_gridWidth + x] = 25;
+			m_layer1Tilemap[y * m_gridWidth + x] = 25;
 		}
 	}
 }
@@ -38,36 +43,36 @@ PlayField::~PlayField()
 
 void PlayField::drawClipdata()
 {
-	for (int32_t y = 0; y < GRID_HEIGHT; y++)
+	for (int32_t y = 0; y < m_gridHeight; y++)
 	{
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
+		for (int32_t x = 0; x < m_gridWidth; x++)
 		{
 			ImU32 color;
-			switch (m_clipdata[y][x])
+			switch (m_clipdata[y * m_gridWidth + x])
 			{
-				case CLIPDATA_TYPE_EMPTY:
-					// WHITE
-					color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
-					break;
-				case CLIPDATA_TYPE_NOTHING:
-					// BLACK
-					color = IM_COL32(0x0, 0x0, 0x0, 0x40);
-					break;
-				case CLIPDATA_TYPE_ENEMY_ONLY:
-					// RED
-					color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
-					break;
-				case CLIPDATA_TYPE_OCCUPIED:
-					// GRAY
-					color = IM_COL32(0xC0, 0xC0, 0xC0, 0x40);
-					break;
-				case CLIPDATA_TYPE_PLAYER_ONLY:
-					// GREEN
-					color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
-					break;
-				default:
-					// Weird grey
-					color = IM_COL32(0x50, 0x50, 0x50, 0x50);
+			case CLIPDATA_TYPE_EMPTY:
+				// WHITE
+				color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
+				break;
+			case CLIPDATA_TYPE_NOTHING:
+				// BLACK
+				color = IM_COL32(0x0, 0x0, 0x0, 0x40);
+				break;
+			case CLIPDATA_TYPE_ENEMY_ONLY:
+				// RED
+				color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
+				break;
+			case CLIPDATA_TYPE_OCCUPIED:
+				// GRAY
+				color = IM_COL32(0xC0, 0xC0, 0xC0, 0x40);
+				break;
+			case CLIPDATA_TYPE_PLAYER_ONLY:
+				// GREEN
+				color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
+				break;
+			default:
+				// Weird grey
+				color = IM_COL32(0x50, 0x50, 0x50, 0x50);
 			}
 
 			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
@@ -77,7 +82,7 @@ void PlayField::drawClipdata()
 		}
 
 		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
-			ImVec2((float_t)Globals::gGridX + GRID_WIDTH * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
+			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
 	}
 }
 
@@ -93,24 +98,24 @@ void PlayField::drawLayers()
 	float_t uvxSize = 1.f / rowWidth;
 	float_t uvySize = 1.f / colHeight;
 
-	for (int32_t y = 0; y < GRID_HEIGHT; y++)
+	for (int32_t y = 0; y < m_gridHeight; y++)
 	{
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
+		for (int32_t x = 0; x < m_gridWidth; x++)
 		{
-			ImVec2 pMin((float_t)Globals::gWindowX + x * GRID_SQUARE_SIZE, (float_t)Globals::gWindowY + y * GRID_SQUARE_SIZE);
-			ImVec2 pMax(Globals::gWindowX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gWindowY + (y + 1.f) * GRID_SQUARE_SIZE);
+			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
+			ImVec2 pMax(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
 
-			uint16_t tile = m_layer0Tilemap[y][x];
+			uint16_t tile = m_layer0Tilemap[y * m_gridWidth + x];
 
 			uint16_t tileY = tile / rowWidth;
 			uint16_t tileX = tile % rowWidth;
 
 			ImVec2 uvMin(uvxSize * tileX, uvySize * tileY);
 			ImVec2 uvMax(uvMin.x + uvxSize, uvMin.y + uvySize);
-			
+
 			Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
 
-			tile = m_layer1Tilemap[y][x];
+			tile = m_layer1Tilemap[y * m_gridWidth + x];
 			tileY = tile / texWidth;
 			tileX = tile % texWidth;
 
@@ -122,14 +127,24 @@ void PlayField::drawLayers()
 	}
 }
 
+void PlayField::resize(uint16_t width, uint16_t height)
+{
+	m_gridWidth = width;
+	m_gridHeight = height;
+
+	m_clipdata.resize(m_gridWidth * m_gridHeight);
+	m_layer0Tilemap.resize(m_gridWidth * m_gridHeight);
+	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
+}
+
 void PlayField::draw()
 {
 	drawLayers();
 	//drawClipdata();
 
-	for (int32_t x = 0; x < GRID_WIDTH; x++)
+	for (int32_t x = 0; x < m_gridWidth; x++)
 		Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
-			ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + GRID_HEIGHT * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+			ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
 
 	towerBarUI.draw();
 
@@ -138,7 +153,7 @@ void PlayField::draw()
 	{
 		if (ImGui::Button("Test"))
 		{
-			std::cout << AStar::findBestPath(GRID_WIDTH - 1, GRID_HEIGHT - 1, 0, 0) << std::endl;
+			std::cout << AStar::findBestPath(m_gridWidth - 1, m_gridHeight - 1, 0, 0) << std::endl;
 		}
 
 		if (AStar::recordPositions.size() != 0)
@@ -164,30 +179,30 @@ void PlayField::save(std::string dst)
 {
 	std::string _dst = MAPS_PATH;
 	_dst += dst;
-	RLE::compress(m_clipdata, sizeof(m_clipdata), _dst.c_str());
+	RLE::compress(m_clipdata.data(), m_clipdata.size(), _dst.c_str());
 }
 
 void PlayField::load(std::string src)
 {
 	std::string _src = MAPS_PATH;
 	_src += src;
-	RLE::decompress(m_clipdata, _src.c_str());
+	RLE::decompress(m_clipdata.data(), _src.c_str());
 }
 
 void PlayField::setClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
 {
-	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
+	if (x >= m_gridWidth || y >= m_gridHeight)
 		return;
 
-	m_clipdata[y][x] = type;
+	m_clipdata[y * m_gridWidth + x] = type;
 }
 
 ClipdataType PlayField::getClipdataTile(uint8_t x, uint8_t y)
 {
-	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
+	if (x >= m_gridWidth || y >= m_gridHeight)
 		return CLIPDATA_TYPE_NOTHING;
 
-	return m_clipdata[y][x];
+	return m_clipdata[y * m_gridWidth + x];
 }
 
 
@@ -198,17 +213,17 @@ void PlayField::loadTileset(const char* name)
 
 void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value)
 {
-	if (x >= GRID_WIDTH || y >= GRID_HEIGHT)
+	if (x >= m_gridWidth || y >= m_gridHeight)
 		return;
 
 	switch (layer)
 	{
 		case 0:
-			m_layer0Tilemap[y][x] = value;
+			m_layer0Tilemap[y * m_gridWidth + x] = value;
 			break;
 
 		case 1:
-			m_layer1Tilemap[y][x] = value;
+			m_layer1Tilemap[y * m_gridWidth + x] = value;
 	}
 }
 
@@ -217,12 +232,12 @@ void PlayField::getGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_
 	uint8_t x = (mouseX - Globals::gGridX) / GRID_SQUARE_SIZE;
 	uint8_t y = (mouseY - Globals::gGridY) / GRID_SQUARE_SIZE;
 
-	if (x >= GRID_WIDTH)
+	if (x >= m_gridWidth)
 		tileX = UCHAR_MAX;
 	else
 		tileX = x;
 
-	if (y >= GRID_HEIGHT)
+	if (y >= m_gridHeight)
 		tileY = UCHAR_MAX;
 	else
 		tileY = y;

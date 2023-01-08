@@ -4,11 +4,15 @@
 #include <imgui.h>
 #include <stdint.h>
 
+#include "PlayField.h"
+
 class Globals
 {
 public:
 	static ImDrawList* gDrawList;
 	static ImGuiIO* gIO;
+
+	static PlayField* gPlayField;
 
 	static int32_t gWindowX;
 	static int32_t gWindowY;
@@ -21,4 +25,5 @@ public:
 	static bool fullscreen;
 
 	static void updateGlobals();
+	static void bindPlayField(PlayField* pf);
 };

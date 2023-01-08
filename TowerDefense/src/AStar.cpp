@@ -3,8 +3,7 @@
 #include <list>
 #include <chrono>
 
-PlayField* AStar::field;
-AStar::AStarNode AStar::nodesField[GRID_HEIGHT][GRID_WIDTH];
+std::vector<AStar::AStarNode> AStar::nodesField;
 
 std::vector<ImVec2> AStar::recordPositions;
 
@@ -20,45 +19,45 @@ double_t AStar::getDistance(const AStarNode* n1, const AStarNode* n2)
 	return std::sqrt(distX * distX + distY * distY);
 }
 
-void AStar::bindField(PlayField* field)
-{
-	AStar::field = field;
-}
-
 bool AStar::findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t startY)
 {
 	//auto startTime = std::chrono::high_resolution_clock::now();
 
-	for (int32_t y = 0; y < GRID_HEIGHT; y++)
+	uint16_t width = Globals::gPlayField->m_gridWidth;
+	uint16_t height = Globals::gPlayField->m_gridHeight;
+
+	nodesField.resize(width * height);
+
+	for (int32_t y = 0; y < height; y++)
 	{
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
+		for (int32_t x = 0; x < width; x++)
 		{
-			nodesField[y][x] = AStarNode(x, y, AStar::field->getClipdataTile(x, y));
+			nodesField[y * width + x] = AStarNode(x, y, Globals::gPlayField->getClipdataTile(x, y));
 		}
 	}
 
-	for (int32_t y = 0; y < GRID_HEIGHT; y++)
+	for (int32_t y = 0; y < height; y++)
 	{
-		for (int32_t x = 0; x < GRID_WIDTH; x++)
+		for (int32_t x = 0; x < width; x++)
 		{
 			if (y > 0)
-				nodesField[y][x].neighbours.push_back(&nodesField[y - 1][x]);
+				nodesField[y * width + x].neighbours.push_back(&nodesField[(y - 1) * width + x]);
 
-			if (y < GRID_HEIGHT - 1)
-				nodesField[y][x].neighbours.push_back(&nodesField[y + 1][x]);
+			if (y < height - 1)
+				nodesField[y * width + x].neighbours.push_back(&nodesField[(y + 1) * width + x]);
 
 			if (x > 0)
-				nodesField[y][x].neighbours.push_back(&nodesField[y][x - 1]);
+				nodesField[y * width + x].neighbours.push_back(&nodesField[y * width + (x - 1)]);
 
-			if (x < GRID_WIDTH - 1)
-				nodesField[y][x].neighbours.push_back(&nodesField[y][x + 1]);
+			if (x < width - 1)
+				nodesField[y * width + x].neighbours.push_back(&nodesField[y * width + (x + 1)]);
 		}
 	}
 
 	recordPositions.clear();
 	
-	AStarNode* start = &nodesField[startY][startX];
-	AStarNode* end = &nodesField[dstY][dstX];
+	AStarNode* start = &nodesField[startY * width + startX];
+	AStarNode* end = &nodesField[dstY * width + dstX];
 	AStarNode* curr = start;
 	start->localGoal = 0.f;
 	start->globalGoal = AStar::getDistance(curr, start);

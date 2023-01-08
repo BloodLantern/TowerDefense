@@ -16,7 +16,7 @@ public:
 
 private:
 	const Tower* towerTemplates[TOWER_COUNT]{
-		new TestTower(Point2(150, 150))
+		new TestTower()
 	};
 	bool extended = false;
 

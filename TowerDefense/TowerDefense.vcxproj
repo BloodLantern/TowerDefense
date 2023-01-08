@@ -157,7 +157,7 @@
     <ClCompile Include="src\entities\Tower.cpp" />
     <ClCompile Include="src\std_image.cpp" />
     <ClCompile Include="src\TowerBarUI.cpp" />
-    <ClCompile Include="TestTower.cpp" />
+    <ClCompile Include="src\entities\TestTower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\stb_image.h" />
@@ -175,7 +175,7 @@
     <ClInclude Include="include\RLE.h" />
     <ClInclude Include="include\entities\Projectile.h" />
     <ClInclude Include="include\TowerBarUI.h" />
-    <ClInclude Include="TestTower.h" />
+    <ClInclude Include="include\entities\TestTower.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

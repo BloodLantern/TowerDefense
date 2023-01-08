@@ -39,8 +39,7 @@ private:
 
 	AStar() { }; // Prevent creating an instance of this class
 
-	static PlayField* field;
-	static AStarNode nodesField[GRID_HEIGHT][GRID_WIDTH];
+	static std::vector<AStarNode> nodesField;
 
 	static bool compareHeuristics(const AStarNode* n1, const AStarNode* n2);
 	static double_t getDistance(const AStarNode* n1, const AStarNode* n2);
@@ -48,6 +47,5 @@ private:
 public:
 	static std::vector<ImVec2> recordPositions;
 
-	static void bindField(PlayField* field);
 	static bool findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t startY);
 };

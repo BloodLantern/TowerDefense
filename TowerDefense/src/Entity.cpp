@@ -4,7 +4,8 @@
 
 Entity::Entity()
 {
-	setPixelPosition(Point2());
+	m_pixelPosition = Point2(INFINITY, INFINITY);
+	m_tilePosition = Point2(INFINITY, INFINITY);
 };
 
 Entity::Entity(Point2 pixelPosition)
@@ -34,7 +35,7 @@ void Entity::setPixelPosition(Point2 newPixelPosition)
 	m_pixelPosition = newPixelPosition;
 
 	uint8_t tileX, tileY;
-	PlayField::getGridPositionFromPixels(newPixelPosition.x, newPixelPosition.y, tileX, tileY);
+	Globals::gPlayField->getGridPositionFromPixels(newPixelPosition.x, newPixelPosition.y, tileX, tileY);
 	m_tilePosition = Point2(tileX, tileY);
 };
 
@@ -43,6 +44,6 @@ void Entity::setTilePosition(Point2 newTilePosition)
 	m_tilePosition = newTilePosition;
 
 	int32_t pixelX, pixelY;
-	PlayField::getPixelPositionFromGrid(newTilePosition.x, newTilePosition.y, pixelX, pixelY);
+	Globals::gPlayField->getPixelPositionFromGrid(newTilePosition.x, newTilePosition.y, pixelX, pixelY);
 	m_tilePosition = Point2(pixelX, pixelY);
 }

@@ -7,8 +7,6 @@
 
 #define GRID_OFFSET_X 0
 #define GRID_OFFSET_Y 18
-#define GRID_WIDTH 42
-#define GRID_HEIGHT 18
 
 #define GRID_SQUARE_SIZE 32
 #define GRID_SQUARE_LINE_SIZE 1
@@ -32,9 +30,9 @@ enum ClipdataType : uint8_t
 class PlayField
 {
 private:
-	ClipdataType m_clipdata[GRID_HEIGHT][GRID_WIDTH];
-	uint16_t m_layer0Tilemap[GRID_HEIGHT][GRID_WIDTH];
-	uint16_t m_layer1Tilemap[GRID_HEIGHT][GRID_WIDTH];
+	std::vector<ClipdataType> m_clipdata;
+	std::vector<uint16_t> m_layer0Tilemap;
+	std::vector<uint16_t> m_layer1Tilemap;
 
 
 	bool maxR;
@@ -46,9 +44,13 @@ private:
 
 public:
 	Texture m_tileset;
+	uint16_t m_gridWidth;
+	uint16_t m_gridHeight;
 
 	PlayField();
 	~PlayField();
+
+	void resize(uint16_t width, uint16_t height);
 
 	void draw();
 	void save(std::string dst);
@@ -60,6 +62,6 @@ public:
 	void loadTileset(const char* name);
 	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
 
-	static void getGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
-	static void getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
+	void getGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
+	void getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
 };

@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 	ImGui_ImplOpenGL3_Init(glslVersion);
 
 	PlayField pf;
-	LevelEditor::bindPlayField(&pf);
+	Globals::bindPlayField(&pf);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))

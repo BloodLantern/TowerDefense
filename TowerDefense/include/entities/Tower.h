@@ -8,6 +8,7 @@
 class Tower : public Entity
 {
 public:
+	Tower(Projectile* projectileTemplate);
 	Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate);
 
 	virtual void shoot(const Projectile& projTemplate) = 0;

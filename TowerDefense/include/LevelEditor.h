@@ -16,6 +16,9 @@ private:
 	static bool m_updateAStar;
 	static char m_fileName[20];
 
+	static int32_t m_gridWidthInput;
+	static int32_t m_gridHeightInput;
+
 	static bool m_selectionActive;
 	static uint8_t m_selectionStartX;
 	static uint8_t m_selectionStartY;
@@ -27,14 +30,12 @@ private:
 	static uint8_t m_selectionCopyHeight;
 	static std::vector<ClipdataType> m_selectionCopyData;
 
-	
-	static PlayField* m_playField;
-
-
 	static void verticalSpace();
 
 	static void handleMisc();
 	static void handleClear();
+	static void handleResize();
+
 	static void handleFile();
 	static void handleCursor();
 
@@ -46,7 +47,6 @@ private:
 
 public:
 	static void loadTileset(const char* name);
-	static void bindPlayField(PlayField* field);
 	
 	static void update();
 };

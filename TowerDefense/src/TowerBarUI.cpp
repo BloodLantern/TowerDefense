@@ -61,7 +61,7 @@ void TowerBarUI::handleMouse()
 			mousePos.y + TOWER_BAR_TOWER_SIZE / 2);
 
 		// If on the playfield
-		if (pos.y < PLAYFIELD_HEIGHT && pos.x < PLAYFIELD_WIDTH)
+		if (pos.y < Globals::gPlayField->m_gridHeight && pos.x < Globals::gPlayField->m_gridWidth)
 		{
 			topLeft.x -= fmod(mousePos.x, GRID_OFFSET_X + GRID_SQUARE_SIZE);
 			topLeft.y -= fmod(mousePos.y, GRID_OFFSET_Y + GRID_SQUARE_SIZE);

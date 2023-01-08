@@ -1,5 +1,11 @@
 #include "Tower.h"
 
+Tower::Tower(Projectile* projectileTemplate)
+	: Entity(), m_projectileTemplate(*projectileTemplate)
+{
+
+}
+
 Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate)
 	: Entity(pixelPosition), m_range(range), m_attackSpeed(attackSpeed), m_projectileTemplate(*projectileTemplate)
 {
