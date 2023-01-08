@@ -51,10 +51,10 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 
 		while (value == _src8[i])
 		{
-			i++;
 			if (i > length || size == UCHAR_MAX)
 				break;
 
+			i++;
 			size++;
 		}
 
@@ -72,10 +72,10 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 
 		while (value == _src16[i])
 		{
-			i++;
 			if (i > length || size == UCHAR_MAX)
 				break;
 
+			i++;
 			size++;
 		}
 
@@ -93,10 +93,10 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 
 		while (value == _src16[i])
 		{
-			i++;
 			if (i > length || size == UCHAR_MAX)
 				break;
 
+			i++;
 			size++;
 		}
 

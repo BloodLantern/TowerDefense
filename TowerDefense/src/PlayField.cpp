@@ -9,12 +9,7 @@
 PlayField::PlayField()
 	: maxR(true), r(0)
 {
-	m_gridWidth = 42;
-	m_gridHeight = 18;
-
-	m_clipdata.resize(m_gridWidth * m_gridHeight);
-	m_layer0Tilemap.resize(m_gridWidth * m_gridHeight);
-	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
+	resize(42, 18);
 
 	loadTileset("forest.png");
 	
