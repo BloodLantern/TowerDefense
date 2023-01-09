@@ -11,11 +11,11 @@ class Projectile : public Entity
 public:
 	Projectile(uint32_t damage, uint16_t pierce, float_t lifetime);
 
-	void draw() override;
+	void Draw() override;
 
 private:
-	Vector2 m_velocity;
-	uint32_t m_damage;
-	uint16_t m_pierce;
-	float_t m_lifetime;
+	Vector2 mVelocity;
+	uint32_t mDamage;
+	uint16_t mPierce;
+	float_t mLifetime;
 };

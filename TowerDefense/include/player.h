@@ -10,11 +10,11 @@ public:
     Player();
     ~Player() {};
 
-    std::vector<Tower*> *getTowers() { return &m_towers; }
+    std::vector<Tower*>* GetTowers() { return &mTowers; }
 
 private:
-    uint32_t m_money = 200;
-    uint8_t m_life = 10;
+    uint32_t mMoney = 200;
+    uint8_t mLife = 10;
 
-    std::vector<Tower*> m_towers;
+    std::vector<Tower*> mTowers;
 };

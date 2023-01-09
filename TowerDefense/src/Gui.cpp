@@ -5,10 +5,10 @@
 
 #include <stdint.h>
 
-bool Gui::m_openedWindows[GUI_WINDOW_ID_COUNT];
+bool Gui::mOpenedWindows[GUI_WINDOW_ID_COUNT];
 
 
-void Gui::handleMenuBar()
+void Gui::HandleMenuBar()
 {
 	if (!ImGui::BeginMainMenuBar())
 		return;
@@ -16,37 +16,37 @@ void Gui::handleMenuBar()
 	if (ImGui::BeginMenu("Editors"))
 	{
 		if (ImGui::MenuItem("Level editor"))
-			Gui::createWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
+			Gui::CreateWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
 		ImGui::EndMenu();
 	}
 
 	ImGui::EndMainMenuBar();
 }
 
-void Gui::createWindow(GuiWindowsid id)
+void Gui::CreateWindow(GuiWindowsid id)
 {
-	if (Gui::m_openedWindows[id])
+	if (Gui::mOpenedWindows[id])
 	{
 		// TODO set focus
 		return;
 	}
 
-	Gui::m_openedWindows[id] = true;
+	Gui::mOpenedWindows[id] = true;
 }
 
-void Gui::update()
+void Gui::Update()
 {
-	Gui::handleMenuBar();
+	Gui::HandleMenuBar();
 
 	for (uint32_t i = 0; i < GUI_WINDOW_ID_COUNT; i++)
 	{
-		if (!Gui::m_openedWindows[i])
+		if (!Gui::mOpenedWindows[i])
 			continue;
 
 		switch (i)
 		{
 			case GUI_WINDOW_ID_LEVEL_EDITOR:
-				LevelEditor::update();
+				LevelEditor::Update();
 		}
 	}
 }

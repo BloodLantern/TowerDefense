@@ -10,13 +10,14 @@ class Enemy : public Entity
 public:
 	Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop);
 
-	void draw() override;
+	void Draw() override;
+	virtual void StickToPath();
 
 private:
-	Vector2 m_velocity;
-	uint32_t m_health;
-	uint8_t m_damage;
+	Vector2 mVelocity;
+	uint32_t mHealth;
+	uint8_t mDamage;
 
-	uint16_t m_moneyDrop;
-	bool m_slowed;
+	uint16_t mMoneyDrop;
+	bool mSlowed;
 };

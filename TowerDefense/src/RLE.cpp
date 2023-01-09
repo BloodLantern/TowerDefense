@@ -15,7 +15,7 @@
  * 
 */
 
-bool RLE::compressLevel(PlayField* pf, const char* dst)
+bool RLE::CompressLevel(PlayField* pf, const char* dst)
 {
 	if (!pf)
 	{
@@ -33,16 +33,16 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 	}
 
 	// Write size
-	fwrite(&pf->m_gridWidth, sizeof(pf->m_gridWidth), 1, f);
-	fwrite(&pf->m_gridHeight, sizeof(pf->m_gridHeight), 1, f);
+	fwrite(&pf->mGridWidth, sizeof(pf->mGridWidth), 1, f);
+	fwrite(&pf->mGridHeight, sizeof(pf->mGridHeight), 1, f);
 
 	// TODO tileset IDs
 	uint8_t zero = 0;
 	fwrite(&zero, sizeof(zero), 1, f);
 
-	size_t length = (size_t)pf->m_gridWidth * pf->m_gridHeight;
+	size_t length = (size_t)pf->mGridWidth * pf->mGridHeight;
 
-	uint8_t* _src8 = (uint8_t*)(pf->getClipdataPointer());
+	uint8_t* _src8 = (uint8_t*)(pf->GetClipdataPointer());
 
 	size_t i = 0;
 	while (i < length)
@@ -63,7 +63,7 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 		fwrite(&value, sizeof(value), 1, f);
 	}
 
-	uint16_t* _src16 = pf->getTilemapPointer(0);
+	uint16_t* _src16 = pf->GetTilemapPointer(0);
 
 	i = 0;
 	while (i < length)
@@ -84,7 +84,7 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 		fwrite(&value, sizeof(value), 1, f);
 	}
 
-	_src16 = pf->getTilemapPointer(1);
+	_src16 = pf->GetTilemapPointer(1);
 
 	i = 0;
 	while (i < length)
@@ -105,7 +105,7 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 		fwrite(&value, sizeof(value), 1, f);
 	}
 
-	_src16 = pf->getTilemapPointer(2);
+	_src16 = pf->GetTilemapPointer(2);
 
 	i = 0;
 	while (i < length)
@@ -130,7 +130,7 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 	return true;
 }
 
-bool RLE::decompressLevel(PlayField* pf, const char* src)
+bool RLE::DecompressLevel(PlayField* pf, const char* src)
 {
 	if (!pf)
 	{
@@ -152,14 +152,14 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 	uint16_t height;
 	fread(&height, sizeof(width), 1, f);
 
-	pf->resize(width, height);
+	pf->Resize(width, height);
 
 	size_t length = (size_t)width * height;
 
 	// TODO tileset
 	uint8_t tileset = fgetc(f);
 
-	uint8_t* _dst8 = (uint8_t*)(pf->getClipdataPointer());
+	uint8_t* _dst8 = (uint8_t*)(pf->GetClipdataPointer());
 	uint32_t i = 0;
 
 	while (i < length)
@@ -171,7 +171,7 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 			_dst8[i++] = value;
 	}
 
-	uint16_t* _dst16 = pf->getTilemapPointer(0);
+	uint16_t* _dst16 = pf->GetTilemapPointer(0);
 	i = 0;
 
 	while (i < length)
@@ -185,7 +185,7 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 			_dst16[i++] = value;
 	}
 
-	_dst16 = pf->getTilemapPointer(1);
+	_dst16 = pf->GetTilemapPointer(1);
 	i = 0;
 
 	while (i < length)
@@ -199,7 +199,7 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 			_dst16[i++] = value;
 	}
 
-	_dst16 = pf->getTilemapPointer(2);
+	_dst16 = pf->GetTilemapPointer(2);
 	i = 0;
 
 	while (i < length)
@@ -217,7 +217,7 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 	return true;
 }
 
-bool RLE::compress(void* src, size_t length, const char* dst)
+bool RLE::Compress(void* src, size_t length, const char* dst)
 {
 	FILE* f;
 	fopen_s(&f, dst, "wb");
@@ -253,7 +253,7 @@ bool RLE::compress(void* src, size_t length, const char* dst)
 	return true;
 }
 
-bool RLE::decompress(void* dst, const char* src)
+bool RLE::Decompress(void* dst, const char* src)
 {
 	FILE* f;
 	fopen_s(&f, src, "rb");

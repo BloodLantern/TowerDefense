@@ -16,7 +16,7 @@ int32_t Globals::gGridY;
 
 bool Globals::fullscreen = false;
 
-void Globals::updateGlobals()
+void Globals::UpdateGlobals()
 {
 	gDrawList = ImGui::GetBackgroundDrawList();
 	gIO = &ImGui::GetIO();
@@ -24,7 +24,7 @@ void Globals::updateGlobals()
 	gGridY = gWindowY + GRID_OFFSET_Y;
 }
 
-void Globals::bindGame(Game* g)
+void Globals::BindGame(Game* g)
 {
 	gGame = g;
 }

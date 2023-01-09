@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 	ImGui_ImplOpenGL3_Init(glslVersion);
 
 	Game game;
-	Globals::bindGame(&game);
+	Globals::BindGame(&game);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -88,9 +88,9 @@ int main(int argc, char** argv)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		Globals::updateGlobals();
+		Globals::UpdateGlobals();
 		game.Draw();
-		Gui::update();
+		Gui::Update();
 
 		// Rendering
 		ImGui::Render();

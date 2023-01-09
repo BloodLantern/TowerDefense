@@ -80,46 +80,46 @@ inline PlayFieldDrawFlags operator^=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b
 class PlayField
 {
 private:
-	std::vector<ClipdataType> m_clipdata;
-	std::vector<uint16_t> m_layer2Tilemap;
-	std::vector<uint16_t> m_layer1Tilemap;
-	std::vector<uint16_t> m_layer0Tilemap;
+	std::vector<ClipdataType> mClipdata;
+	std::vector<uint16_t> mLayer2Tilemap;
+	std::vector<uint16_t> mLayer1Tilemap;
+	std::vector<uint16_t> mLayer0Tilemap;
 
-	PlayFieldDrawFlags m_drawFlags;
+	PlayFieldDrawFlags mDrawFlags;
 
 
 	bool maxR;
 	size_t r;
 	TowerBarUI towerBarUI;
 	
-	void drawClipdata();
-	void drawLayers();
-	void drawLines();
+	void DrawClipdata();
+	void DrawLayers();
+	void DrawLines();
 
 public:
-	Texture m_tileset;
-	uint16_t m_gridWidth;
-	uint16_t m_gridHeight;
+	Texture mTileset;
+	uint16_t mGridWidth;
+	uint16_t mGridHeight;
 
 	PlayField();
 	~PlayField();
 
-	void resize(uint16_t width, uint16_t height);
-	void setDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags);
+	void Resize(uint16_t width, uint16_t height);
+	void SetDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags);
 
-	void draw();
-	void save(std::string dst);
-	void load(std::string src);
+	void Draw();
+	void Save(std::string dst);
+	void Load(std::string src);
 
-	void setClipdataTile(uint8_t x, uint8_t y, ClipdataType type);
-	ClipdataType getClipdataTile(uint8_t x, uint8_t y);
+	void SetClipdataTile(uint8_t x, uint8_t y, ClipdataType type);
+	ClipdataType GetClipdataTile(uint8_t x, uint8_t y);
 
-	void loadTileset(const char* name);
-	void setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
+	void LoadTileset(const char* name);
+	void SetLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
 
-	ClipdataType* getClipdataPointer();
-	uint16_t* getTilemapPointer(uint8_t layer);
+	ClipdataType* GetClipdataPointer();
+	uint16_t* GetTilemapPointer(uint8_t layer);
 
-	void getGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
-	void getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
+	void GetGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
+	void GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
 };

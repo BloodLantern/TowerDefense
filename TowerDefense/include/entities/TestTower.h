@@ -14,7 +14,7 @@ public:
 	TestTower(Texture* texture);
 	TestTower(Point2 pixelPosition);
 
-	void shoot(const Projectile& projTemplate) override;
+	void Shoot(const Projectile& projTemplate) override;
 
 private:
 
