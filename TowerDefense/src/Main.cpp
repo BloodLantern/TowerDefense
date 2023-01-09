@@ -12,6 +12,7 @@
 #include "Gui.h"
 
 #include "discordRPC/discord_rpc.h"
+#include "stb_image.h"
 
 #include <chrono>
 
@@ -21,21 +22,14 @@
 
 void SetupDiscordRPC(DiscordRichPresence* rpc)
 {
+	memset(rpc, 0, sizeof(*rpc));
 	rpc->state = "Playing Solo";
-	rpc->details = "Competitive";
+	rpc->details = "Wave 1/20";
 	rpc->startTimestamp = std::time(nullptr);
-	rpc->endTimestamp = 0;
 	rpc->largeImageKey = "logo";
-	rpc->largeImageText = "In game";
-	rpc->smallImageKey = "";
-	rpc->matchSecret = "";
-	rpc->joinSecret = "";
-	rpc->spectateSecret = "";
-	rpc->smallImageText = "Rogue - Level 100";
-	rpc->partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
-	rpc->partySize = 1;
-	rpc->partyMax = 1;
-	rpc->joinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= ";
+	rpc->largeImageText = "Fourmi defense";
+	// rpc->partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
+	// rpc->joinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= ";
 	Discord_UpdatePresence(rpc);
 }
 
@@ -79,7 +73,12 @@ int main(int argc, char** argv)
 	if (window == NULL)
 		return 1;
 
+	// Set icon
 	glfwMakeContextCurrent(window);
+	GLFWimage windowIcon;
+	windowIcon.pixels = stbi_load("assets/ant.png", &windowIcon.width, &windowIcon.height, 0, 4);
+
+	glfwSetWindowIcon(window, 1, &windowIcon);
 	glfwSwapInterval(1); // Enable vsync
 
 	// Setup Dear ImGui context
@@ -99,8 +98,7 @@ int main(int argc, char** argv)
 
 	DiscordEventHandlers discordEvents = { 0 };
 	Discord_Initialize("1062095306986115073", &discordEvents, true, nullptr);
-	DiscordRichPresence rpc;
-	SetupDiscordRPC(&rpc);
+	SetupDiscordRPC(&Globals::gDiscordRpc);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -118,7 +116,7 @@ int main(int argc, char** argv)
 		Globals::UpdateGlobals();
 		game.Draw();
 		Gui::Update();
-		Discord_UpdatePresence(&rpc);
+		Discord_UpdatePresence(&Globals::gDiscordRpc);
 
 		// Rendering
 		ImGui::Render();

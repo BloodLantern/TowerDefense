@@ -5,6 +5,7 @@ ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;
 
 Game* Globals::gGame;
+DiscordRichPresence Globals::gDiscordRpc;
 
 int32_t Globals::gWindowX;
 int32_t Globals::gWindowY;

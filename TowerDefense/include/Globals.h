@@ -3,6 +3,7 @@
 #include <Vector2.h>
 #include <imgui.h>
 #include <stdint.h>
+#include "discordRPC/discord_rpc.h"
 
 #include "game.h"
 
@@ -13,6 +14,7 @@ public:
 	static ImGuiIO* gIO;
 
 	static Game* gGame;
+	static DiscordRichPresence gDiscordRpc;
 
 	static int32_t gWindowX;
 	static int32_t gWindowY;
