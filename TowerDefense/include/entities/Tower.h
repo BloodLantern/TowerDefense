@@ -6,6 +6,8 @@
 
 #include <stdint.h>
 
+class Player;
+
 class Tower : public Entity
 {
 public:
@@ -20,6 +22,8 @@ public:
     float_t GetRange() const { return mRange; }
 	uint8_t GetWidth() const { return mWidth; }
 	uint8_t GetHeight() const { return mHeight; }
+	Player* GetOwner() const { return mOwner; }
+	void SetOwner(Player* newOwner) { mOwner = newOwner; }
 
 protected:
 	void SetRange(float range) { mRange = range; }
@@ -43,4 +47,6 @@ private:
 	uint32_t mDamageDealt = 0;
 	uint32_t mKillCount = 0;
 	uint32_t mMoneyGenerated = 0;
+
+	Player* mOwner;
 };
