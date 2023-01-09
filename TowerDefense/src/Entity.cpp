@@ -4,51 +4,51 @@
 
 Entity::Entity()
 {
-	m_pixelPosition = Point2(INFINITY, INFINITY);
-	m_tilePosition = Point2(INFINITY, INFINITY);
+	mPixelPosition = Point2(INFINITY, INFINITY);
+	mTilePosition = Point2(INFINITY, INFINITY);
 }
 
 Entity::Entity(const Entity& other)
-    : m_texture(other.m_texture)
+    : mTexture(other.mTexture)
 {
 }
 
 Entity::Entity(Point2 pixelPosition)
 {
-	setPixelPosition(pixelPosition);
+	SetPixelPosition(pixelPosition);
 }
 
 Entity::Entity(float_t pixelPositionX, float_t pixelPositionY)
 {
-	setPixelPosition(Point2(pixelPositionX, pixelPositionY));
+	SetPixelPosition(Point2(pixelPositionX, pixelPositionY));
 }
 
 Entity::Entity(int32_t tilePositionX, int32_t tilePositionY)
 {
-	setTilePosition(Point2((float_t)tilePositionX, (float_t)tilePositionY));
+	SetTilePosition(Point2((float_t)tilePositionX, (float_t)tilePositionY));
 }
 
-void Entity::draw()
+void Entity::Draw()
 {
-	ImVec2 pos(Globals::gWindowX + m_pixelPosition.x, Globals::gWindowY + m_pixelPosition.y);
+	ImVec2 pos(Globals::gWindowX + mPixelPosition.x, Globals::gWindowY + mPixelPosition.y);
 
 	Globals::gDrawList->AddCircleFilled(pos, GRID_SQUARE_SIZE / 2, IM_COL32(0xFF, 0xFF, 0x0, 0xFF));
 }
 
-void Entity::setPixelPosition(Point2 newPixelPosition)
+void Entity::SetPixelPosition(Point2 newPixelPosition)
 {
-	m_pixelPosition = newPixelPosition;
+	mPixelPosition = newPixelPosition;
 
 	uint8_t tileX, tileY;
-	Globals::gGame->getPlayField()->getGridPositionFromPixels(newPixelPosition.x, newPixelPosition.y, tileX, tileY);
-	m_tilePosition = Point2(tileX, tileY);
+	Globals::gGame->GetPlayField()->GetGridPositionFromPixels(newPixelPosition.x, newPixelPosition.y, tileX, tileY);
+	mTilePosition = Point2(tileX, tileY);
 }
 
-void Entity::setTilePosition(Point2 newTilePosition)
+void Entity::SetTilePosition(Point2 newTilePosition)
 {
-	m_tilePosition = newTilePosition;
+	mTilePosition = newTilePosition;
 
 	int32_t pixelX, pixelY;
-	Globals::gGame->getPlayField()->getPixelPositionFromGrid(newTilePosition.x, newTilePosition.y, pixelX, pixelY);
-	m_pixelPosition = Point2(pixelX, pixelY);
+	Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(newTilePosition.x, newTilePosition.y, pixelX, pixelY);
+	mPixelPosition = Point2(pixelX, pixelY);
 }

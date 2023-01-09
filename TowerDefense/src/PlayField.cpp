@@ -9,19 +9,19 @@
 PlayField::PlayField()
 	: maxR(true), r(0)
 {
-	resize(42, 18);
+	Resize(42, 18);
 
-	loadTileset("forest.png");
+	LoadTileset("forest.png");
 	
-	if (!RLE::decompressLevel(this, MAPS_PATH "Level1.bin"))
+	if (!RLE::DecompressLevel(this, MAPS_PATH "Level1.bin"))
 	{
 		std::cout << "Failed to open file" << std::endl;
-		for (int32_t x = 0; x < m_gridWidth; x++)
-			for (int32_t y = 0; y < m_gridHeight; y++)
-				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
+		for (int32_t x = 0; x < mGridWidth; x++)
+			for (int32_t y = 0; y < mGridHeight; y++)
+				mClipdata[y * mGridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
 
-	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 |
+	SetDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 |
 		PLAYFIELD_DRAW_FLAGS_LAYER1 | PLAYFIELD_DRAW_FLAGS_LAYER2);
 }
 
@@ -30,14 +30,14 @@ PlayField::~PlayField()
 {
 }
 
-void PlayField::drawClipdata()
+void PlayField::DrawClipdata()
 {
-	for (int32_t y = 0; y < m_gridHeight; y++)
+	for (int32_t y = 0; y < mGridHeight; y++)
 	{
-		for (int32_t x = 0; x < m_gridWidth; x++)
+		for (int32_t x = 0; x < mGridWidth; x++)
 		{
 			ImU32 color;
-			switch (m_clipdata[y * m_gridWidth + x])
+			switch (mClipdata[y * mGridWidth + x])
 			{
 				case CLIPDATA_TYPE_EMPTY:
 					// WHITE
@@ -72,11 +72,11 @@ void PlayField::drawClipdata()
 	}
 }
 
-void PlayField::drawLayers()
+void PlayField::DrawLayers()
 {
-	ImTextureID texId = m_tileset.id;
-	int32_t texWidth = m_tileset.width;
-	int32_t texHeight = m_tileset.height;
+	ImTextureID texId = mTileset.id;
+	int32_t texWidth = mTileset.width;
+	int32_t texHeight = mTileset.height;
 
 	uint32_t rowWidth = texWidth / GRID_SQUARE_SIZE;
 	uint32_t colHeight = texHeight / GRID_SQUARE_SIZE;
@@ -84,9 +84,9 @@ void PlayField::drawLayers()
 	float_t uvxSize = 1.f / rowWidth;
 	float_t uvySize = 1.f / colHeight;
 
-	for (int32_t y = 0; y < m_gridHeight; y++)
+	for (int32_t y = 0; y < mGridHeight; y++)
 	{
-		for (int32_t x = 0; x < m_gridWidth; x++)
+		for (int32_t x = 0; x < mGridWidth; x++)
 		{
 			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
 			ImVec2 pMax(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
@@ -96,9 +96,9 @@ void PlayField::drawLayers()
 			ImVec2 uvMin;
 			ImVec2 uvMax;
 
-			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER2)
+			if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_LAYER2)
 			{
-				tile = m_layer2Tilemap[y * m_gridWidth + x];
+				tile = mLayer2Tilemap[y * mGridWidth + x];
 
 				tileY = tile / rowWidth;
 				tileX = tile % rowWidth;
@@ -109,9 +109,9 @@ void PlayField::drawLayers()
 				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
 			}
 
-			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER1)
+			if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_LAYER1)
 			{
-				tile = m_layer1Tilemap[y * m_gridWidth + x];
+				tile = mLayer1Tilemap[y * mGridWidth + x];
 
 				tileY = tile / rowWidth;
 				tileX = tile % rowWidth;
@@ -122,9 +122,9 @@ void PlayField::drawLayers()
 				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
 			}
 
-			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER0)
+			if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_LAYER0)
 			{
-				tile = m_layer0Tilemap[y * m_gridWidth + x];
+				tile = mLayer0Tilemap[y * mGridWidth + x];
 
 				tileY = tile / rowWidth;
 				tileX = tile % rowWidth;
@@ -138,62 +138,62 @@ void PlayField::drawLayers()
 	}
 }
 
-void PlayField::resize(uint16_t width, uint16_t height)
+void PlayField::Resize(uint16_t width, uint16_t height)
 {
-	m_gridWidth = width;
-	m_gridHeight = height;
+	mGridWidth = width;
+	mGridHeight = height;
 
-	m_clipdata.resize(m_gridWidth * m_gridHeight);
-	m_layer0Tilemap.resize(m_gridWidth * m_gridHeight);
-	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
-	m_layer2Tilemap.resize(m_gridWidth * m_gridHeight);
+	mClipdata.resize(mGridWidth * mGridHeight);
+	mLayer0Tilemap.resize(mGridWidth * mGridHeight);
+	mLayer1Tilemap.resize(mGridWidth * mGridHeight);
+	mLayer2Tilemap.resize(mGridWidth * mGridHeight);
 }
 
-void PlayField::setDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags)
+void PlayField::SetDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags)
 {
 	switch (operation)
 	{
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_ADD:
-			m_drawFlags |= flags;
+			mDrawFlags |= flags;
 			break;
 
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_REMOVE:
-			m_drawFlags &= static_cast<PlayFieldDrawFlags>(~flags);
+			mDrawFlags &= static_cast<PlayFieldDrawFlags>(~flags);
 			break;
 
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_TOGGLE:
-			m_drawFlags ^= flags;
+			mDrawFlags ^= flags;
 			break;
 
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_SET:
-			m_drawFlags = flags;
+			mDrawFlags = flags;
 	}
 }
 
-void PlayField::drawLines()
+void PlayField::DrawLines()
 {
-	for (int32_t y = 0; y < m_gridHeight; y++)
+	for (int32_t y = 0; y < mGridHeight; y++)
 	{
 		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
-			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
+			ImVec2((float_t)Globals::gGridX + mGridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
 		
-		for (int32_t x = 0; x < m_gridWidth; x++)
+		for (int32_t x = 0; x < mGridWidth; x++)
 		{
 			Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
-				ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+				ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + mGridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
 		}
 	}
 }
 
-void PlayField::draw()
+void PlayField::Draw()
 {
-	drawLayers();
+	DrawLayers();
 	
-	if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_CLIPDATA)
-		drawClipdata();
+	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_CLIPDATA)
+		DrawClipdata();
 
-	if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
-		drawLines();
+	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
+		DrawLines();
 
 	towerBarUI.draw();
 
@@ -202,7 +202,7 @@ void PlayField::draw()
 	{
 		if (ImGui::Button("Test"))
 		{
-			std::cout << AStar::findBestPath(m_gridWidth - 1, m_gridHeight / 2, 0, m_gridHeight / 2) << std::endl;
+			std::cout << AStar::FindBestPath(mGridWidth - 1, mGridHeight / 2, 0, mGridHeight / 2) << std::endl;
 		}
 
 		if (AStar::recordPositions.size() != 0)
@@ -224,95 +224,95 @@ void PlayField::draw()
 	ImGui::End();
 }
 
-void PlayField::save(std::string dst)
+void PlayField::Save(std::string dst)
 {
 	std::string _dst = MAPS_PATH;
 	_dst += dst;
-	RLE::compressLevel(this, _dst.c_str());
+	RLE::CompressLevel(this, _dst.c_str());
 }
 
-void PlayField::load(std::string src)
+void PlayField::Load(std::string src)
 {
 	std::string _src = MAPS_PATH;
 	_src += src;
-	RLE::decompressLevel(this, _src.c_str());
+	RLE::DecompressLevel(this, _src.c_str());
 }
 
-void PlayField::setClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
+void PlayField::SetClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
 {
-	if (x >= m_gridWidth || y >= m_gridHeight)
+	if (x >= mGridWidth || y >= mGridHeight)
 		return;
 
-	m_clipdata[y * m_gridWidth + x] = type;
+	mClipdata[y * mGridWidth + x] = type;
 }
 
-ClipdataType PlayField::getClipdataTile(uint8_t x, uint8_t y)
+ClipdataType PlayField::GetClipdataTile(uint8_t x, uint8_t y)
 {
-	if (x >= m_gridWidth || y >= m_gridHeight)
+	if (x >= mGridWidth || y >= mGridHeight)
 		return CLIPDATA_TYPE_NOTHING;
 
-	return m_clipdata[y * m_gridWidth + x];
+	return mClipdata[y * mGridWidth + x];
 }
 
 
-void PlayField::loadTileset(const char* name)
+void PlayField::LoadTileset(const char* name)
 {
-	m_tileset = ImGuiUtils::LoadTexture(std::string("assets/tilesets/").append(name).c_str());
+	mTileset = ImGuiUtils::LoadTexture(std::string("assets/tilesets/").append(name).c_str());
 }
 
-void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value)
+void PlayField::SetLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value)
 {
-	if (x >= m_gridWidth || y >= m_gridHeight)
+	if (x >= mGridWidth || y >= mGridHeight)
 		return;
 
 	switch (layer)
 	{
 		case 0:
-			m_layer0Tilemap[y * m_gridWidth + x] = value;
+			mLayer0Tilemap[y * mGridWidth + x] = value;
 			break;
 
 		case 1:
-			m_layer1Tilemap[y * m_gridWidth + x] = value;
+			mLayer1Tilemap[y * mGridWidth + x] = value;
 			break;
 
 		case 2:
-			m_layer2Tilemap[y * m_gridWidth + x] = value;
+			mLayer2Tilemap[y * mGridWidth + x] = value;
 	}
 }
 
-ClipdataType* PlayField::getClipdataPointer()
+ClipdataType* PlayField::GetClipdataPointer()
 {
-	return m_clipdata.data();
+	return mClipdata.data();
 }
 
-uint16_t* PlayField::getTilemapPointer(uint8_t layer)
+uint16_t* PlayField::GetTilemapPointer(uint8_t layer)
 {
 	uint16_t* pLayers[] = {
-		m_layer0Tilemap.data(),
-		m_layer1Tilemap.data(),
-		m_layer2Tilemap.data(),
+		mLayer0Tilemap.data(),
+		mLayer1Tilemap.data(),
+		mLayer2Tilemap.data(),
 	};
 
 	return pLayers[layer];
 }
 
-void PlayField::getGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
+void PlayField::GetGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
 {
 	uint8_t x = (mouseX - Globals::gGridX) / GRID_SQUARE_SIZE;
 	uint8_t y = (mouseY - Globals::gGridY) / GRID_SQUARE_SIZE;
 
-	if (x >= m_gridWidth)
+	if (x >= mGridWidth)
 		tileX = UCHAR_MAX;
 	else
 		tileX = x;
 
-	if (y >= m_gridHeight)
+	if (y >= mGridHeight)
 		tileY = UCHAR_MAX;
 	else
 		tileY = y;
 }
 
-void PlayField::getPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY)
+void PlayField::GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY)
 {
 	screenX = tileX * GRID_SQUARE_SIZE;
 	screenY = tileY * GRID_SQUARE_SIZE;

@@ -10,10 +10,10 @@ TestTower::TestTower(const TestTower& other)
 TestTower::TestTower(Texture* texture)
 	: Tower(new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
-	setWidth(1);
-	setHeight(1);
-	setRange(5);
-	setTexture(texture);
+	SetWidth(1);
+	SetHeight(1);
+	SetRange(5);
+	SetTexture(texture);
 }
 
 TestTower::TestTower(Point2 pixelPosition)
@@ -21,6 +21,6 @@ TestTower::TestTower(Point2 pixelPosition)
 {
 }
 
-void TestTower::shoot(const Projectile& projTemplate)
+void TestTower::Shoot(const Projectile& projTemplate)
 {
 }

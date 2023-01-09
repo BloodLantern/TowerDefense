@@ -24,6 +24,6 @@ public:
 
 	static bool fullscreen;
 
-	static void updateGlobals();
-	static void bindGame(Game* g);
+	static void UpdateGlobals();
+	static void BindGame(Game* g);
 };

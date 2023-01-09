@@ -7,48 +7,46 @@
 class LevelEditor
 {
 private:
-	static int32_t m_currentBlockType;
-	static int32_t m_currentLayer;
-	static uint16_t m_currentTileValue;
+	static int32_t mCurrentBlockType;
+	static int32_t mCurrentLayer;
+	static uint16_t mCurrentTileValue;
 		
-	static bool m_dragEnabled;
-	static bool m_canPlaceTile;
-	static bool m_updateAStar;
-	static char m_fileName[20];
+	static bool mDragEnabled;
+	static bool mCanPlaceTile;
+	static bool mUpdateAStar;
+	static char mFileName[20];
 
-	static int32_t m_gridWidthInput;
-	static int32_t m_gridHeightInput;
-	static PlayFieldDrawFlags m_drawFlags;
+	static int32_t mGridWidthInput;
+	static int32_t mGridHeightInput;
+	static PlayFieldDrawFlags mDrawFlags;
 
-	static bool m_selectionActive;
-	static uint8_t m_selectionStartX;
-	static uint8_t m_selectionStartY;
-	static uint8_t m_selectionEndX;
-	static uint8_t m_selectionEndY;
-	static uint8_t m_selectionWidth;
-	static uint8_t m_selectionHeight;;
-	static uint8_t m_selectionCopyWidth;
-	static uint8_t m_selectionCopyHeight;
-	static std::vector<ClipdataType> m_selectionCopyData;
+	static bool mSelectionActive;
+	static uint8_t mSelectionStartX;
+	static uint8_t mSelectionStartY;
+	static uint8_t mSelectionEndX;
+	static uint8_t mSelectionEndY;
+	static uint8_t mSelectionWidth;
+	static uint8_t mSelectionHeight;;
+	static uint8_t mSelectionCopyWidth;
+	static uint8_t mSelectionCopyHeight;
+	static std::vector<ClipdataType> mSelectionCopyData;
 
-	static void verticalSpace();
+	static void VerticalSpace();
 
-	static void handleMisc();
-	static void handleClear();
-	static void handleResize();
+	static void HandleMisc();
+	static void HandleClear();
+	static void HandleResize();
 
-	static void handleFile();
-	static void handleCursor();
+	static void HandleFile();
+	static void HandleCursor();
 
-	static void handleTileset();
+	static void HandleTileset();
 
-	static void handleSelection();
-	static void handleHotkeys();
+	static void HandleSelection();
+	static void HandleHotkeys();
 
 
-public:
-	static void loadTileset(const char* name);
-	
-	static void update();
+public:	
+	static void Update();
 };
 

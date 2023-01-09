@@ -22,10 +22,10 @@ public:
 	void draw();
 
 private:
-	const Tower* towerTemplates[TOWER_COUNT]{
+	const Tower* mTowerTemplates[TOWER_COUNT]{
 		new TestTower(&towerTextures[0])
 	};
-	bool extended = false;
+	bool mExtended = false;
 
-	void handleMouse();
+	void HandleMouse();
 };

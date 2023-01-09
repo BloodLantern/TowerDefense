@@ -11,11 +11,11 @@ class Gui
 {
 private:
 
-	static void handleMenuBar();
+	static void HandleMenuBar();
 
 public:
-	static bool m_openedWindows[GUI_WINDOW_ID_COUNT];
+	static bool mOpenedWindows[GUI_WINDOW_ID_COUNT];
 
-	static void createWindow(enum GuiWindowsid id);
-	static void update();
+	static void CreateWindow(enum GuiWindowsid id);
+	static void Update();
 };

@@ -10,10 +10,10 @@ public:
 
     void Draw();
 
-    PlayField* getPlayField() const { return m_playField; }
-    Player* getPlayer() const { return m_player; }
+    PlayField* GetPlayField() const { return mPlayField; }
+    Player* GetPlayer() const { return mPlayer; }
 
 private:
-    PlayField* m_playField;
-    Player* m_player;
+    PlayField* mPlayField;
+    Player* mPlayer;
 };

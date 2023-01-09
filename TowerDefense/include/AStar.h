@@ -39,13 +39,13 @@ private:
 
 	AStar() { }; // Prevent creating an instance of this class
 
-	static std::vector<AStarNode> nodesField;
+	static std::vector<AStarNode> mNodesField;
 
-	static bool compareHeuristics(const AStarNode* n1, const AStarNode* n2);
-	static double_t getDistance(const AStarNode* n1, const AStarNode* n2);
+	static bool CompareHeuristics(const AStarNode* n1, const AStarNode* n2);
+	static double_t GetDistance(const AStarNode* n1, const AStarNode* n2);
 
 public:
 	static std::vector<ImVec2> recordPositions;
 
-	static bool findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t startY);
+	static bool FindBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t startY);
 };

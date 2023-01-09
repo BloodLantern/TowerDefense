@@ -1,10 +1,15 @@
 #include "Enemy.h"
 
 Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop)
-	: Entity(pixelPosition), m_health(health), m_damage(damage), m_moneyDrop(moneyDrop)
+	: Entity(pixelPosition), mHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 }
 
-void Enemy::draw()
+void Enemy::Draw()
 {
+}
+
+void Enemy::StickToPath()
+{
+
 }

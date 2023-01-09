@@ -23,7 +23,7 @@ TowerBarUI::~TowerBarUI()
 {
 	for (int i = 0; i < TOWER_COUNT; i++) {
 		ImGuiUtils::UnloadTexture(towerTextures[i]);
-		delete towerTemplates[i];
+		delete mTowerTemplates[i];
 	}
 }
 
@@ -41,10 +41,10 @@ void TowerBarUI::draw()
 		Globals::gDrawList->AddImage(towerTextures[i].id, ImVec2(x, y + TOWER_BAR_Y_OFFSET / 2),
 			ImVec2(x + TOWER_BAR_TOWER_SIZE, y + TOWER_BAR_Y_OFFSET / 2 + TOWER_BAR_TOWER_SIZE));
 
-	handleMouse();
+	HandleMouse();
 }
 
-void TowerBarUI::handleMouse()
+void TowerBarUI::HandleMouse()
 {
 	if (Globals::gIO->WantCaptureMouse)
 		return;
@@ -73,9 +73,9 @@ void TowerBarUI::handleMouse()
 	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y)
 	{
 		int selectedTowerIndex = std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1);
-		const Tower* selectedTower = towerTemplates[selectedTowerIndex];
-		const int selectedTowerWidth = selectedTower->getWidth() * GRID_SQUARE_SIZE;
-		const int selectedTowerHeight = selectedTower->getHeight() * GRID_SQUARE_SIZE;
+		const Tower* selectedTower = mTowerTemplates[selectedTowerIndex];
+		const int selectedTowerWidth = selectedTower->GetWidth() * GRID_SQUARE_SIZE;
+		const int selectedTowerHeight = selectedTower->GetHeight() * GRID_SQUARE_SIZE;
 
 		ImVec2 topLeft = ImVec2(mousePos.x - selectedTowerWidth / 2, mousePos.y - selectedTowerHeight / 2);
 		ImVec2 bottomRight = ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight);
@@ -86,8 +86,8 @@ void TowerBarUI::handleMouse()
 		{
 
 			// If on the playfield
-			if (mousePos.x < Globals::gGridX + Globals::gGame->getPlayField()->m_gridWidth * GRID_SQUARE_SIZE
-				&& mousePos.y < Globals::gGridY + Globals::gGame->getPlayField()->m_gridHeight * GRID_SQUARE_SIZE)
+			if (mousePos.x < Globals::gGridX + Globals::gGame->GetPlayField()->mGridWidth * GRID_SQUARE_SIZE
+				&& mousePos.y < Globals::gGridY + Globals::gGame->GetPlayField()->mGridHeight * GRID_SQUARE_SIZE)
 			{
 				int xSnapped = tileX * GRID_SQUARE_SIZE;
 				int ySnapped = tileY * GRID_SQUARE_SIZE;
@@ -99,7 +99,7 @@ void TowerBarUI::handleMouse()
 
 			// Range
 			Globals::gDrawList->AddCircleFilled(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2),
-				towerTemplates[selectedTowerIndex]->getRange() * GRID_SQUARE_SIZE, IM_COL32(0xB0, 0xB0, 0xB0, 0x70));
+				mTowerTemplates[selectedTowerIndex]->GetRange() * GRID_SQUARE_SIZE, IM_COL32(0xB0, 0xB0, 0xB0, 0x70));
 			// Tower
 			Globals::gDrawList->AddImage(towerTextures[selectedTowerIndex].id, topLeft, bottomRight);
 
@@ -110,9 +110,9 @@ void TowerBarUI::handleMouse()
 		{
 			// TODO Remove money
 			// TODO Check if there is enough space
-			Tower* tower = new Tower(*towerTemplates[selectedTowerIndex]);
-			tower->setTilePosition(Point2(tileX, tileY));
-			Globals::gGame->getPlayer()->getTowers()->push_back(tower);
+			Tower* tower = new Tower(*mTowerTemplates[selectedTowerIndex]);
+			tower->SetTilePosition(Point2(tileX, tileY));
+			Globals::gGame->GetPlayer()->GetTowers()->push_back(tower);
 		}
 	}
 }
