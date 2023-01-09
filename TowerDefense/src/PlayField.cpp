@@ -76,8 +76,7 @@ void PlayField::drawClipdata()
 			Globals::gDrawList->AddRectFilled(pMin, pMax, color);
 		}
 
-		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
-			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
+		
 	}
 }
 
@@ -137,9 +136,7 @@ void PlayField::draw()
 	drawLayers();
 	//drawClipdata();
 
-	for (int32_t x = 0; x < m_gridWidth; x++)
-		Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
-			ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+	drawLines();
 
 	towerBarUI.draw();
 
@@ -168,6 +165,20 @@ void PlayField::draw()
 		}
 	}
 	ImGui::End();
+}
+
+void PlayField::drawLines()
+{
+	for (int32_t y = 0; y < m_gridHeight; y++)
+	{
+		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
+			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
+		for (int32_t x = 0; x < m_gridWidth; x++)
+		{
+			Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
+				ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+		}
+	}
 }
 
 void PlayField::save(std::string dst)

@@ -3,6 +3,7 @@
 #include "PlayField.h"
 
 #define TOWER_BAR_TOWER_SIZE 64
+#define TOWER_BAR_TOWER_OFFSET_X 8
 
 #define TOWER_BAR_Y_OFFSET 2
 #define TOWER_BAR_HEIGHT TOWER_BAR_TOWER_SIZE + TOWER_BAR_Y_OFFSET
@@ -61,10 +62,10 @@ void TowerBarUI::handleMouse()
 		// If on the playfield
 		if (pos.y < Globals::gGridY + Globals::gPlayField->m_gridHeight * GRID_SQUARE_SIZE && pos.x < Globals::gGridX + Globals::gPlayField->m_gridWidth * GRID_SQUARE_SIZE)
 		{
-			double xSnap = fmod(mousePos.x, GRID_SQUARE_SIZE);
-			double ySnap = fmod(mousePos.y, GRID_SQUARE_SIZE);
-			topLeft.x = topLeft.x + (GRID_SQUARE_SIZE - xSnap) / 2;
-			topLeft.y = topLeft.y + (GRID_SQUARE_SIZE - ySnap) / 2;
+			int xSnapped = ((int) (mousePos.x - Globals::gGridX) / GRID_SQUARE_SIZE) * GRID_SQUARE_SIZE;
+			int ySnapped = ((int) (mousePos.y - Globals::gGridY) / GRID_SQUARE_SIZE) * GRID_SQUARE_SIZE;
+			topLeft.x = xSnapped + Globals::gGridX;
+			topLeft.y = ySnapped + Globals::gGridY;
 			bottomRight.x = topLeft.x + TOWER_BAR_TOWER_SIZE;
 			bottomRight.y = topLeft.y + TOWER_BAR_TOWER_SIZE;
 		}
