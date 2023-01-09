@@ -130,7 +130,9 @@ void TowerBarUI::HandleMouse()
 			{
 				Tower* tower = new Tower(*mTowerTemplates[selectedTowerIndex]);
 				tower->SetTilePosition(Point2(tileX, tileY));
+				tower->SetOwner(Globals::gGame->GetPlayer());
 				Globals::gGame->GetPlayer()->GetTowers()->push_back(tower);
+
 				for (int x = 0; x < selectedTower->GetWidth(); x++)
 					for (int y = 0; y < selectedTower->GetHeight(); y++)
 						Globals::gGame->GetPlayField()->SetClipdataTile(tileX + x, tileY + y, CLIPDATA_TYPE_OCCUPIED);
