@@ -10,10 +10,10 @@
 class TestTower : public Tower
 {
 public:
+	TestTower(const TestTower& other);
 	TestTower(Texture* texture);
 	TestTower(Point2 pixelPosition);
 
-	void draw() override;
 	void shoot(const Projectile& projTemplate) override;
 
 private:

@@ -9,10 +9,13 @@
 class Tower : public Entity
 {
 public:
+	Tower(const Tower& other);
 	Tower(Projectile* projectileTemplate);
 	Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate);
+	virtual ~Tower() {};
 
-	virtual void shoot(const Projectile& projTemplate) = 0;
+	virtual void shoot(const Projectile& projTemplate);
+	void draw() override;
 
     float_t getRange() const { return m_range; }
 	uint8_t getWidth() const { return m_width; }
@@ -24,20 +27,20 @@ protected:
 	void setHeight(uint8_t newHeight) { m_height = newHeight; }
 
 private:
-	float_t m_range;
+	float_t m_range = 3.f;
 	// Number of attacks per second
-	float_t m_attackSpeed;
+	float_t m_attackSpeed = 1.f;
 
 	Projectile& m_projectileTemplate;
 	Enemy* m_target;
 
-	uint8_t m_genericUpgradeLevel;
-	uint8_t m_customUpgradeLevel;
+	uint8_t m_genericUpgradeLevel = 1;
+	uint8_t m_customUpgradeLevel = 1;
 
-	uint8_t m_width;
-	uint8_t m_height;
+	uint8_t m_width = 1;
+	uint8_t m_height = 1;
 
-	uint32_t m_damageDealt;
-	uint32_t m_killCount;
-	uint32_t m_moneyGenerated;
+	uint32_t m_damageDealt = 0;
+	uint32_t m_killCount = 0;
+	uint32_t m_moneyGenerated = 0;
 };

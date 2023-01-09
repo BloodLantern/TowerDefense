@@ -9,10 +9,11 @@ class Entity
 {
 public:
 	Entity();
+	Entity(const Entity& other);
 	Entity(Point2 pixelPosition);
 	Entity(float_t pixelPositionX, float_t pixelPositionY);
 	Entity(int32_t tilePositionX, int32_t tilePositionY);
-	~Entity() {};
+	virtual ~Entity() {};
 
 	virtual void draw() = 0;
 
@@ -41,6 +42,6 @@ private:
 	float_t m_scale = 1;
 	float_t m_rotation = 0;
 
-	Texture* m_texture;
+	Texture* m_texture = nullptr;
 };
 

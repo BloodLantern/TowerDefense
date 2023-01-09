@@ -15,4 +15,7 @@ Game::~Game()
 void Game::Draw()
 {
     m_playField->draw();
+
+    for (std::vector<Tower*>::iterator t = m_player->getTowers()->begin(); t != m_player->getTowers()->end(); t++)
+        (*t)->draw();
 }
