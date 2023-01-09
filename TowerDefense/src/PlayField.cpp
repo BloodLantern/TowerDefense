@@ -20,15 +20,6 @@ PlayField::PlayField()
 			for (int32_t y = 0; y < m_gridHeight; y++)
 				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
-
-	for (int32_t x = 0; x < m_gridWidth; x++)
-	{
-		for (int32_t y = 0; y < m_gridHeight; y++)
-		{
-			m_layer0Tilemap[y * m_gridWidth + x] = 25;
-			m_layer1Tilemap[y * m_gridWidth + x] = 25;
-		}
-	}
 }
 
 
@@ -45,29 +36,29 @@ void PlayField::drawClipdata()
 			ImU32 color;
 			switch (m_clipdata[y * m_gridWidth + x])
 			{
-			case CLIPDATA_TYPE_EMPTY:
-				// WHITE
-				color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
-				break;
-			case CLIPDATA_TYPE_NOTHING:
-				// BLACK
-				color = IM_COL32(0x0, 0x0, 0x0, 0x40);
-				break;
-			case CLIPDATA_TYPE_ENEMY_ONLY:
-				// RED
-				color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
-				break;
-			case CLIPDATA_TYPE_OCCUPIED:
-				// GRAY
-				color = IM_COL32(0xC0, 0xC0, 0xC0, 0x40);
-				break;
-			case CLIPDATA_TYPE_PLAYER_ONLY:
-				// GREEN
-				color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
-				break;
-			default:
-				// Weird grey
-				color = IM_COL32(0x50, 0x50, 0x50, 0x50);
+				case CLIPDATA_TYPE_EMPTY:
+					// WHITE
+					color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
+					break;
+				case CLIPDATA_TYPE_NOTHING:
+					// BLACK
+					color = IM_COL32(0x0, 0x0, 0x0, 0x40);
+					break;
+				case CLIPDATA_TYPE_ENEMY_ONLY:
+					// RED
+					color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
+					break;
+				case CLIPDATA_TYPE_OCCUPIED:
+					// GRAY
+					color = IM_COL32(0xC0, 0xC0, 0xC0, 0x40);
+					break;
+				case CLIPDATA_TYPE_PLAYER_ONLY:
+					// GREEN
+					color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
+					break;
+				default:
+					// Weird grey
+					color = IM_COL32(0x50, 0x50, 0x50, 0x50);
 			}
 
 			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
@@ -75,8 +66,6 @@ void PlayField::drawClipdata()
 
 			Globals::gDrawList->AddRectFilled(pMin, pMax, color);
 		}
-
-		
 	}
 }
 
@@ -96,27 +85,41 @@ void PlayField::drawLayers()
 	{
 		for (int32_t x = 0; x < m_gridWidth; x++)
 		{
-			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
-			ImVec2 pMax(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
+			ImVec2 pMin;
+			ImVec2 pMax;
+			uint16_t tile;
+			uint16_t tileY;
+			uint16_t tileX;
+			ImVec2 uvMin;
+			ImVec2 uvMax;
 
-			uint16_t tile = m_layer0Tilemap[y * m_gridWidth + x];
+			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER0)
+			{
+				pMin = ImVec2((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
+				pMax = ImVec2(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
 
-			uint16_t tileY = tile / rowWidth;
-			uint16_t tileX = tile % rowWidth;
+				tile = m_layer0Tilemap[y * m_gridWidth + x];
 
-			ImVec2 uvMin(uvxSize * tileX, uvySize * tileY);
-			ImVec2 uvMax(uvMin.x + uvxSize, uvMin.y + uvySize);
+				tileY = tile / rowWidth;
+				tileX = tile % rowWidth;
 
-			Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
+				uvMin = ImVec2(uvxSize * tileX, uvySize * tileY);
+				uvMax = ImVec2(uvMin.x + uvxSize, uvMin.y + uvySize);
 
-			tile = m_layer1Tilemap[y * m_gridWidth + x];
-			tileY = tile / texWidth;
-			tileX = tile % texWidth;
+				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
+			}
 
-			uvMin = ImVec2(uvxSize * tileX, uvySize * tileY);
-			uvMax = ImVec2(uvMin.x + uvxSize, uvMin.y + uvySize);
+			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER1)
+			{
+				tile = m_layer1Tilemap[y * m_gridWidth + x];
+				tileY = tile / texWidth;
+				tileX = tile % texWidth;
 
-			Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
+				uvMin = ImVec2(uvxSize * tileX, uvySize * tileY);
+				uvMax = ImVec2(uvMin.x + uvxSize, uvMin.y + uvySize);
+				
+				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
+			}
 		}
 	}
 }
@@ -131,12 +134,51 @@ void PlayField::resize(uint16_t width, uint16_t height)
 	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
 }
 
+void PlayField::setDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags)
+{
+	switch (operation)
+	{
+		case PLAYFIELD_DRAW_FLAGS_OPERATION_ADD:
+			m_drawFlags |= flags;
+			break;
+
+		case PLAYFIELD_DRAW_FLAGS_OPERATION_REMOVE:
+			m_drawFlags &= ~flags;
+			break;
+
+		case PLAYFIELD_DRAW_FLAGS_OPERATION_TOGGLE:
+			m_drawFlags ^= flags;
+			break;
+
+		case PLAYFIELD_DRAW_FLAGS_OPERATION_SET:
+			m_drawFlags = flags;
+	}
+}
+
+void PlayField::drawLines()
+{
+	for (int32_t y = 0; y < m_gridHeight; y++)
+	{
+		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
+			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
+		
+		for (int32_t x = 0; x < m_gridWidth; x++)
+		{
+			Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
+				ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
+		}
+	}
+}
+
 void PlayField::draw()
 {
 	drawLayers();
-	//drawClipdata();
+	
+	if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_CLIPDATA)
+		drawClipdata();
 
-	drawLines();
+	if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
+		drawLines();
 
 	towerBarUI.draw();
 
@@ -165,20 +207,6 @@ void PlayField::draw()
 		}
 	}
 	ImGui::End();
-}
-
-void PlayField::drawLines()
-{
-	for (int32_t y = 0; y < m_gridHeight; y++)
-	{
-		Globals::gDrawList->AddLine(ImVec2((float_t)Globals::gGridX, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE),
-			ImVec2((float_t)Globals::gGridX + m_gridWidth * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE), GRID_LINE_COLOR);
-		for (int32_t x = 0; x < m_gridWidth; x++)
-		{
-			Globals::gDrawList->AddLine(ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY),
-				ImVec2(Globals::gGridX + (x + 1) * GRID_SQUARE_SIZE - GRID_SQUARE_LINE_SIZE, (float_t)Globals::gGridY + m_gridHeight * GRID_SQUARE_SIZE), GRID_LINE_COLOR);
-		}
-	}
 }
 
 void PlayField::save(std::string dst)

@@ -18,6 +18,7 @@ private:
 
 	static int32_t m_gridWidthInput;
 	static int32_t m_gridHeightInput;
+	static PlayFieldDrawFlags m_drawFlags;
 
 	static bool m_selectionActive;
 	static uint8_t m_selectionStartX;

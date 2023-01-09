@@ -17,6 +17,8 @@ char LevelEditor::m_fileName[20];
 
 int32_t LevelEditor::m_gridWidthInput;
 int32_t LevelEditor::m_gridHeightInput;
+PlayFieldDrawFlags LevelEditor::m_drawFlags;
+
 
 bool LevelEditor::m_selectionActive;
 uint8_t LevelEditor::m_selectionStartX;
@@ -75,14 +77,25 @@ void LevelEditor::handleMisc()
 	ImGui::Text("Clipdata");
 	ImGui::SameLine();
 	ImGui::Combo("##", &LevelEditor::m_currentBlockType, sClipdataNames, IM_ARRAYSIZE(sClipdataNames));
+	
+	ImGui::CheckboxFlags("Display clipdata", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_CLIPDATA);
+	ImGui::SameLine();
+	ImGui::CheckboxFlags("Display grid", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_GRID_LINES);
 
 	LevelEditor::verticalSpace();
 
 	ImGui::RadioButton("Layer 0", &LevelEditor::m_currentLayer, 0);
+	ImGui::SameLine();
+	ImGui::CheckboxFlags("Display layer 0", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_LAYER0);
+
 	ImGui::RadioButton("Layer 1", &LevelEditor::m_currentLayer, 1);
+	ImGui::SameLine();
+	ImGui::CheckboxFlags("Display layer 1", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_LAYER1);
 
 	ImGui::Text("Layer : %d ; Tile : %d", LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
 
+	Globals::gPlayField->setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, LevelEditor::m_drawFlags);
+	
 	LevelEditor::verticalSpace();
 
 	ImGui::Checkbox("Enable dragging", &LevelEditor::m_dragEnabled);
@@ -297,7 +310,9 @@ void LevelEditor::handleTileset()
 
 			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left, false))
 			{
-				LevelEditor::m_currentTileValue = tileY * (Globals::gPlayField->m_tileset.width / GRID_SQUARE_SIZE) + tileX;
+				// Tile position, accounting for Y scroll
+				LevelEditor::m_currentTileValue = (tileY + (int)ImGui::GetScrollY() / GRID_SQUARE_SIZE) *
+					(Globals::gPlayField->m_tileset.width / GRID_SQUARE_SIZE) + tileX;
 			}
 		}
 	}
