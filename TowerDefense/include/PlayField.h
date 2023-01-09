@@ -44,6 +44,36 @@ enum PlayFieldDrawFlagsOperation : uint8_t
 	PLAYFIELD_DRAW_FLAGS_OPERATION_SET = 3,
 };
 
+inline PlayFieldDrawFlags operator|=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b)
+{
+	return a = static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
+}
+
+inline PlayFieldDrawFlags operator|(PlayFieldDrawFlags a, PlayFieldDrawFlags b)
+{
+	return static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
+}
+
+inline PlayFieldDrawFlags operator&(PlayFieldDrawFlags a, PlayFieldDrawFlags b)
+{
+	return static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
+}
+
+inline PlayFieldDrawFlags operator&=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b)
+{
+	return a = static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
+}
+
+inline PlayFieldDrawFlags operator^(PlayFieldDrawFlags a, PlayFieldDrawFlags b)
+{
+	return static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) ^ static_cast<uint32_t>(b));
+}
+
+inline PlayFieldDrawFlags operator^=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b)
+{
+	return a = static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) ^ static_cast<uint32_t>(b));
+}
+
 class PlayField
 {
 private:
@@ -51,7 +81,7 @@ private:
 	std::vector<uint16_t> m_layer0Tilemap;
 	std::vector<uint16_t> m_layer1Tilemap;
 
-	uint16_t m_drawFlags;
+	PlayFieldDrawFlags m_drawFlags;
 
 
 	bool maxR;

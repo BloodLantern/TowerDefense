@@ -20,6 +20,8 @@ PlayField::PlayField()
 			for (int32_t y = 0; y < m_gridHeight; y++)
 				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
+
+	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 | PLAYFIELD_DRAW_FLAGS_LAYER1);
 }
 
 
@@ -143,7 +145,7 @@ void PlayField::setDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDra
 			break;
 
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_REMOVE:
-			m_drawFlags &= ~flags;
+			m_drawFlags &= static_cast<PlayFieldDrawFlags>(~flags);
 			break;
 
 		case PLAYFIELD_DRAW_FLAGS_OPERATION_TOGGLE:
