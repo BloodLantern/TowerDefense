@@ -13,6 +13,9 @@
 #define TOWER_BAR_Y Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_TOWER_SIZE - TOWER_BAR_Y_OFFSET
 #define TOWER_BAR_WIDTH Globals::gWindowWidth
 
+#define TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
+#define TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED IM_COL32(0xC0, 0x00, 0x00, 0x70)
+
 TowerBarUI::TowerBarUI()
 {
 	for (int i = 0; i < TOWER_COUNT; i++)
@@ -73,7 +76,7 @@ void TowerBarUI::handleMouse()
 	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y)
 	{
 		int selectedTowerIndex = std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1);
-		const Tower* selectedTower = towerTemplates[selectedTowerIndex];
+		const Tower* const selectedTower = towerTemplates[selectedTowerIndex];
 		const int selectedTowerWidth = selectedTower->getWidth() * GRID_SQUARE_SIZE;
 		const int selectedTowerHeight = selectedTower->getHeight() * GRID_SQUARE_SIZE;
 
@@ -82,9 +85,26 @@ void TowerBarUI::handleMouse()
 
 		int tileX = (int) (mousePos.x - Globals::gGridX) / GRID_SQUARE_SIZE;
 		int tileY = (int) (mousePos.y - Globals::gGridY) / GRID_SQUARE_SIZE;
+
+		bool available = true;
+		for (int x = 0; x < selectedTower->getWidth(); x++)
+		{
+			for (int y = 0; y < selectedTower->getHeight(); y++)
+			{
+				if (available)
+				{
+					ClipdataType tileType = Globals::gGame->getPlayField()->getClipdataTile(tileX + x, tileY + y);
+					available = tileType == CLIPDATA_TYPE_EMPTY || tileType == CLIPDATA_TYPE_PLAYER_ONLY;
+				}
+				else
+				    break;
+			}
+			if (!available)
+			    break;
+		}
+
 		if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 		{
-
 			// If on the playfield
 			if (mousePos.x < Globals::gGridX + Globals::gGame->getPlayField()->m_gridWidth * GRID_SQUARE_SIZE
 				&& mousePos.y < Globals::gGridY + Globals::gGame->getPlayField()->m_gridHeight * GRID_SQUARE_SIZE)
@@ -99,20 +119,22 @@ void TowerBarUI::handleMouse()
 
 			// Range
 			Globals::gDrawList->AddCircleFilled(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2),
-				towerTemplates[selectedTowerIndex]->getRange() * GRID_SQUARE_SIZE, IM_COL32(0xB0, 0xB0, 0xB0, 0x70));
+				towerTemplates[selectedTowerIndex]->getRange() * GRID_SQUARE_SIZE, available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE : TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
 			// Tower
 			Globals::gDrawList->AddImage(towerTextures[selectedTowerIndex].id, topLeft, bottomRight);
-
-			// Debugging
-			//Globals::gDrawList->AddText(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2), IM_COL32(0xFF, 0xFF, 0xFF, 0xC0), std::to_string(selectedTowerIndex).c_str());
 		}
 		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 		{
 			// TODO Remove money
-			// TODO Check if there is enough space
-			Tower* tower = new Tower(*towerTemplates[selectedTowerIndex]);
-			tower->setTilePosition(Point2(tileX, tileY));
-			Globals::gGame->getPlayer()->getTowers()->push_back(tower);
+			if (available)
+			{
+				Tower* tower = new Tower(*towerTemplates[selectedTowerIndex]);
+				tower->setTilePosition(Point2(tileX, tileY));
+				Globals::gGame->getPlayer()->getTowers()->push_back(tower);
+				for (int x = 0; x < selectedTower->getWidth(); x++)
+					for (int y = 0; y < selectedTower->getHeight(); y++)
+						Globals::gGame->getPlayField()->setClipdataTile(tileX + x, tileY + y, CLIPDATA_TYPE_OCCUPIED);
+			}
 		}
 	}
 }

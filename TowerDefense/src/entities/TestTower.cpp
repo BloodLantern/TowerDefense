@@ -10,8 +10,8 @@ TestTower::TestTower(const TestTower& other)
 TestTower::TestTower(Texture* texture)
 	: Tower(new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
-	setWidth(1);
-	setHeight(1);
+	setWidth(10);
+	setHeight(2);
 	setRange(5);
 	setTexture(texture);
 }
