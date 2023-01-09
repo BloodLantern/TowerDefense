@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui_utils.hpp"
+
 #include <Maths/Point2.h>
 #include <stdint.h>
 
@@ -24,14 +26,21 @@ public:
 	void setScale(float_t newScale) { m_scale = newScale; }
 	void addScale(float_t scale) { m_scale += scale; };
 
-	float_t getRotation() { return m_rotation; };
-	void setRotation(float_t newRotation) { m_rotation = newRotation; };
-	void addRotation(float_t rotation) { m_rotation += rotation; };
+	float_t getRotation() { return m_rotation; }
+	void setRotation(float_t newRotation) { m_rotation = newRotation; }
+	void addRotation(float_t rotation) { m_rotation += rotation; }
+	
+	Texture* getTexture() const { return m_texture; }
+
+protected:
+	void setTexture(Texture* newTexture) { m_texture = newTexture; }
 
 private:
 	Point2 m_pixelPosition;
 	Point2 m_tilePosition;
 	float_t m_scale = 1;
 	float_t m_rotation = 0;
+
+	Texture* m_texture;
 };
 

@@ -4,7 +4,7 @@
 ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;
 
-PlayField* Globals::gPlayField;
+Game* Globals::gGame;
 
 int32_t Globals::gWindowX;
 int32_t Globals::gWindowY;
@@ -24,7 +24,7 @@ void Globals::updateGlobals()
 	gGridY = gWindowY + GRID_OFFSET_Y;
 }
 
-void Globals::bindPlayField(PlayField* pf)
+void Globals::bindGame(Game* g)
 {
-	gPlayField = pf;
+	gGame = g;
 }

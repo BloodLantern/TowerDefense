@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\entities\Enemy.cpp" />
     <ClCompile Include="src\entities\Projectile.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="externals\include\maths\Point2.cpp" />
     <ClCompile Include="externals\include\maths\Vector2.cpp" />
+    <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\PlayField.cpp" />
     <ClCompile Include="src\Globals.cpp" />
     <ClCompile Include="src\RLE.cpp" />
@@ -161,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\stb_image.h" />
+    <ClInclude Include="include\game.h" />
     <ClInclude Include="include\Gui.h" />
     <ClInclude Include="include\AStar.h" />
     <ClInclude Include="include\entities\Enemy.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="include\LevelEditor.h" />
     <ClInclude Include="externals\include\maths\Point2.h" />
     <ClInclude Include="externals\include\maths\Vector2.h" />
+    <ClInclude Include="include\player.h" />
     <ClInclude Include="include\PlayField.h" />
     <ClInclude Include="include\Globals.h" />
     <ClInclude Include="include\RLE.h" />

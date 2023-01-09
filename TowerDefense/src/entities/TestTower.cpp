@@ -1,10 +1,14 @@
 #include "TestTower.h"
 
-TestTower::TestTower()
+#include "Globals.h"
+
+TestTower::TestTower(Texture* texture)
 	: Tower(new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
 	setWidth(1);
 	setHeight(1);
+	setRange(5);
+	setTexture(texture);
 }
 
 TestTower::TestTower(Point2 pixelPosition)
@@ -14,6 +18,8 @@ TestTower::TestTower(Point2 pixelPosition)
 
 void TestTower::draw()
 {
+	Globals::gDrawList->AddImage(getTexture()->id, getPixelPosition(),
+		ImVec2(getPixelPosition().x + getWidth(), getPixelPosition().y + getHeight()));
 }
 
 void TestTower::shoot(const Projectile& projTemplate)

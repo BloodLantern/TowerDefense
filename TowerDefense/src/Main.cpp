@@ -7,7 +7,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include "Globals.h"
-#include "PlayField.h"
+#include "Game.h"
 #include "LevelEditor.h"
 #include "Gui.h"
 
@@ -72,8 +72,8 @@ int main(int argc, char** argv)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glslVersion);
 
-	PlayField pf;
-	Globals::bindPlayField(&pf);
+	Game game;
+	Globals::bindGame(&game);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 		ImGui::NewFrame();
 
 		Globals::updateGlobals();
-		pf.draw();
+		game.Draw();
 		Gui::update();
 
 		// Rendering

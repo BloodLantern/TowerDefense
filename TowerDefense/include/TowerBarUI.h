@@ -23,7 +23,7 @@ public:
 
 private:
 	const Tower* towerTemplates[TOWER_COUNT]{
-		new TestTower()
+		new TestTower(&towerTextures[0])
 	};
 	bool extended = false;
 

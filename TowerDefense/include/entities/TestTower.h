@@ -10,7 +10,7 @@
 class TestTower : public Tower
 {
 public:
-	TestTower();
+	TestTower(Texture* texture);
 	TestTower(Point2 pixelPosition);
 
 	void draw() override;

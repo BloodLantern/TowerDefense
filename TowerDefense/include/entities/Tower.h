@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Projectile.h"
 #include "Enemy.h"
+
 #include <stdint.h>
 
 class Tower : public Entity
@@ -13,10 +14,12 @@ public:
 
 	virtual void shoot(const Projectile& projTemplate) = 0;
 
+    float_t getRange() const { return m_range; }
 	uint8_t getWidth() const { return m_width; }
 	uint8_t getHeight() const { return m_height; }
 
 protected:
+	void setRange(float range) { m_range = range; }
 	void setWidth(uint8_t newWidth) { m_width = newWidth; }
 	void setHeight(uint8_t newHeight) { m_height = newHeight; }
 

@@ -84,8 +84,8 @@ void TowerBarUI::handleMouse()
 			ImVec2 bottomRight = ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight);
 
 			// If on the playfield
-			if (mousePos.x < Globals::gGridX + Globals::gPlayField->m_gridWidth * GRID_SQUARE_SIZE
-				&& mousePos.y < Globals::gGridY + Globals::gPlayField->m_gridHeight * GRID_SQUARE_SIZE)
+			if (mousePos.x < Globals::gGridX + Globals::gGame->getPlayField()->m_gridWidth * GRID_SQUARE_SIZE
+				&& mousePos.y < Globals::gGridY + Globals::gGame->getPlayField()->m_gridHeight * GRID_SQUARE_SIZE)
 			{
 				int xSnapped = ((int) (mousePos.x - Globals::gGridX) / GRID_SQUARE_SIZE) * GRID_SQUARE_SIZE;
 				int ySnapped = ((int) (mousePos.y - Globals::gGridY) / GRID_SQUARE_SIZE) * GRID_SQUARE_SIZE;
@@ -95,11 +95,17 @@ void TowerBarUI::handleMouse()
 				bottomRight.y = topLeft.y + selectedTowerHeight;
 			}
 
+			// Range
+			Globals::gDrawList->AddCircleFilled(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2),
+				towerTemplates[selectedTowerIndex]->getRange() * GRID_SQUARE_SIZE, IM_COL32(0xB0, 0xB0, 0xB0, 0x70));
+			// Tower
 			Globals::gDrawList->AddImage(towerTextures[selectedTowerIndex].id, topLeft, bottomRight);
+
 			// Debugging
 			//Globals::gDrawList->AddText(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2), IM_COL32(0xFF, 0xFF, 0xFF, 0xC0), std::to_string(selectedTowerIndex).c_str());
-		} else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+		}
+		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 		{
-			
+
 		}
 }

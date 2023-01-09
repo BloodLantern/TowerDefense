@@ -23,8 +23,8 @@ bool AStar::findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 {
 	//auto startTime = std::chrono::high_resolution_clock::now();
 
-	uint16_t width = Globals::gPlayField->m_gridWidth;
-	uint16_t height = Globals::gPlayField->m_gridHeight;
+	uint16_t width = Globals::gGame->getPlayField()->m_gridWidth;
+	uint16_t height = Globals::gGame->getPlayField()->m_gridHeight;
 
 	nodesField.resize(width * height);
 
@@ -32,7 +32,7 @@ bool AStar::findBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 	{
 		for (int32_t x = 0; x < width; x++)
 		{
-			nodesField[y * width + x] = AStarNode(x, y, Globals::gPlayField->getClipdataTile(x, y));
+			nodesField[y * width + x] = AStarNode(x, y, Globals::gGame->getPlayField()->getClipdataTile(x, y));
 		}
 	}
 
