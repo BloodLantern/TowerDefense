@@ -143,7 +143,6 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 	while (i < length)
 	{
 		uint8_t size = fgetc(f);
-
 		uint8_t value = fgetc(f);
 
 		while (size--)
@@ -156,9 +155,6 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 	while (i < length)
 	{
 		uint8_t size = fgetc(f);
-
-		if (size == UCHAR_MAX)
-			break;
 
 		uint16_t value;
 		fread(&value, sizeof(value), 1, f);

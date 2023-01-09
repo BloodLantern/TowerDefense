@@ -13,7 +13,7 @@ PlayField::PlayField()
 
 	loadTileset("forest.png");
 	
-	if (!RLE::decompress(m_clipdata.data(), MAPS_PATH "Default.bin"))
+	if (!RLE::decompressLevel(this, MAPS_PATH "Default.bin"))
 	{
 		std::cout << "Failed to open file" << std::endl;
 		for (int32_t x = 0; x < m_gridWidth; x++)
