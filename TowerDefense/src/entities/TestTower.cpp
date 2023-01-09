@@ -3,7 +3,8 @@
 TestTower::TestTower()
 	: Tower(new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
-
+	setWidth(1);
+	setHeight(1);
 }
 
 TestTower::TestTower(Point2 pixelPosition)
