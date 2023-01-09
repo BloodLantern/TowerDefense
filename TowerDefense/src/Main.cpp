@@ -11,11 +11,33 @@
 #include "LevelEditor.h"
 #include "Gui.h"
 
+#include "discordRPC/discord_rpc.h"
+
 #include <chrono>
 
 #define WINDOW_TITLE "Fourmi Defense"
 #define WINDOW_WIDTH 1350
 #define WINDOW_HEIGHT 700
+
+void SetupDiscordRPC(DiscordRichPresence* rpc)
+{
+	rpc->state = "Playing Solo";
+	rpc->details = "Competitive";
+	rpc->startTimestamp = std::time(nullptr);
+	rpc->endTimestamp = 0;
+	rpc->largeImageKey = "logo";
+	rpc->largeImageText = "In game";
+	rpc->smallImageKey = "";
+	rpc->matchSecret = "";
+	rpc->joinSecret = "";
+	rpc->spectateSecret = "";
+	rpc->smallImageText = "Rogue - Level 100";
+	rpc->partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
+	rpc->partySize = 1;
+	rpc->partyMax = 1;
+	rpc->joinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= ";
+	Discord_UpdatePresence(rpc);
+}
 
 int main(int argc, char** argv)
 {
@@ -75,6 +97,11 @@ int main(int argc, char** argv)
 	Game game;
 	Globals::BindGame(&game);
 
+	DiscordEventHandlers discordEvents = { 0 };
+	Discord_Initialize("1062095306986115073", &discordEvents, true, nullptr);
+	DiscordRichPresence rpc;
+	SetupDiscordRPC(&rpc);
+
 	// Main loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -91,6 +118,7 @@ int main(int argc, char** argv)
 		Globals::UpdateGlobals();
 		game.Draw();
 		Gui::Update();
+		Discord_UpdatePresence(&rpc);
 
 		// Rendering
 		ImGui::Render();
