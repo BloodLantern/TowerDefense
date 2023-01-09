@@ -11,6 +11,7 @@
  * 5 | 1X | Clipdata
  * X | 2X | Layer 0 tilemap
  * X | 2X | Layer 1 tilemap
+ * X | 2X | Layer 2 tilemap
  * 
 */
 
@@ -104,6 +105,27 @@ bool RLE::compressLevel(PlayField* pf, const char* dst)
 		fwrite(&value, sizeof(value), 1, f);
 	}
 
+	_src16 = pf->getTilemapPointer(2);
+
+	i = 0;
+	while (i < length)
+	{
+		uint16_t value = _src16[i++];
+		uint8_t size = 1;
+
+		while (value == _src16[i])
+		{
+			if (i > length || size == UCHAR_MAX)
+				break;
+
+			i++;
+			size++;
+		}
+
+		fwrite(&size, sizeof(size), 1, f);
+		fwrite(&value, sizeof(value), 1, f);
+	}
+
 	fclose(f);
 	return true;
 }
@@ -164,6 +186,20 @@ bool RLE::decompressLevel(PlayField* pf, const char* src)
 	}
 
 	_dst16 = pf->getTilemapPointer(1);
+	i = 0;
+
+	while (i < length)
+	{
+		uint8_t size = fgetc(f);
+
+		uint16_t value;
+		fread(&value, sizeof(value), 1, f);
+
+		while (size--)
+			_dst16[i++] = value;
+	}
+
+	_dst16 = pf->getTilemapPointer(2);
 	i = 0;
 
 	while (i < length)

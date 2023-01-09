@@ -21,7 +21,7 @@ PlayField::PlayField()
 				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
 
-	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 | PLAYFIELD_DRAW_FLAGS_LAYER1);
+	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 | PLAYFIELD_DRAW_FLAGS_LAYER1 | PLAYFIELD_DRAW_FLAGS_LAYER2);
 }
 
 
@@ -87,20 +87,17 @@ void PlayField::drawLayers()
 	{
 		for (int32_t x = 0; x < m_gridWidth; x++)
 		{
-			ImVec2 pMin;
-			ImVec2 pMax;
+			ImVec2 pMin((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
+			ImVec2 pMax(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
 			uint16_t tile;
 			uint16_t tileY;
 			uint16_t tileX;
 			ImVec2 uvMin;
 			ImVec2 uvMax;
 
-			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER0)
+			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER2)
 			{
-				pMin = ImVec2((float_t)Globals::gGridX + x * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + y * GRID_SQUARE_SIZE);
-				pMax = ImVec2(Globals::gGridX + (x + 1.f) * GRID_SQUARE_SIZE, Globals::gGridY + (y + 1.f) * GRID_SQUARE_SIZE);
-
-				tile = m_layer0Tilemap[y * m_gridWidth + x];
+				tile = m_layer2Tilemap[y * m_gridWidth + x];
 
 				tileY = tile / rowWidth;
 				tileX = tile % rowWidth;
@@ -114,12 +111,26 @@ void PlayField::drawLayers()
 			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER1)
 			{
 				tile = m_layer1Tilemap[y * m_gridWidth + x];
-				tileY = tile / texWidth;
-				tileX = tile % texWidth;
+
+				tileY = tile / rowWidth;
+				tileX = tile % rowWidth;
 
 				uvMin = ImVec2(uvxSize * tileX, uvySize * tileY);
 				uvMax = ImVec2(uvMin.x + uvxSize, uvMin.y + uvySize);
-				
+
+				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
+			}
+
+			if (m_drawFlags & PLAYFIELD_DRAW_FLAGS_LAYER0)
+			{
+				tile = m_layer0Tilemap[y * m_gridWidth + x];
+
+				tileY = tile / rowWidth;
+				tileX = tile % rowWidth;
+
+				uvMin = ImVec2(uvxSize * tileX, uvySize * tileY);
+				uvMax = ImVec2(uvMin.x + uvxSize, uvMin.y + uvySize);
+
 				Globals::gDrawList->AddImage(texId, pMin, pMax, uvMin, uvMax);
 			}
 		}
@@ -134,6 +145,7 @@ void PlayField::resize(uint16_t width, uint16_t height)
 	m_clipdata.resize(m_gridWidth * m_gridHeight);
 	m_layer0Tilemap.resize(m_gridWidth * m_gridHeight);
 	m_layer1Tilemap.resize(m_gridWidth * m_gridHeight);
+	m_layer2Tilemap.resize(m_gridWidth * m_gridHeight);
 }
 
 void PlayField::setDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags)
@@ -260,6 +272,10 @@ void PlayField::setLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value
 
 		case 1:
 			m_layer1Tilemap[y * m_gridWidth + x] = value;
+			break;
+
+		case 2:
+			m_layer2Tilemap[y * m_gridWidth + x] = value;
 	}
 }
 
@@ -273,6 +289,7 @@ uint16_t* PlayField::getTilemapPointer(uint8_t layer)
 	uint16_t* pLayers[] = {
 		m_layer0Tilemap.data(),
 		m_layer1Tilemap.data(),
+		m_layer2Tilemap.data(),
 	};
 
 	return pLayers[layer];

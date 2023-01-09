@@ -34,6 +34,7 @@ enum PlayFieldDrawFlags : uint32_t
 	PLAYFIELD_DRAW_FLAGS_GRID_LINES = 1 << 2,
 	PLAYFIELD_DRAW_FLAGS_LAYER0 = 1 << 3,
 	PLAYFIELD_DRAW_FLAGS_LAYER1 = 1 << 4,
+	PLAYFIELD_DRAW_FLAGS_LAYER2 = 1 << 5,
 };
 
 enum PlayFieldDrawFlagsOperation : uint8_t
@@ -44,6 +45,7 @@ enum PlayFieldDrawFlagsOperation : uint8_t
 	PLAYFIELD_DRAW_FLAGS_OPERATION_SET = 3,
 };
 
+#pragma region Flags operators
 inline PlayFieldDrawFlags operator|=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b)
 {
 	return a = static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
@@ -73,13 +75,15 @@ inline PlayFieldDrawFlags operator^=(PlayFieldDrawFlags& a, PlayFieldDrawFlags b
 {
 	return a = static_cast<PlayFieldDrawFlags>(static_cast<uint32_t>(a) ^ static_cast<uint32_t>(b));
 }
+#pragma endregion
 
 class PlayField
 {
 private:
 	std::vector<ClipdataType> m_clipdata;
-	std::vector<uint16_t> m_layer0Tilemap;
+	std::vector<uint16_t> m_layer2Tilemap;
 	std::vector<uint16_t> m_layer1Tilemap;
+	std::vector<uint16_t> m_layer0Tilemap;
 
 	PlayFieldDrawFlags m_drawFlags;
 

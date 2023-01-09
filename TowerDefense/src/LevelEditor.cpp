@@ -92,6 +92,10 @@ void LevelEditor::handleMisc()
 	ImGui::SameLine();
 	ImGui::CheckboxFlags("Display layer 1", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_LAYER1);
 
+	ImGui::RadioButton("Layer 2", &LevelEditor::m_currentLayer, 2);
+	ImGui::SameLine();
+	ImGui::CheckboxFlags("Display layer 2", (uint32_t*)&LevelEditor::m_drawFlags, PLAYFIELD_DRAW_FLAGS_LAYER2);
+
 	ImGui::Text("Layer : %d ; Tile : %d", LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
 
 	Globals::gPlayField->setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, LevelEditor::m_drawFlags);
