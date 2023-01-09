@@ -21,7 +21,8 @@ PlayField::PlayField()
 				m_clipdata[y * m_gridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
 	}
 
-	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 | PLAYFIELD_DRAW_FLAGS_LAYER1 | PLAYFIELD_DRAW_FLAGS_LAYER2);
+	setDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 |
+		PLAYFIELD_DRAW_FLAGS_LAYER1 | PLAYFIELD_DRAW_FLAGS_LAYER2);
 }
 
 
@@ -201,7 +202,7 @@ void PlayField::draw()
 	{
 		if (ImGui::Button("Test"))
 		{
-			std::cout << AStar::findBestPath(m_gridWidth - 1, m_gridHeight - 1, 0, 0) << std::endl;
+			std::cout << AStar::findBestPath(m_gridWidth - 1, m_gridHeight / 2, 0, m_gridHeight / 2) << std::endl;
 		}
 
 		if (AStar::recordPositions.size() != 0)

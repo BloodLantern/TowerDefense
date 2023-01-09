@@ -74,6 +74,8 @@ void LevelEditor::verticalSpace()
 
 void LevelEditor::handleMisc()
 {
+	ImGui::RadioButton("Clipdata", &LevelEditor::m_currentLayer, -1);
+	ImGui::SameLine();
 	ImGui::Text("Clipdata");
 	ImGui::SameLine();
 	ImGui::Combo("##", &LevelEditor::m_currentBlockType, sClipdataNames, IM_ARRAYSIZE(sClipdataNames));
@@ -119,10 +121,17 @@ void LevelEditor::handleClear()
 		if (ImGui::Button("Yes", ImVec2(120, 0)))
 		{
 			for (int32_t x = 0; x < Globals::gPlayField->m_gridWidth; x++)
+			{
 				for (int32_t y = 0; y < Globals::gPlayField->m_gridHeight; y++)
+				{
 					Globals::gPlayField->setClipdataTile(x, y, CLIPDATA_TYPE_EMPTY);
+					Globals::gPlayField->setLayertile(x, y, 0, 115);
+					Globals::gPlayField->setLayertile(x, y, 1, 115);
+					Globals::gPlayField->setLayertile(x, y, 2, 115);
+				}
+			}
 
-			AStar::findBestPath(0, 0, Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight - 1);
+			AStar::findBestPath(Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight / 2, 0, Globals::gPlayField->m_gridHeight / 2);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -166,7 +175,7 @@ void LevelEditor::handleFile()
 	{
 		Globals::gPlayField->load(LevelEditor::m_fileName);
 
-		AStar::findBestPath(0, 0, Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight - 1);
+		AStar::findBestPath(Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight / 2, 0, Globals::gPlayField->m_gridHeight / 2);
 	}
 }
 
@@ -194,12 +203,13 @@ void LevelEditor::handleCursor()
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
 			(LevelEditor::m_dragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
-			Globals::gPlayField->setClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::m_currentBlockType));
-
-			Globals::gPlayField->setLayertile(tileX, tileY, LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
+			if (LevelEditor::m_currentLayer == -1)
+				Globals::gPlayField->setClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::m_currentBlockType));
+			else
+				Globals::gPlayField->setLayertile(tileX, tileY, LevelEditor::m_currentLayer, LevelEditor::m_currentTileValue);
 
 			if (LevelEditor::m_updateAStar)
-				AStar::findBestPath(0, 0, Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight - 1);
+				AStar::findBestPath(Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight / 2, 0, Globals::gPlayField->m_gridHeight / 2);
 		}
 	}
 }
@@ -368,7 +378,7 @@ void LevelEditor::handleHotkeys()
 				}
 			}
 
-			AStar::findBestPath(0, 0, Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight - 1);
+			AStar::findBestPath(Globals::gPlayField->m_gridWidth - 1, Globals::gPlayField->m_gridHeight / 2, 0, Globals::gPlayField->m_gridHeight / 2);
 		}
 
 		return;
