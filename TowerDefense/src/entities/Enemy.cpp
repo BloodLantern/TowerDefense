@@ -5,16 +5,18 @@
 Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop)
 	: Entity(pixelPosition), mHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
+	mCurrentPathIndex = 0;
+	mSpeed = 1.f;
 }
 
 void Enemy::OnUpdate()
 {
-
+	StickToPath();
 }
 
 void Enemy::OnRender()
 {
-	SetPixelPosition(GetPixelPosition() + mVelocity);
+	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed);
 
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
