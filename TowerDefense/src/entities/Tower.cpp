@@ -38,7 +38,13 @@ void Tower::Shoot(const Projectile& projTemplate)
 
 void Tower::OnUpdate()
 {
-
+	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+	// If clicked on the tower
+	if ((int)(mouseClickedPos.x - Globals::gGridX) / GRID_SQUARE_SIZE == GetTilePosition().x
+		&& (int)(mouseClickedPos.y - Globals::gGridY) / GRID_SQUARE_SIZE == GetTilePosition().y)
+	{
+		std::cout << "Mouse clicked" << std::endl;
+	}
 }
 
 void Tower::OnRender()
