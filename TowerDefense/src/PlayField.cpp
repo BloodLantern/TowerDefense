@@ -195,7 +195,7 @@ void PlayField::Draw()
 	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
 		DrawLines();
 
-	towerBarUI.draw();
+	towerBarUI.Draw();
 
 
 	if (ImGui::Begin("A*"))
@@ -296,10 +296,10 @@ uint16_t* PlayField::GetTilemapPointer(uint8_t layer)
 	return pLayers[layer];
 }
 
-void PlayField::GetGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_t& tileX, uint8_t& tileY)
+void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY)
 {
-	uint8_t x = (mouseX - Globals::gGridX) / GRID_SQUARE_SIZE;
-	uint8_t y = (mouseY - Globals::gGridY) / GRID_SQUARE_SIZE;
+	uint8_t x = (pixelX - Globals::gGridX) / GRID_SQUARE_SIZE;
+	uint8_t y = (pixelY - Globals::gGridY) / GRID_SQUARE_SIZE;
 
 	if (x >= mGridWidth)
 		tileX = UCHAR_MAX;
@@ -312,8 +312,8 @@ void PlayField::GetGridPositionFromPixels(int32_t mouseX, int32_t mouseY, uint8_
 		tileY = y;
 }
 
-void PlayField::GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY)
+void PlayField::GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY)
 {
-	screenX = tileX * GRID_SQUARE_SIZE;
-	screenY = tileY * GRID_SQUARE_SIZE;
+	pixelX = tileX * GRID_SQUARE_SIZE + Globals::gGridX;
+	pixelY = tileY * GRID_SQUARE_SIZE + Globals::gGridY;
 }

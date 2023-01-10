@@ -2,8 +2,6 @@
 #include "Globals.h"
 #include "PlayField.h"
 
-#include <string>
-
 #define TOWER_BAR_TOWER_SIZE 64
 #define TOWER_BAR_TOWER_OFFSET_X 8
 
@@ -29,12 +27,10 @@ TowerBarUI::~TowerBarUI()
 	}
 }
 
-void TowerBarUI::draw()
+void TowerBarUI::Draw()
 {
-	int32_t x = TOWER_BAR_X;
-	int32_t y = TOWER_BAR_Y;
-	int32_t width = TOWER_BAR_WIDTH;
-	int32_t height = TOWER_BAR_HEIGHT;
+	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;
+	const int32_t width = TOWER_BAR_WIDTH, height = TOWER_BAR_HEIGHT;
 
 	Globals::gDrawList->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), TOWER_BAR_UI_BACKGROUND_COLOR);
 	Globals::gDrawList->AddRect(ImVec2(x, y), ImVec2(x + width, y + height), TOWER_BAR_UI_OUTLINE_COLOR);
@@ -51,18 +47,17 @@ void TowerBarUI::HandleMouse()
 	if (Globals::gIO->WantCaptureMouse)
 		return;
 
-	int32_t x = TOWER_BAR_X;
-	int32_t y = TOWER_BAR_Y;
-	int32_t width = TOWER_BAR_WIDTH;
-	int32_t height = TOWER_BAR_HEIGHT;
+	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;
+	const int32_t width = TOWER_BAR_WIDTH, height = TOWER_BAR_HEIGHT;
 
 	// Overlay
-	ImVec2 mousePos = Globals::gIO->MousePos;
+
+	const ImVec2 mousePos = Globals::gIO->MousePos;
 	// If on the tower bar
 	if (mousePos.x > x && mousePos.y > y && mousePos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y + height)
 	{
 		ImVec2 topLeft(mousePos.x - x, y + TOWER_BAR_Y_OFFSET / 2);
-		topLeft.x = (float)(((int) topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
+		topLeft.x = (float)(((int32_t) topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
 		ImVec2 bottomRight(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
 
 		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR);
@@ -70,29 +65,42 @@ void TowerBarUI::HandleMouse()
 
 
 	// Drag and drop
-	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
-	// If the click started on the tower bar and the mouse is dragging
-	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y)
+
+	const ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+	// If the click started on the tower bar and the mouse is dragging outside
+	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y
+		// Optimization
+		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
-		int selectedTowerIndex = std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1);
-		const Tower* selectedTower = mTowerTemplates[selectedTowerIndex];
-		const int selectedTowerWidth = selectedTower->GetWidth() * GRID_SQUARE_SIZE;
-		const int selectedTowerHeight = selectedTower->GetHeight() * GRID_SQUARE_SIZE;
+		if (!mSelectedTower)
+			mSelectedTower = new Tower(*mTowerTemplates[std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1)]);
 
-		ImVec2 topLeft = ImVec2(mousePos.x - selectedTowerWidth / 2, mousePos.y - selectedTowerHeight / 2);
-		ImVec2 bottomRight = ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight);
+		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
+		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
 
-		int tileX = (int) (mousePos.x - Globals::gGridX) / GRID_SQUARE_SIZE;
-		int tileY = (int) (mousePos.y - Globals::gGridY) / GRID_SQUARE_SIZE;
-
-		bool available = true;
-		for (int x = 0; x < selectedTower->GetWidth(); x++)
+		const bool isOnGrid = mSelectedTower->IsOnGrid();
+		mSelectedTower->SetPixelPosition(Point2(mousePos.x, mousePos.y));
+        const Point2& tilePosition = mSelectedTower->GetTilePosition();
+		
+		if (isOnGrid)
 		{
-			for (int y = 0; y < selectedTower->GetHeight(); y++)
+			mSelectedTower->SnapToGrid();
+		}
+		else
+		{
+        	const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
+			mSelectedTower->SetPixelPosition(Point2(pixelPosition.x - selectedTowerWidth / 2, pixelPosition.y - selectedTowerHeight / 2));
+		}
+
+		// Check for tile availability
+		bool available = true;
+		for (uint8_t x = 0; x < mSelectedTower->GetWidth(); x++)
+		{
+			for (uint8_t y = 0; y < mSelectedTower->GetHeight(); y++)
 			{
 				if (available)
 				{
-					ClipdataType tileType = Globals::gGame->GetPlayField()->GetClipdataTile(tileX + x, tileY + y);
+					ClipdataType tileType = Globals::gGame->GetPlayField()->GetClipdataTile(tilePosition.x + x, tilePosition.y + y);
 					available = tileType == CLIPDATA_TYPE_EMPTY || tileType == CLIPDATA_TYPE_PLAYER_ONLY;
 				}
 				else
@@ -102,39 +110,44 @@ void TowerBarUI::HandleMouse()
 			    break;
 		}
 
+		// Check if the mouse is dragging the tower
 		if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 		{
-			// If on the playfield
-			if (mousePos.x < Globals::gGridX + Globals::gGame->GetPlayField()->mGridWidth * GRID_SQUARE_SIZE
-				&& mousePos.y < Globals::gGridY + Globals::gGame->GetPlayField()->mGridHeight * GRID_SQUARE_SIZE)
-			{
-				int xSnapped = tileX * GRID_SQUARE_SIZE;
-				int ySnapped = tileY * GRID_SQUARE_SIZE;
-				topLeft.x = xSnapped + Globals::gGridX;
-				topLeft.y = ySnapped + Globals::gGridY;
-				bottomRight.x = topLeft.x + selectedTowerWidth;
-				bottomRight.y = topLeft.y + selectedTowerHeight;
-			}
+			if (isOnGrid)
+				mSelectedTower->SnapToGrid();
 
-			// Range
-			mTowerTemplates[selectedTowerIndex]->DrawRange(available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
-			// Tower
-			Globals::gDrawList->AddImage(towerTextures[selectedTowerIndex].id, topLeft, bottomRight);
+			// Tower rendering
+			mSelectedTower->DrawRange(available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
+			//Globals::gDrawList->AddImage(mSelectedTower->GetTexture()->id, topLeft, ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight));
+			mSelectedTower->OnRender();
 		}
-		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+		// If the mouse dropped the tower somewhere
+		else
 		{
 			// TODO Remove money
 			if (available)
 			{
-				Tower* tower = new Tower(*mTowerTemplates[selectedTowerIndex]);
-				tower->SetTilePosition(Point2(tileX, tileY));
-				tower->SetOwner(Globals::gGame->GetPlayer());
-				Globals::gGame->GetPlayer()->GetTowers()->push_back(tower);
+				mSelectedTower->SetOwner(Globals::gGame->GetPlayer());
+				mSelectedTower->SnapToGrid();
+				Globals::gGame->GetPlayer()->GetTowers()->push_back(mSelectedTower);
 
-				for (int x = 0; x < selectedTower->GetWidth(); x++)
-					for (int y = 0; y < selectedTower->GetHeight(); y++)
-						Globals::gGame->GetPlayField()->SetClipdataTile(tileX + x, tileY + y, CLIPDATA_TYPE_OCCUPIED);
+				PlayField* playfield = Globals::gGame->GetPlayField();
+				for (uint8_t x = 0; x < mSelectedTower->GetWidth(); x++)
+					for (uint8_t y = 0; y < mSelectedTower->GetHeight(); y++)
+						playfield->SetClipdataTile(tilePosition.x + x, tilePosition.y + y, CLIPDATA_TYPE_OCCUPIED);
+
+				mSelectedTower = nullptr;
+			}
+			else
+			{
+				delete mSelectedTower;
+				mSelectedTower = nullptr;
 			}
 		}
 	}
+	else if (mSelectedTower)
+    {
+		delete mSelectedTower;
+		mSelectedTower = nullptr;
+    }
 }

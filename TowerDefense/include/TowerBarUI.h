@@ -19,12 +19,13 @@ public:
 	TowerBarUI();
 	~TowerBarUI();
 
-	void draw();
+	void Draw();
 
 private:
 	const Tower* mTowerTemplates[TOWER_COUNT]{
 		new TestTower(&towerTextures[0])
 	};
+	Tower* mSelectedTower = nullptr;
 	bool mExtended = false;
 
 	void HandleMouse();

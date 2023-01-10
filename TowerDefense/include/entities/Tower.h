@@ -45,12 +45,13 @@ private:
 	uint8_t mGenericUpgradeLevel = 1;
 	uint8_t mCustomUpgradeLevel = 1;
 
-	uint8_t mWidth = 1;
-	uint8_t mHeight = 1;
+	uint8_t mWidth = 1, mHeight = 1;
 
 	uint32_t mDamageDealt = 0;
 	uint32_t mKillCount = 0;
 	uint32_t mMoneyGenerated = 0;
 
 	Player* mOwner;
+
+	bool selected;
 };

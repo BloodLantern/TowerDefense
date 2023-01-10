@@ -57,4 +57,5 @@ public:
 	operator ImVec2() { return ImVec2(x, y); }
 
 	friend std::ostream& operator<<(std::ostream& out, Point2& p);
+
 };

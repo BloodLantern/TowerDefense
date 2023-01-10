@@ -120,6 +120,6 @@ public:
 	ClipdataType* GetClipdataPointer();
 	uint16_t* GetTilemapPointer(uint8_t layer);
 
-	void GetGridPositionFromPixels(int32_t screenX, int32_t screenY, uint8_t& tileX, uint8_t& tileY);
-	void GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& screenX, int32_t& screenY);
+	void GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY);
+	void GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY);
 };

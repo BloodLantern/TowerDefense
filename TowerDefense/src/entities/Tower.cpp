@@ -39,7 +39,7 @@ void Tower::Shoot(const Projectile& projTemplate)
 void Tower::DrawRange(ImU32 color) const
 {
 	Globals::gDrawList->AddCircleFilled(
-		ImVec2(GetPixelPosition().x + Globals::gGridX + GetWidth() / 2, GetPixelPosition().y + GetHeight() / 2),
+		ImVec2(GetPixelPosition().x + GetWidth() * GRID_SQUARE_SIZE / 2, GetPixelPosition().y + GetHeight() * GRID_SQUARE_SIZE / 2),
 		GetRange() * GRID_SQUARE_SIZE, color);
 }
 
@@ -54,16 +54,19 @@ void Tower::OnUpdate()
 		Globals::gGame->GetPlayField()->GetGridPositionFromPixels(pixelX, pixelY, tileX, tileY);
 		if (tileX == GetTilePosition().x && tileY == GetTilePosition().y)
 		{
-		    
+		    selected = true;
 		}
+		else
+        {
+            selected = false;
+        }
 	}
 }
 
 void Tower::OnRender()
 {
-	//ImVec2 pos(GetPixelPosition().x + Globals::gGridX + GRID_SQUARE_SIZE / 2, GetPixelPosition().y + Globals::gGridY + GRID_SQUARE_SIZE / 2);
 	//ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
-	ImVec2 topLeft = ImVec2(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
-	ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
+	const ImVec2 topLeft = GetPixelPosition();
+	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
 	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
 }
