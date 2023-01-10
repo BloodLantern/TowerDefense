@@ -24,3 +24,13 @@ TestTower::TestTower(Point2 pixelPosition)
 void TestTower::Shoot(const Projectile& projTemplate)
 {
 }
+
+void TestTower::OnUpdate()
+{
+
+}
+
+void TestTower::OnRender()
+{
+
+}

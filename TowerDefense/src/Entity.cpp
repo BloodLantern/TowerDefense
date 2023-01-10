@@ -28,13 +28,6 @@ Entity::Entity(int32_t tilePositionX, int32_t tilePositionY)
 	SetTilePosition(Point2((float_t)tilePositionX, (float_t)tilePositionY));
 }
 
-void Entity::Draw()
-{
-	ImVec2 pos(Globals::gWindowX + mPixelPosition.x, Globals::gWindowY + mPixelPosition.y);
-
-	Globals::gDrawList->AddCircleFilled(pos, GRID_SQUARE_SIZE / 2, IM_COL32(0xFF, 0xFF, 0x0, 0xFF));
-}
-
 void Entity::SetPixelPosition(Point2 newPixelPosition)
 {
 	mPixelPosition = newPixelPosition;

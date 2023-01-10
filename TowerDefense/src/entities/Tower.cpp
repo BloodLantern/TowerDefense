@@ -33,10 +33,15 @@ Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectil
 
 void Tower::Shoot(const Projectile& projTemplate)
 {
+	
+}
+
+void Tower::OnUpdate()
+{
 
 }
 
-void Tower::Draw()
+void Tower::OnRender()
 {
 	//ImVec2 pos(GetPixelPosition().x + Globals::gGridX + GRID_SQUARE_SIZE / 2, GetPixelPosition().y + Globals::gGridY + GRID_SQUARE_SIZE / 2);
 	//ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());

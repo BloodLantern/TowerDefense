@@ -10,7 +10,9 @@ class Enemy : public Entity
 public:
 	Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop);
 
-	void Draw() override;
+	virtual void OnUpdate() override;
+	virtual void OnRender() override;
+
 	virtual void StickToPath();
 
 private:

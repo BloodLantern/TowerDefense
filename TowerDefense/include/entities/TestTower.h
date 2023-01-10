@@ -16,6 +16,9 @@ public:
 
 	void Shoot(const Projectile& projTemplate) override;
 
+	void OnRender() override;
+	void OnUpdate() override;
+
 private:
 
 };

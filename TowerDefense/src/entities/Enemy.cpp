@@ -7,7 +7,12 @@ Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t mon
 {
 }
 
-void Enemy::Draw()
+void Enemy::OnUpdate()
+{
+
+}
+
+void Enemy::OnRender()
 {
 	SetPixelPosition(GetPixelPosition() + mVelocity);
 

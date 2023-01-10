@@ -15,7 +15,8 @@ public:
 	Entity(int32_t tilePositionX, int32_t tilePositionY);
 	virtual ~Entity() {};
 
-	virtual void Draw() = 0;
+	virtual void OnUpdate() = 0;
+	virtual void OnRender() = 0;
 
 	Point2 GetPixelPosition() { return mPixelPosition; };
 	void SetPixelPosition(Point2 newPixelPosition);

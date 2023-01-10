@@ -5,6 +5,11 @@ Projectile::Projectile(uint32_t damage, uint16_t pierce, float_t lifetime)
 {
 }
 
-void Projectile::Draw()
+void Projectile::OnUpdate()
+{
+
+}
+
+void Projectile::OnRender()
 {
 }

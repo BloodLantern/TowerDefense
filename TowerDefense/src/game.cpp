@@ -23,7 +23,7 @@ void Game::Draw()
         int32_t screenX;
         int32_t screenY;
         mPlayField->GetPixelPositionFromGrid(0, 7, screenX, screenY);
-        
+
         Enemy* e = new Enemy(Point2(screenX, screenY), 0, 0, 0);
         mTempTex = ImGuiUtils::LoadTexture("assets/ant.png");
         e->SetTexture(&mTempTex);
@@ -31,17 +31,18 @@ void Game::Draw()
 
         mEnemies.push_back(e);
     }
+
     
     for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
     {
         Tower* t = *_t;
-        t->Draw();
+        t->OnRender();
     }
 
     for (std::vector<Enemy*>::iterator _e = mEnemies.begin(); _e != mEnemies.end(); _e++)
     {
         Enemy* e = *_e;
         e->StickToPath();
-        e->Draw();
+        e->OnRender();
     }
 }

@@ -17,7 +17,9 @@ public:
 	virtual ~Tower() {};
 
 	virtual void Shoot(const Projectile& projTemplate);
-	void Draw() override;
+
+	virtual void OnRender() override;
+	virtual void OnUpdate() override;
 
     float_t GetRange() const { return mRange; }
 	uint8_t GetWidth() const { return mWidth; }
