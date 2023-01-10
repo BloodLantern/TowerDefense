@@ -18,6 +18,8 @@ public:
 	virtual void OnUpdate() = 0;
 	virtual void OnRender() = 0;
 
+	bool IsOnGrid() const;
+
 	Point2 GetPixelPosition() const { return mPixelPosition; };
 	void SetPixelPosition(Point2 newPixelPosition);
 

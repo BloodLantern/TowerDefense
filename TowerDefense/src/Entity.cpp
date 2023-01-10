@@ -28,6 +28,13 @@ Entity::Entity(int32_t tilePositionX, int32_t tilePositionY)
 	SetTilePosition(Point2((float_t)tilePositionX, (float_t)tilePositionY));
 }
 
+bool Entity::IsOnGrid() const
+{
+	uint8_t tileX, tileY;
+	Globals::gGame->GetPlayField()->GetGridPositionFromPixels(mPixelPosition.x, mPixelPosition.y, tileX, tileY);
+    return !(tileX == UCHAR_MAX || tileY == UCHAR_MAX);
+}
+
 void Entity::SetPixelPosition(Point2 newPixelPosition)
 {
 	mPixelPosition = newPixelPosition;
