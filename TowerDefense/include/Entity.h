@@ -19,6 +19,7 @@ public:
 	virtual void OnRender() = 0;
 
 	bool IsOnGrid() const;
+	inline void SnapToGrid() { SetTilePosition(GetTilePosition()); };
 
 	Point2 GetPixelPosition() const { return mPixelPosition; };
 	void SetPixelPosition(Point2 newPixelPosition);
