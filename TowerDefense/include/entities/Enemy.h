@@ -20,4 +20,8 @@ private:
 
 	uint16_t mMoneyDrop;
 	bool mSlowed;
+
+	uint8_t mGridDestinationX;
+	uint8_t mGridDestinationY;
+	uint16_t mCurrentPathIndex;
 };

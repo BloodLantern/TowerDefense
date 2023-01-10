@@ -2,6 +2,7 @@
 
 #include "PlayField.h"
 #include "player.h"
+#include "Enemy.h"
 
 class Game {
 public:
@@ -16,4 +17,5 @@ public:
 private:
     PlayField* mPlayField;
     Player* mPlayer;
+    std::vector<Enemy*> mEnemies;
 };

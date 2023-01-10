@@ -107,7 +107,7 @@ bool AStar::FindBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 
 	for (AStarNode* node = end; node->parent != nullptr; node = node->parent)
 	{
-		recordPositions.push_back(ImVec2(node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f,
+		recordPositions.insert(recordPositions.begin(), ImVec2(node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f,
 			node->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f));
 	}
 	return true;

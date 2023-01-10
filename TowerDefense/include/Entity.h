@@ -31,10 +31,10 @@ public:
 	void SetRotation(float_t newRotation) { mRotation = newRotation; }
 	void AddRotation(float_t rotation) { mRotation += rotation; }
 	
+	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 	Texture* GetTexture() const { return mTexture; }
 
 protected:
-	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 
 private:
 	Point2 mPixelPosition;

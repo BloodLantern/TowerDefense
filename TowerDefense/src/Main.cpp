@@ -28,8 +28,8 @@ void SetupDiscordRPC(DiscordRichPresence* rpc)
 	rpc->startTimestamp = std::time(nullptr);
 	rpc->largeImageKey = "logo";
 	rpc->largeImageText = "Fourmi defense";
-	// rpc->partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
-	// rpc->joinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= ";
+	rpc->partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
+	rpc->joinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= ";
 	Discord_UpdatePresence(rpc);
 }
 
