@@ -36,14 +36,26 @@ void Tower::Shoot(const Projectile& projTemplate)
 	
 }
 
+void Tower::DrawRange(ImU32 color) const
+{
+	Globals::gDrawList->AddCircleFilled(
+		ImVec2(GetPixelPosition().x + Globals::gGridX + GetWidth() / 2, GetPixelPosition().y + GetHeight() / 2),
+		GetRange() * GRID_SQUARE_SIZE, color);
+}
+
 void Tower::OnUpdate()
 {
-	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
-	// If clicked on the tower
-	if ((int)(mouseClickedPos.x - Globals::gGridX) / GRID_SQUARE_SIZE == GetTilePosition().x
-		&& (int)(mouseClickedPos.y - Globals::gGridY) / GRID_SQUARE_SIZE == GetTilePosition().y)
+	if (Globals::gIO->MouseClicked[ImGuiMouseButton_Left])
 	{
-		std::cout << "Mouse clicked" << std::endl;
+		ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+		// If the tower is being clicked
+		int32_t pixelX = mouseClickedPos.x - Globals::gGridX, pixelY = mouseClickedPos.y - Globals::gGridY;
+		uint8_t tileX, tileY;
+		Globals::gGame->GetPlayField()->GetGridPositionFromPixels(pixelX, pixelY, tileX, tileY);
+		if (tileX == GetTilePosition().x && tileY == GetTilePosition().y)
+		{
+		    
+		}
 	}
 }
 

@@ -18,22 +18,22 @@ public:
 	virtual void OnUpdate() = 0;
 	virtual void OnRender() = 0;
 
-	Point2 GetPixelPosition() { return mPixelPosition; };
+	Point2 GetPixelPosition() const { return mPixelPosition; };
 	void SetPixelPosition(Point2 newPixelPosition);
 
-	Point2 GetTilePosition() { return mTilePosition; };
+	Point2 GetTilePosition() const { return mTilePosition; };
 	void SetTilePosition(Point2 newTilePosition);
 
-	float_t GetScale() { return mScale; };
+	float_t GetScale() const { return mScale; };
 	void SetScale(float_t newScale) { mScale = newScale; }
 	void AddScale(float_t scale) { mScale += scale; };
 
-	float_t GetRotation() { return mRotation; }
+	float_t GetRotation() const { return mRotation; }
 	void SetRotation(float_t newRotation) { mRotation = newRotation; }
 	void AddRotation(float_t rotation) { mRotation += rotation; }
 	
-	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 	Texture* GetTexture() const { return mTexture; }
+	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 
 protected:
 

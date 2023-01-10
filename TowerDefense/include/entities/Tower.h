@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 class Player;
+#define TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
 
 class Tower : public Entity
 {
@@ -17,6 +18,7 @@ public:
 	virtual ~Tower() {};
 
 	virtual void Shoot(const Projectile& projTemplate);
+	void DrawRange(ImU32 color = TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
 	virtual void OnUpdate() override;

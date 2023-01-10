@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "Enemy.h"
 #include <stdint.h>
 #include <Vector2.h>
 
@@ -19,4 +19,5 @@ private:
 	uint32_t mDamage;
 	uint16_t mPierce;
 	float_t mLifetime;
+	Enemy* mTarget;
 };

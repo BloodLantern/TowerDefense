@@ -13,7 +13,6 @@
 #define TOWER_BAR_Y Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_TOWER_SIZE - TOWER_BAR_Y_OFFSET
 #define TOWER_BAR_WIDTH Globals::gWindowWidth
 
-#define TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
 #define TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED IM_COL32(0xC0, 0x00, 0x00, 0x70)
 
 TowerBarUI::TowerBarUI()
@@ -118,8 +117,7 @@ void TowerBarUI::HandleMouse()
 			}
 
 			// Range
-			Globals::gDrawList->AddCircleFilled(ImVec2(topLeft.x + selectedTowerWidth / 2, topLeft.y + selectedTowerHeight / 2),
-				mTowerTemplates[selectedTowerIndex]->GetRange() * GRID_SQUARE_SIZE, available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE : TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
+			mTowerTemplates[selectedTowerIndex]->DrawRange(available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
 			// Tower
 			Globals::gDrawList->AddImage(towerTextures[selectedTowerIndex].id, topLeft, bottomRight);
 		}
