@@ -17,6 +17,8 @@ public:
 
 private:
 	Vector2 mVelocity;
+	float mSpeed;
+
 	uint32_t mHealth;
 	uint8_t mDamage;
 

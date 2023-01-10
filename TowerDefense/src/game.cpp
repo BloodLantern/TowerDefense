@@ -45,7 +45,6 @@ void Game::Draw()
     {
         Enemy* e = *_e;
 
-        e->StickToPath();
         e->OnUpdate();
         e->OnRender();
     }
