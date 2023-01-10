@@ -23,23 +23,32 @@ void Enemy::OnRender()
 void Enemy::StickToPath()
 {
 	if (AStar::recordPositions.size() <= 0)
-		AStar::FindBestPath(Globals::gGame->GetPlayField()->mGridWidth - 1, Globals::gGame->GetPlayField()->mGridHeight / 2, 0, Globals::gGame->GetPlayField()->mGridHeight / 2);
+	{
+		PlayField* pf = Globals::gGame->GetPlayField();
+		// Failsafe
+		AStar::FindBestPath(pf->mGridWidth - 1, pf->mGridHeight / 2, 0, pf->mGridHeight / 2);
+		return;
+	}
 
 	if (mCurrentPathIndex >= AStar::recordPositions.size())
 	{
+		// Ended path, stop moving
 		mVelocity = Vector2(0, 0);
 		return;
 	}
 
-	PlayField* pf = Globals::gGame->GetPlayField();
-	ImVec2 pos = AStar::recordPositions[mCurrentPathIndex];
-
-	mVelocity = Vector2(GetPixelPosition(), Point2(pos.x, pos.y)).Normalize();
-
-	pf->GetGridPositionFromPixels(pos.x, pos.y, mGridDestinationX, mGridDestinationY);
-	Point2 dstPos(pos.x, pos.y);
-
+	// Get destination on the path
+	ImVec2 dstPos = AStar::recordPositions[mCurrentPathIndex];
 	Point2 pixelPos = GetPixelPosition();
+
+	// Check is on the destination tile
 	if (fabsf(pixelPos.x - dstPos.x) < 1.f && fabsf(pixelPos.y - dstPos.y) < 1.f)
+	{
+		// Advance path
 		mCurrentPathIndex++;
+		return;
+	}
+
+	// Move to path at standard speed
+	mVelocity = Vector2(pixelPos, Point2(dstPos.x, dstPos.y)).Normalize();
 }

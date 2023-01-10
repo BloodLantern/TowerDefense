@@ -24,7 +24,7 @@ void Game::Draw()
         int32_t screenY;
         mPlayField->GetPixelPositionFromGrid(0, 7, screenX, screenY);
 
-        Enemy* e = new Enemy(Point2(screenX, screenY), 0, 0, 0);
+        Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 0, 0);
         mTempTex = ImGuiUtils::LoadTexture("assets/ant.png");
         e->SetTexture(&mTempTex);
         e->SetScale(.1f);
