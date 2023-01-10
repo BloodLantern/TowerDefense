@@ -36,13 +36,17 @@ void Game::Draw()
     for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
     {
         Tower* t = *_t;
+
+        t->OnUpdate();
         t->OnRender();
     }
 
     for (std::vector<Enemy*>::iterator _e = mEnemies.begin(); _e != mEnemies.end(); _e++)
     {
         Enemy* e = *_e;
+
         e->StickToPath();
+        e->OnUpdate();
         e->OnRender();
     }
 }
