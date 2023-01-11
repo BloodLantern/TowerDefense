@@ -20,6 +20,7 @@ Tower::Tower(const Tower& other)
 {
 	mOwner = nullptr;
 	mTarget = nullptr;
+	mSelected = false;
 }
 
 Tower::Tower(Projectile* projectileTemplate)
@@ -27,6 +28,7 @@ Tower::Tower(Projectile* projectileTemplate)
 {
 	mOwner = nullptr;
 	mTarget = nullptr;
+	mSelected = false;
 }
 
 Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate)
@@ -37,6 +39,7 @@ Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectil
 
 	mOwner = nullptr;
 	mTarget = nullptr;
+	mSelected = false;
 }
 
 void Tower::Shoot(const Projectile& projTemplate)

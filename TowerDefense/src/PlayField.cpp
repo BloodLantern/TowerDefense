@@ -189,19 +189,8 @@ void PlayField::DrawLines()
 	}
 }
 
-void PlayField::Draw()
+void PlayField::DrawPath()
 {
-	DrawLayers();
-	
-	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_CLIPDATA)
-		DrawClipdata();
-
-	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
-		DrawLines();
-
-	towerBarUI.Draw();
-
-
 	if (ImGui::Begin("A*"))
 	{
 		if (ImGui::Button("Test"))
@@ -226,6 +215,22 @@ void PlayField::Draw()
 		}
 	}
 	ImGui::End();
+}
+
+void PlayField::Draw()
+{
+	DrawLayers();
+	
+	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_CLIPDATA)
+		DrawClipdata();
+
+	if (mDrawFlags & PLAYFIELD_DRAW_FLAGS_GRID_LINES)
+		DrawLines();
+
+	if (false)
+		DrawPath();
+
+	towerBarUI.Draw();
 }
 
 void PlayField::Save(std::string dst)

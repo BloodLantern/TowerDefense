@@ -95,6 +95,7 @@ private:
 	void DrawClipdata();
 	void DrawLayers();
 	void DrawLines();
+	void DrawPath();
 
 public:
 	Texture mTileset;
