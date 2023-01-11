@@ -2,13 +2,14 @@
 #include "Globals.h"
 #include "PlayField.h"
 
-#define TOWER_BAR_TOWER_SIZE 64
+#define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
+#define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
+#define TOWER_BAR_UI_TOWER_HOVER_COLOR IM_COL32(0xC0, 0x90, 0x40, 0xA0)
+
 #define TOWER_BAR_TOWER_OFFSET_X 8
 
-#define TOWER_BAR_Y_OFFSET 2
-#define TOWER_BAR_HEIGHT TOWER_BAR_TOWER_SIZE + TOWER_BAR_Y_OFFSET
 #define TOWER_BAR_X Globals::gWindowX
-#define TOWER_BAR_Y Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_TOWER_SIZE - TOWER_BAR_Y_OFFSET
+#define TOWER_BAR_Y (Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_HEIGHT)
 #define TOWER_BAR_WIDTH Globals::gWindowWidth
 
 #define TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED IM_COL32(0xC0, 0x00, 0x00, 0x70)
@@ -78,8 +79,8 @@ void TowerBarUI::HandleMouse()
 		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
 		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
 
-		const bool isOnGrid = mSelectedTower->IsOnGrid();
 		mSelectedTower->SetPixelPosition(Point2(mousePos.x, mousePos.y));
+		const bool isOnGrid = mSelectedTower->IsOnGrid();
         const Point2& tilePosition = mSelectedTower->GetTilePosition();
 		
 		if (isOnGrid)
@@ -117,7 +118,7 @@ void TowerBarUI::HandleMouse()
 				mSelectedTower->SnapToGrid();
 
 			// Tower rendering
-			mSelectedTower->DrawRange(available ? TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
+			mSelectedTower->DrawRange(available ? TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
 			//Globals::gDrawList->AddImage(mSelectedTower->GetTexture()->id, topLeft, ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight));
 			mSelectedTower->OnRender();
 		}

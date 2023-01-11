@@ -2,6 +2,14 @@
 
 #include "Globals.h"
 
+#define TOWER_RANGE_OUTLINE_COLOR IM_COL32(0x20, 0x20, 0x20, 0xA0)
+#define TOWER_SELECTION_OVERLAY_COLOR IM_COL32(0x80, 0x80, 0x80, 0x80)
+#define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
+
+#define TOWER_PANEL_WIDTH 200
+#define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
+#define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
+
 Tower::Tower(const Tower& other)
 	: Entity(other),
 	mRange(other.mRange),
@@ -38,6 +46,9 @@ void Tower::Shoot(const Projectile& projTemplate)
 
 void Tower::DrawRange(ImU32 color) const
 {
+	Globals::gDrawList->AddCircle(
+		ImVec2(GetPixelPosition().x + GetWidth() * GRID_SQUARE_SIZE / 2, GetPixelPosition().y + GetHeight() * GRID_SQUARE_SIZE / 2),
+		GetRange() * GRID_SQUARE_SIZE, TOWER_RANGE_OUTLINE_COLOR, 0, 2.f);
 	Globals::gDrawList->AddCircleFilled(
 		ImVec2(GetPixelPosition().x + GetWidth() * GRID_SQUARE_SIZE / 2, GetPixelPosition().y + GetHeight() * GRID_SQUARE_SIZE / 2),
 		GetRange() * GRID_SQUARE_SIZE, color);
@@ -49,21 +60,15 @@ void Tower::OnUpdate()
 	SnapToGrid();
 
 	// Check for selection
-	if (Globals::gIO->MouseClicked[ImGuiMouseButton_Left])
+	if (Globals::gIO->MouseClicked[ImGuiMouseButton_Left] && !Globals::gIO->WantCaptureMouse)
 	{
 		ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
 		// If the tower is being clicked
-		int32_t pixelX = mouseClickedPos.x - Globals::gGridX, pixelY = mouseClickedPos.y - Globals::gGridY;
+		int32_t pixelX = mouseClickedPos.x, pixelY = mouseClickedPos.y;
 		uint8_t tileX, tileY;
 		Globals::gGame->GetPlayField()->GetGridPositionFromPixels(pixelX, pixelY, tileX, tileY);
-		if (tileX == GetTilePosition().x && tileY == GetTilePosition().y)
-		{
-		    selected = true;
-		}
-		else
-        {
-            selected = false;
-        }
+
+		mSelected = tileX == GetTilePosition().x && tileY == GetTilePosition().y;
 	}
 }
 
@@ -73,4 +78,24 @@ void Tower::OnRender()
 	const ImVec2 topLeft = GetPixelPosition();
 	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
 	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
+
+	if (mSelected)
+	{
+		// Selection overlay
+		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_SELECTION_OVERLAY_COLOR);
+		Globals::gDrawList->AddRect(topLeft, bottomRight, TOWER_SELECTION_OUTLINE_COLOR, 0, 3.f);
+
+		// Tower panel
+		ImVec2 panelTopLeft(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH, Globals::gGridY);
+		//ImVec2 panelBottomRight(Globals::gWindowX + Globals::gWindowWidth,
+		//	Globals::gGridY + Globals::gWindowHeight - TOWER_BAR_HEIGHT);
+		//Globals::gDrawList->AddRectFilled(panelTopLeft, panelBottomRight, TOWER_PANEL_BACKGROUND_COLOR);
+		//Globals::gDrawList->AddRect(panelTopLeft, panelBottomRight, TOWER_PANEL_OUTLINE_COLOR);
+
+		// Draw stats
+		ImGui::SetNextWindowPos(panelTopLeft);
+		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
+		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+		ImGui::End();
+	}
 }

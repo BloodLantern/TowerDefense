@@ -5,9 +5,11 @@
 #include "Enemy.h"
 
 #include <stdint.h>
+#include <string>
 
 class Player;
-#define TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
+
+#define TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
 
 class Tower : public Entity
 {
@@ -18,11 +20,12 @@ public:
 	virtual ~Tower() {};
 
 	virtual void Shoot(const Projectile& projTemplate);
-	void DrawRange(ImU32 color = TOWER_BAR_TOWER_RANGE_COLOR_AVAILABLE) const;
+	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
 	virtual void OnUpdate() override;
 
+    std::string GetName() const { return mName; }
     float_t GetRange() const { return mRange; }
 	uint8_t GetWidth() const { return mWidth; }
 	uint8_t GetHeight() const { return mHeight; }
@@ -30,11 +33,14 @@ public:
 	void SetOwner(Player* newOwner) { mOwner = newOwner; }
 
 protected:
-	void SetRange(float range) { mRange = range; }
+	void SetName(std::string newName) { mName = newName; }
+	void SetRange(float_t range) { mRange = range; }
 	void SetWidth(uint8_t newWidth) { mWidth = newWidth; }
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
 
 private:
+    std::string mName;
+
 	float_t mRange = 3.f;
 	// Number of attacks per second
 	float_t mAttackSpeed = 1.f;
@@ -53,5 +59,5 @@ private:
 
 	Player* mOwner;
 
-	bool selected;
+	bool mSelected;
 };
