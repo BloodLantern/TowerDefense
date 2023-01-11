@@ -21,11 +21,19 @@ PlayField::PlayField()
 	{
 		std::cout << "Failed to open file" << std::endl;
 		for (int32_t x = 0; x < mGridWidth; x++)
+		{
 			for (int32_t y = 0; y < mGridHeight; y++)
-				mClipdata[y * mGridWidth + x] = CLIPDATA_TYPE_EMPTY; // static_cast<ClipdataType>(std::rand() % 5);
+			{
+				uint32_t i = y * mGridWidth + x;
+				mClipdata[i] = CLIPDATA_TYPE_EMPTY;
+				mLayer0Tilemap[i] = 0;
+				mLayer1Tilemap[i] = 0;
+				mLayer2Tilemap[i] = 0;
+			}
+		}
 	}
 
-	SetDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_GRID_LINES | PLAYFIELD_DRAW_FLAGS_LAYER0 |
+	SetDrawFlags(PLAYFIELD_DRAW_FLAGS_OPERATION_SET, PLAYFIELD_DRAW_FLAGS_LAYER0 |
 		PLAYFIELD_DRAW_FLAGS_LAYER1 | PLAYFIELD_DRAW_FLAGS_LAYER2);
 }
 

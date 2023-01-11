@@ -55,7 +55,7 @@ void Round::OnUpdate()
 
 			{
 				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 1, 0);
-				mTempTex = ImGuiUtils::LoadTexture("assets/ant.png");
+				mTempTex = ImGuiUtils::LoadTexture("assets/ant_alpha.png");
 				e->SetTexture(&mTempTex);
 				e->SetScale(.1f);
 
