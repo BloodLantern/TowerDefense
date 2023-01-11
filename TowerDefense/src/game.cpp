@@ -1,11 +1,13 @@
 #include "game.h"
 #include "Round.h"
 #include "Globals.h"
+#include "RoundsData.h"
 
 Game::Game()
-    : mPlayField(new PlayField), mPlayer(new Player), mPlayingSpeed(1)
+    : mPlayField(new PlayField), mPlayer(new Player), mPlayingSpeed(1), mCurrentWave(1)
 {
-
+    mDeltaTime = 0;
+    mPlayingSpeedDeltaTime = 0;
 }
 
 Game::~Game()
@@ -19,6 +21,10 @@ void Game::Draw()
     mDeltaTime = Globals::gIO->DeltaTime;
     mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
     
+    ImGui::Begin("Delta time");
+    ImGui::SliderFloat("Play speed", &mPlayingSpeed, .1f, 5.f);
+    ImGui::End();
+
     mPlayField->Draw();
 
     Round::OnUpdate();
@@ -48,5 +54,14 @@ void Game::Draw()
 
         e->OnRender();
         _e++;
+    }
+
+    if (Round::HasEnded() && mEnemies.empty())
+    {
+        mCurrentWave++;
+        mRpcDetailsText = std::string("Wave ").append(std::to_string(mCurrentWave)).append("/20");
+        Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
+
+        Round::StartRound(sLevel1_Wave1);
     }
 }

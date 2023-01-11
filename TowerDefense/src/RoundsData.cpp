@@ -1,12 +1,13 @@
 #include "RoundsData.h"
 
-const RoundInfo sLevel1_Wave1[10] = {
+const RoundInfo sLevel1_Wave1[11] = {
 	RoundInfo(ROUND_COMMAND_COOLDOWN, 100),
 	RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0),
 	RoundInfo(ROUND_COMMAND_COOLDOWN, 100),
 	RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0),
 	RoundInfo(ROUND_COMMAND_COOLDOWN, 90),
 	RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0),
+	RoundInfo(ROUND_COMMAND_COOLDOWN, 30),
 	RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0),
 	RoundInfo(ROUND_COMMAND_COOLDOWN, 50),
 	RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0),

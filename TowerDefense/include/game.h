@@ -15,6 +15,7 @@ public:
     Player* GetPlayer() const { return mPlayer; }
 
     std::vector<Enemy*> mEnemies;
+    uint32_t mCurrentWave;
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
     double_t GetDeltaTime() const { return mDeltaTime; }
@@ -23,6 +24,8 @@ public:
 private:
     PlayField* mPlayField;
     Player* mPlayer;
+
+    std::string mRpcDetailsText;
 
     double_t mDeltaTime;
     double_t mPlayingSpeedDeltaTime;

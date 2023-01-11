@@ -116,6 +116,7 @@ int main(int argc, char** argv)
 		Globals::UpdateGlobals();
 		game.Draw();
 		Gui::Update();
+
 		Discord_UpdatePresence(&Globals::gDiscordRpc);
 
 		// Rendering
