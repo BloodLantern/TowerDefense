@@ -3,6 +3,9 @@
 #include "AStar.h"
 #include "RLE.h"
 
+#include "Round.h"
+#include "RoundsData.h"
+
 #include <cstdlib>
 #include <iostream>
 
@@ -12,6 +15,7 @@ PlayField::PlayField()
 	Resize(42, 18);
 
 	LoadTileset("forest.png");
+	Round::StartRound(sLevel1_Wave1);
 	
 	if (!RLE::DecompressLevel(this, MAPS_PATH "Level1.bin"))
 	{

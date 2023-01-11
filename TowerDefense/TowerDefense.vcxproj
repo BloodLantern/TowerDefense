@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Round.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\entities\Enemy.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="src\Globals.cpp" />
     <ClCompile Include="src\RLE.cpp" />
     <ClCompile Include="src\entities\Tower.cpp" />
+    <ClCompile Include="src\RoundsData.cpp" />
     <ClCompile Include="src\std_image.cpp" />
     <ClCompile Include="src\TowerBarUI.cpp" />
     <ClCompile Include="src\entities\TestTower.cpp" />
@@ -186,8 +188,10 @@
     <ClInclude Include="include\Globals.h" />
     <ClInclude Include="include\RLE.h" />
     <ClInclude Include="include\entities\Projectile.h" />
+    <ClInclude Include="include\RoundsData.h" />
     <ClInclude Include="include\TowerBarUI.h" />
     <ClInclude Include="include\entities\TestTower.h" />
+    <ClInclude Include="include\Round.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

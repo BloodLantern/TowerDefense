@@ -1,6 +1,5 @@
 #include "game.h"
-
-Texture mTempTex;
+#include "Round.h"
 
 Game::Game()
     : mPlayField(new PlayField), mPlayer(new Player)
@@ -18,20 +17,9 @@ void Game::Draw()
 {
     mPlayField->Draw();
 
-    if (ImGui::IsKeyPressed(ImGuiKey_Space, false))
-    {
-        int32_t screenX;
-        int32_t screenY;
-        mPlayField->GetPixelPositionFromGrid(0, 7, screenX, screenY);
+    Round::OnUpdate();
 
-        Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 0, 0);
-        mTempTex = ImGuiUtils::LoadTexture("assets/ant.png");
-        e->SetTexture(&mTempTex);
-        e->SetScale(.1f);
-
-        mEnemies.push_back(e);
-    }
-
+    mPlayer->OnRender();
     
     for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
     {
@@ -41,11 +29,20 @@ void Game::Draw()
         t->OnRender();
     }
 
-    for (std::vector<Enemy*>::iterator _e = mEnemies.begin(); _e != mEnemies.end(); _e++)
+    for (std::vector<Enemy*>::iterator _e = mEnemies.begin(); _e != mEnemies.end(); )
     {
         Enemy* e = *_e;
 
         e->OnUpdate();
+        if (e->mToDelete)
+        {
+            // Kill enemy
+            _e = mEnemies.erase(_e);
+            delete e;
+            continue;
+        }
+
         e->OnRender();
+        _e++;
     }
 }
