@@ -38,6 +38,8 @@ public:
 	Texture* GetTexture() const { return mTexture; }
 	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 
+	bool mToDelete;
+
 protected:
 
 private:

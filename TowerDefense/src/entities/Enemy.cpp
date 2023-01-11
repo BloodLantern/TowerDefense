@@ -6,7 +6,7 @@ Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t mon
 	: Entity(pixelPosition), mHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 	mCurrentPathIndex = 0;
-	mSpeed = 1.f;
+	mSpeed = 2.f;
 }
 
 void Enemy::OnUpdate()
@@ -34,8 +34,14 @@ void Enemy::StickToPath()
 
 	if (mCurrentPathIndex >= AStar::recordPositions.size())
 	{
-		// Ended path, stop moving
-		mVelocity = Vector2(0, 0);
+		// Ended path, keep previous velocity to "walk off screen"
+		if (!IsOnGrid())
+		{
+			// Deal damage
+			Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
+			// Flag for deletion
+			mToDelete = true;
+		}
 		return;
 	}
 
