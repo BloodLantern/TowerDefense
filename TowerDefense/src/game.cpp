@@ -1,8 +1,9 @@
 #include "game.h"
 #include "Round.h"
+#include "Globals.h"
 
 Game::Game()
-    : mPlayField(new PlayField), mPlayer(new Player)
+    : mPlayField(new PlayField), mPlayer(new Player), mPlayingSpeed(1)
 {
 
 }
@@ -15,6 +16,9 @@ Game::~Game()
 
 void Game::Draw()
 {
+    mDeltaTime = Globals::gIO->DeltaTime;
+    mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
+    
     mPlayField->Draw();
 
     Round::OnUpdate();

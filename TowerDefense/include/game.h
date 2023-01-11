@@ -15,7 +15,16 @@ public:
     Player* GetPlayer() const { return mPlayer; }
 
     std::vector<Enemy*> mEnemies;
+
+    double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
+    double_t GetDeltaTime() const { return mDeltaTime; }
+    void SetPlayingSpeed(float speed) { mPlayingSpeed = speed; }
+
 private:
     PlayField* mPlayField;
     Player* mPlayer;
+
+    double_t mDeltaTime;
+    double_t mPlayingSpeedDeltaTime;
+    float_t mPlayingSpeed;
 };

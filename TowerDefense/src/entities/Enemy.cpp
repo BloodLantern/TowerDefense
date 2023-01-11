@@ -16,7 +16,7 @@ void Enemy::OnUpdate()
 
 void Enemy::OnRender()
 {
-	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed);
+	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
 
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
@@ -50,7 +50,7 @@ void Enemy::StickToPath()
 	Point2 pixelPos = GetPixelPosition();
 
 	// Check is on the destination tile
-	if (fabsf(pixelPos.x - dstPos.x) < 1.f && fabsf(pixelPos.y - dstPos.y) < 1.f)
+	if (fabsf(pixelPos.x - dstPos.x) < 10.f && fabsf(pixelPos.y - dstPos.y) < 10.f)
 	{
 		// Advance path
 		mCurrentPathIndex++;
@@ -58,5 +58,5 @@ void Enemy::StickToPath()
 	}
 
 	// Move to path at standard speed
-	mVelocity = Vector2(pixelPos, Point2(dstPos.x, dstPos.y)).Normalize();
+	mVelocity = Vector2(pixelPos, Point2(dstPos.x, dstPos.y)).Normalize() * 60;
 }
