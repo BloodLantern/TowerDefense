@@ -45,6 +45,10 @@ void Tower::DrawRange(ImU32 color) const
 
 void Tower::OnUpdate()
 {
+	// Update pixel position from tile position
+	SnapToGrid();
+
+	// Check for selection
 	if (Globals::gIO->MouseClicked[ImGuiMouseButton_Left])
 	{
 		ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
