@@ -17,7 +17,7 @@ public:
 	Tower(const Tower& other);
 	Tower(Projectile* projectileTemplate);
 	Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate);
-	virtual ~Tower() {};
+	virtual ~Tower() { delete mProjectileTemplate; };
 
 	virtual void Shoot(const Projectile& projTemplate);
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
@@ -32,8 +32,8 @@ public:
 	Player* GetOwner() const { return mOwner; }
 	void SetOwner(Player* newOwner) { mOwner = newOwner; }
 
-protected:
 	void SetName(std::string newName) { mName = newName; }
+protected:
 	void SetRange(float_t range) { mRange = range; }
 	void SetWidth(uint8_t newWidth) { mWidth = newWidth; }
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
@@ -45,7 +45,7 @@ private:
 	// Number of attacks per second
 	float_t mAttackSpeed = 1.f;
 
-	Projectile& mProjectileTemplate;
+	Projectile* mProjectileTemplate;
 	Enemy* mTarget;
 
 	uint8_t mGenericUpgradeLevel = 1;

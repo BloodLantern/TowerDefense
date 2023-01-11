@@ -2,16 +2,21 @@
 
 #include "Globals.h"
 
+#include <GLFW/glfw3.h>
+
 #define TOWER_RANGE_OUTLINE_COLOR IM_COL32(0x20, 0x20, 0x20, 0xA0)
 #define TOWER_SELECTION_OVERLAY_COLOR IM_COL32(0x80, 0x80, 0x80, 0x80)
 #define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
 
-#define TOWER_PANEL_WIDTH 200
+#define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
+#define TOWER_PANEL_TEXT_SIZE_MULTIPLIER 1.f
+#define TOWER_PANEL_WIDTH TOWER_PANEL_IMAGE_SIZE_MULTIPLIER * GRID_SQUARE_SIZE
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
 Tower::Tower(const Tower& other)
 	: Entity(other),
+	mName(other.mName),
 	mRange(other.mRange),
 	mAttackSpeed(other.mAttackSpeed),
 	mProjectileTemplate(other.mProjectileTemplate),
@@ -24,7 +29,7 @@ Tower::Tower(const Tower& other)
 }
 
 Tower::Tower(Projectile* projectileTemplate)
-	: Entity(), mProjectileTemplate(*projectileTemplate)
+	: Entity(), mProjectileTemplate(projectileTemplate)
 {
 	mOwner = nullptr;
 	mTarget = nullptr;
@@ -32,7 +37,7 @@ Tower::Tower(Projectile* projectileTemplate)
 }
 
 Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate)
-	: Entity(pixelPosition), mRange(range), mAttackSpeed(attackSpeed), mProjectileTemplate(*projectileTemplate)
+	: Entity(pixelPosition), mRange(range), mAttackSpeed(attackSpeed), mProjectileTemplate(projectileTemplate)
 {
 	mCustomUpgradeLevel = 0;
 	mGenericUpgradeLevel = 0;
@@ -75,6 +80,11 @@ void Tower::OnUpdate()
 	}
 }
 
+//void ImGuiCallback_NearestInterpolation(const ImDrawList*, const ImDrawCmd*)
+//{
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//}
+
 void Tower::OnRender()
 {
 	//ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
@@ -89,16 +99,30 @@ void Tower::OnRender()
 		Globals::gDrawList->AddRect(topLeft, bottomRight, TOWER_SELECTION_OUTLINE_COLOR, 0, 3.f);
 
 		// Tower panel
-		ImVec2 panelTopLeft(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH, Globals::gGridY);
-		//ImVec2 panelBottomRight(Globals::gWindowX + Globals::gWindowWidth,
-		//	Globals::gGridY + Globals::gWindowHeight - TOWER_BAR_HEIGHT);
-		//Globals::gDrawList->AddRectFilled(panelTopLeft, panelBottomRight, TOWER_PANEL_BACKGROUND_COLOR);
-		//Globals::gDrawList->AddRect(panelTopLeft, panelBottomRight, TOWER_PANEL_OUTLINE_COLOR);
+		ImVec2 panelPosition(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH, Globals::gGridY);
 
 		// Draw stats
-		ImGui::SetNextWindowPos(panelTopLeft);
+		ImGui::SetNextWindowPos(panelPosition);
 		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+		ImDrawList* dl = ImGui::GetForegroundDrawList();
+		// For pixel arts upscale
+		//dl->AddCallback(ImGuiCallback_NearestInterpolation, nullptr);
+
+        ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x / TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
+		ImGui::SetWindowFontScale(TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
+		ImGui::Text(mName.c_str());
+
+		//Texture* texture = GetTexture();
+		//ImVec2 towerTexturePos(panelPosition.x, panelPosition.y + 20);
+		//dl->AddImage(texture->id, towerTexturePos, ImVec2(towerTexturePos.x + texture->width * TOWER_PANEL_IMAGE_SIZE_MULTIPLIER,
+		//	towerTexturePos.y + texture->height * TOWER_PANEL_IMAGE_SIZE_MULTIPLIER));
+		ImGui::Dummy(ImVec2(1, 100));
+		ImGui::TextColored(ImVec4(1, 0, 0, 1), "%d ж", mKillCount);
+		ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Damage dealt:    %d", mDamageDealt);
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "Money generated: %d", mMoneyGenerated);
+
+		//dl->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
 		ImGui::End();
 	}
 }
