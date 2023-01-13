@@ -1,6 +1,6 @@
 #include "gui.hpp"
 #include "level_editor.hpp"
-#include "wave_editor.hpp"
+#include "round_editor.hpp"
 
 #include <imgui.h>
 
@@ -55,7 +55,7 @@ void Gui::Update()
 				break;
 
 			case GUI_WINDOW_ID_WAVE_EDITOR:
-				WaveEditor::Update();
+				RoundEditor::Update();
 		}
 	}
 }

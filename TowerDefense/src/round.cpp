@@ -56,8 +56,6 @@ void Round::OnUpdate()
 			int32_t screenY;
 			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
 
-			std::cout << screenX << " ; " << screenY << std::endl;
-
 			{
 				// Offset by grid because GetPixelPositionFromGrid adds it
 				Enemy* e = new Enemy(Point2(screenX - Globals::gGridX, screenY + GRID_SQUARE_SIZE / 2 - Globals::gGridY), 0, 1, 0);
