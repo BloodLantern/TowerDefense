@@ -1,4 +1,4 @@
-#include "RLE.h"
+#include "rle.hpp"
 
 #include <iostream>
 

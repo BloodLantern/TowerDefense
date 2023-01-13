@@ -1,5 +1,5 @@
-#include "Globals.h"
-#include "PlayField.h"
+#include "globals.hpp"
+#include "playfield.hpp"
 
 ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;

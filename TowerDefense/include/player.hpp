@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tower.h"
+#include "tower.hpp"
 
 #include <stdint.h>
 #include <vector>

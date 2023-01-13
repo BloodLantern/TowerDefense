@@ -6,10 +6,10 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "Globals.h"
-#include "Game.h"
-#include "LevelEditor.h"
-#include "Gui.h"
+#include "globals.hpp"
+#include "game.hpp"
+#include "level_editor.hpp"
+#include "gui.hpp"
 
 #include "discordRPC/discord_rpc.h"
 #include "stb_image.h"

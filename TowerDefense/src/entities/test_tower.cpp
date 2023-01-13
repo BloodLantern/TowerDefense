@@ -1,6 +1,5 @@
-#include "TestTower.h"
-
-#include "Globals.h"
+#include "test_tower.hpp"
+#include "globals.hpp"
 
 TestTower::TestTower(const TestTower& other)
 	: Tower(other)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tower.h"
+#include "tower.hpp"
 
 #define TEST_TOWER_RANGE 5.f
 #define TEST_TOWER_ATTACK_SPEED 2.f

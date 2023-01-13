@@ -1,10 +1,10 @@
-#include "LevelEditor.h"
+#include "level_editor.hpp"
 
 #include <imgui.h>
 
-#include "Globals.h"
-#include "AStar.h"
-#include "Gui.h"
+#include "globals.hpp"
+#include "a_star.hpp"
+#include "gui.hpp"
 
 int32_t LevelEditor::mCurrentBlockType;
 int32_t LevelEditor::mCurrentLayer;

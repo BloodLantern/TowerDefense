@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "discordRPC/discord_rpc.h"
 
-#include "game.h"
+#include "game.hpp"
 
 class Globals
 {

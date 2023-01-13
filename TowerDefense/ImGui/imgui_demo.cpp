@@ -1295,7 +1295,7 @@ static void ShowDemoWindowWidgets()
             static bool selected[3] = { false, false, false };
             ImGui::Selectable("main.c",    &selected[0]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
             ImGui::Selectable("Hello.cpp", &selected[1]); ImGui::SameLine(300); ImGui::Text("12,345 bytes");
-            ImGui::Selectable("Hello.h",   &selected[2]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
+            ImGui::Selectable("Hello.hpp",   &selected[2]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
             ImGui::TreePop();
         }
         IMGUI_DEMO_MARKER("Widgets/Selectables/In columns");
@@ -2583,7 +2583,7 @@ static void ShowDemoWindowWidgets()
             "  \"xxx,yyy\"  display lines containing \"xxx\" or \"yyy\"\n"
             "  \"-xxx\"     hide lines containing \"xxx\"");
         filter.Draw();
-        const char* lines[] = { "aaa1.c", "bbb1.c", "ccc1.c", "aaa2.cpp", "bbb2.cpp", "ccc2.cpp", "abc.h", "hello, world" };
+        const char* lines[] = { "aaa1.c", "bbb1.c", "ccc1.c", "aaa2.cpp", "bbb2.cpp", "ccc2.cpp", "abc.hpp", "hello, world" };
         for (int i = 0; i < IM_ARRAYSIZE(lines); i++)
             if (filter.PassFilter(lines[i]))
                 ImGui::BulletText("%s", lines[i]);
@@ -6583,7 +6583,7 @@ static void ShowExampleMenuFile()
     {
         ImGui::MenuItem("fish_hat.c");
         ImGui::MenuItem("fish_hat.inl");
-        ImGui::MenuItem("fish_hat.h");
+        ImGui::MenuItem("fish_hat.hpp");
         if (ImGui::BeginMenu("More.."))
         {
             ImGui::MenuItem("Hello");

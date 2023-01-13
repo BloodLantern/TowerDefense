@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
-#include "TowerBarUI.h"
+#include "entity.hpp"
+#include "tower_bar_ui.hpp"
 #include "imgui_utils.hpp"
 #include <stdint.h>
 
@@ -91,7 +91,7 @@ private:
 	bool maxR;
 	size_t r;
 	TowerBarUI towerBarUI;
-	
+
 	void DrawClipdata();
 	void DrawLayers();
 	void DrawLines();

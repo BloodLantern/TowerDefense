@@ -168,7 +168,7 @@ CODE
  ----------------------------------------------
  - Overwrite all the sources files except for imconfig.h (if you have modified your copy of imconfig.h)
  - Or maintain your own branch where you have imconfig.h modified as a top-most commit which you can regularly rebase over "master".
- - You can also use '#define IMGUI_USER_CONFIG "my_config_file.h" to redirect configuration to your own file.
+ - You can also use '#define IMGUI_USER_CONFIG "my_config_file.hpp" to redirect configuration to your own file.
  - Read the "API BREAKING CHANGES" section (below). This is where we list occasional API breaking changes.
    If a function/type has been renamed / or marked obsolete, try to fix the name in your code before it is permanently removed
    from the public API. If you have a problem with a missing function/symbols, search for its name in the code, there will
@@ -1816,7 +1816,7 @@ const char* ImStrSkipBlank(const char* str)
 #ifdef IMGUI_STB_SPRINTF_FILENAME
 #include IMGUI_STB_SPRINTF_FILENAME
 #else
-#include "stb_sprintf.h"
+#include "stb_sprintf.hpp"
 #endif
 #endif
 

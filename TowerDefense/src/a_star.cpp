@@ -1,5 +1,5 @@
-#include "AStar.h"
-#include "Globals.h"
+#include "a_star.hpp"
+#include "globals.hpp"
 #include <list>
 #include <chrono>
 

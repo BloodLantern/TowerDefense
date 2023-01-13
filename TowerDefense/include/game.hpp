@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PlayField.h"
-#include "player.h"
-#include "Enemy.h"
+#include "playfield.hpp"
+#include "player.hpp"
+#include "enemy.hpp"
 
 class Game {
 public:

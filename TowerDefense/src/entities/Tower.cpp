@@ -1,6 +1,6 @@
-#include "Tower.h"
+#include "tower.hpp"
 
-#include "Globals.h"
+#include "globals.hpp"
 
 #include <GLFW/glfw3.h>
 

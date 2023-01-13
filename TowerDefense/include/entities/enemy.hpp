@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "entity.hpp"
 #include <stdint.h>
 #include <Vector2.h>
 

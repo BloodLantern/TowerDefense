@@ -1,10 +1,10 @@
-#include "PlayField.h"
-#include "Globals.h"
-#include "AStar.h"
-#include "RLE.h"
+#include "playfield.hpp"
+#include "globals.hpp"
+#include "a_star.hpp"
+#include "rle.hpp"
 
-#include "Round.h"
-#include "RoundsData.h"
+#include "round.hpp"
+#include "rounds_data.hpp"
 
 #include <cstdlib>
 #include <iostream>

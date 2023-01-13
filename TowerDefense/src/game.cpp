@@ -1,7 +1,7 @@
-#include "game.h"
-#include "Round.h"
-#include "Globals.h"
-#include "RoundsData.h"
+#include "game.hpp"
+#include "globals.hpp"
+#include "rounds_data.hpp"
+#include "round.hpp"
 
 Game::Game()
     : mPlayField(new PlayField), mPlayer(new Player), mPlayingSpeed(1), mCurrentWave(1)

@@ -1,6 +1,6 @@
-#include "Enemy.h"
-#include "AStar.h"
-#include "Globals.h"
+#include "enemy.hpp"
+#include "a_star.hpp"
+#include "globals.hpp"
 
 Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop)
 	: Entity(pixelPosition), mHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)

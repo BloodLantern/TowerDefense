@@ -1,6 +1,6 @@
-#include "Entity.h"
-#include "PlayField.h"
-#include "Globals.h"
+#include "entity.hpp"
+#include "playfield.hpp"
+#include "globals.hpp"
 
 Entity::Entity()
 {

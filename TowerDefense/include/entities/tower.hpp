@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Entity.h"
-#include "Projectile.h"
-#include "Enemy.h"
+#include "entity.hpp"
+#include "projectile.hpp"
+#include "enemy.hpp"
 
 #include <stdint.h>
 #include <string>
@@ -25,8 +25,8 @@ public:
 	virtual void OnRender() override;
 	virtual void OnUpdate() override;
 
-    std::string GetName() const { return mName; }
-    float_t GetRange() const { return mRange; }
+	std::string GetName() const { return mName; }
+	float_t GetRange() const { return mRange; }
 	uint8_t GetWidth() const { return mWidth; }
 	uint8_t GetHeight() const { return mHeight; }
 	Player* GetOwner() const { return mOwner; }
@@ -39,7 +39,7 @@ protected:
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
 
 private:
-    std::string mName;
+	std::string mName;
 
 	float_t mRange = 3.f;
 	// Number of attacks per second

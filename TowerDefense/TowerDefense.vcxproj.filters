@@ -30,7 +30,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
@@ -60,37 +60,37 @@
     <ClCompile Include="externals\include\maths\Vector2.cpp">
       <Filter>Source Files\Maths</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlayField.cpp">
+    <ClCompile Include="src\playfield.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Globals.cpp">
+    <ClCompile Include="src\globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity.cpp">
+    <ClCompile Include="src\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AStar.cpp">
+    <ClCompile Include="src\a_star.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RLE.cpp">
+    <ClCompile Include="src\rle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LevelEditor.cpp">
+    <ClCompile Include="src\level_editor.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Tower.cpp">
+    <ClCompile Include="src\entities\tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Projectile.cpp">
+    <ClCompile Include="src\entities\projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Enemy.cpp">
+    <ClCompile Include="src\entities\enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TowerBarUI.cpp">
+    <ClCompile Include="src\tower_bar_ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gui.cpp">
+    <ClCompile Include="src\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_utils.cpp">
@@ -99,7 +99,7 @@
     <ClCompile Include="src\std_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\TestTower.cpp">
+    <ClCompile Include="src\entities\test_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cpp">
@@ -108,10 +108,10 @@
     <ClCompile Include="src\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Round.cpp">
+    <ClCompile Include="src\round.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RoundsData.cpp">
+    <ClCompile Include="src\rounds_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,46 +122,46 @@
     <ClInclude Include="externals\include\maths\Vector2.h">
       <Filter>Header Files\Maths</Filter>
     </ClInclude>
-    <ClInclude Include="include\PlayField.h">
+    <ClInclude Include="include\playfield.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Globals.h">
+    <ClInclude Include="include\globals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Entity.h">
+    <ClInclude Include="include\entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AStar.h">
+    <ClInclude Include="include\a_star.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RLE.h">
+    <ClInclude Include="include\rle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\LevelEditor.h">
+    <ClInclude Include="include\level_editor.hpp">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\Projectile.h">
+    <ClInclude Include="include\entities\projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\Enemy.h">
+    <ClInclude Include="include\entities\enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\Tower.h">
+    <ClInclude Include="include\entities\tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\TowerBarUI.h">
+    <ClInclude Include="include\tower_bar_ui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui_utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Gui.h">
+    <ClInclude Include="include\gui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\TestTower.h">
+    <ClInclude Include="include\entities\test_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\discordRPC\discord_register.h">
@@ -170,16 +170,16 @@
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\game.h">
+    <ClInclude Include="include\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\player.h">
+    <ClInclude Include="include\player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Round.h">
+    <ClInclude Include="include\round.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RoundsData.h">
+    <ClInclude Include="include\rounds_data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

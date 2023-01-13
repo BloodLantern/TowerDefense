@@ -1,5 +1,5 @@
-#include "Round.h"
-#include "Globals.h"
+#include "round.hpp"
+#include "globals.hpp"
 #include "imgui_utils.hpp"
 #include <assert.h>
 

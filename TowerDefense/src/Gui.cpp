@@ -1,5 +1,5 @@
-#include "Gui.h"
-#include "LevelEditor.h"
+#include "gui.hpp"
+#include "level_editor.hpp"
 
 #include <imgui.h>
 

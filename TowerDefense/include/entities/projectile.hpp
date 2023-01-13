@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enemy.h"
+#include "enemy.hpp"
 #include <stdint.h>
 #include <Vector2.h>
 

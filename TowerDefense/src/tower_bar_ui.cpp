@@ -1,6 +1,6 @@
-#include "TowerBarUI.h"
-#include "Globals.h"
-#include "PlayField.h"
+#include "tower_bar_ui.hpp"
+#include "globals.hpp"
+#include "playfield.hpp"
 
 #define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
@@ -58,7 +58,7 @@ void TowerBarUI::HandleMouse()
 	if (mousePos.x > x && mousePos.y > y && mousePos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y + height)
 	{
 		ImVec2 topLeft(mousePos.x - x, y + TOWER_BAR_Y_OFFSET / 2);
-		topLeft.x = (float)(((int32_t) topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
+		topLeft.x = (float)(((int32_t)topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
 		ImVec2 bottomRight(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
 
 		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR);
@@ -81,15 +81,15 @@ void TowerBarUI::HandleMouse()
 
 		mSelectedTower->SetPixelPosition(Point2(mousePos.x, mousePos.y));
 		const bool isOnGrid = mSelectedTower->IsOnGrid();
-        const Point2& tilePosition = mSelectedTower->GetTilePosition();
-		
+		const Point2& tilePosition = mSelectedTower->GetTilePosition();
+
 		if (isOnGrid)
 		{
 			mSelectedTower->SnapToGrid();
 		}
 		else
 		{
-        	const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
+			const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
 			mSelectedTower->SetPixelPosition(Point2(pixelPosition.x - selectedTowerWidth / 2, pixelPosition.y - selectedTowerHeight / 2));
 		}
 
@@ -105,10 +105,10 @@ void TowerBarUI::HandleMouse()
 					available = tileType == CLIPDATA_TYPE_EMPTY || tileType == CLIPDATA_TYPE_PLAYER_ONLY;
 				}
 				else
-				    break;
+					break;
 			}
 			if (!available)
-			    break;
+				break;
 		}
 
 		// Check if the mouse is dragging the tower
@@ -118,7 +118,7 @@ void TowerBarUI::HandleMouse()
 				mSelectedTower->SnapToGrid();
 
 			// Tower rendering
-			mSelectedTower->DrawRange(available ? TOWER_RANGE_COLOR_AVAILABLE: TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
+			mSelectedTower->DrawRange(available ? TOWER_RANGE_COLOR_AVAILABLE : TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
 			//Globals::gDrawList->AddImage(mSelectedTower->GetTexture()->id, topLeft, ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight));
 			mSelectedTower->OnRender();
 		}
@@ -147,8 +147,8 @@ void TowerBarUI::HandleMouse()
 		}
 	}
 	else if (mSelectedTower)
-    {
+	{
 		delete mSelectedTower;
 		mSelectedTower = nullptr;
-    }
+	}
 }
