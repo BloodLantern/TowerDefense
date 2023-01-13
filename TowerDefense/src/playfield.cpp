@@ -336,6 +336,6 @@ void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_
 
 void PlayField::GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY)
 {
-	pixelX = tileX * GRID_SQUARE_SIZE + Globals::gGridX;
-	pixelY = tileY * GRID_SQUARE_SIZE + Globals::gGridY;
+	pixelX = Globals::gGridX + tileX * GRID_SQUARE_SIZE;
+	pixelY = Globals::gGridY + tileY * GRID_SQUARE_SIZE;
 }

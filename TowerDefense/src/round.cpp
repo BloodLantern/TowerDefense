@@ -56,8 +56,11 @@ void Round::OnUpdate()
 			int32_t screenY;
 			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
 
+			std::cout << screenX << " ; " << screenY << std::endl;
+
 			{
-				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 1, 0);
+				// Offset by grid because GetPixelPositionFromGrid adds it
+				Enemy* e = new Enemy(Point2(screenX - Globals::gGridX, screenY + GRID_SQUARE_SIZE / 2 - Globals::gGridY), 0, 1, 0);
 				e->SetTexture(Globals::gResources->GetTexture("ant_alpha"));
 				e->SetScale(.1f);
 
