@@ -18,7 +18,7 @@ struct RoundInfo
 	union
 	{
 		uint32_t dataInt;
-		uint32_t dataFloat;
+		float_t dataFloat;
 	} data;
 
 	RoundInfo(RoundCommand cmd, uint32_t d)
