@@ -39,7 +39,7 @@ void RoundEditor::Update()
 void RoundEditor::DisplayTable()
 {
     ImVec2 cursor = ImGui::GetCursorPos();
-    ImGui::SetCursorPos(ImVec2(cursor.x + 80, cursor.y));
+    ImGui::SetCursorPos(ImVec2(cursor.x + 130, cursor.y));
     if (!ImGui::BeginTable("Command table", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         return;
 
@@ -70,14 +70,27 @@ void RoundEditor::DisplayTable()
     ImGui::EndTable();
 
     ImGui::SetCursorPos(ImVec2(cursor.x, cursor.y + 20));
-    for (size_t row = 0; row < mRoundInfo.size(); row++)
+    for (std::vector<RoundInfo>::iterator _r = mRoundInfo.begin(); _r != mRoundInfo.end(); )
     {
-        ImGui::PushID(row);
+        RoundInfo* round = &*_r;
+        ImGui::PushID(round);
+
         if (ImGui::Button("Delete"))
         {
-            mRoundInfo.erase(mRoundInfo.begin() + row);
+            _r = mRoundInfo.erase(_r);
+            ImGui::PopID();
+            continue;
         }
+        ImGui::SameLine();
+        if (ImGui::Button("Insert"))
+        {
+            _r = mRoundInfo.insert(_r, RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0u));
+            ImGui::PopID();
+            continue;
+        }
+
         ImGui::PopID();
+        _r++;
     }
 }
 
