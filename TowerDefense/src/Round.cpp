@@ -7,7 +7,7 @@
 const RoundInfo* Round::mRoundInfo;
 uint32_t Round::mCurrentCommand;
 
-uint32_t Round::mTimer;
+float_t Round::mTimer;
 bool Round::mEnded;
 
 Texture mTempTex;
@@ -19,7 +19,7 @@ void Round::StartRound(const RoundInfo* const info)
 	mRoundInfo = info;
 
 	mCurrentCommand = 0;
-	mTimer = UINT32_MAX;
+	mTimer = FLT_MAX;
 
 	mEnded = false;
 }
@@ -27,7 +27,7 @@ void Round::StartRound(const RoundInfo* const info)
 void Round::AdvanceRound()
 {
 	mCurrentCommand++;
-	mTimer = UINT32_MAX;
+	mTimer = FLT_MAX;
 }
 
 bool Round::HasEnded()
@@ -37,7 +37,7 @@ bool Round::HasEnded()
 
 void Round::GrantEndRoundMoney()
 {
-	Globals::gGame->GetPlayer()->IncreaseMoney(mRoundInfo[mCurrentCommand].data);
+	Globals::gGame->GetPlayer()->IncreaseMoney(mRoundInfo[mCurrentCommand].data.dataInt);
 }
 
 void Round::OnUpdate()
@@ -71,17 +71,18 @@ void Round::OnUpdate()
 			break;
 
 		case ROUND_COMMAND_COOLDOWN:
-			if (mTimer == UINT32_MAX)
+			if (mTimer == FLT_MAX)
 			{
 				// Set cooldown
-				mTimer = mRoundInfo[mCurrentCommand].data;
+				mTimer = mRoundInfo[mCurrentCommand].data.dataFloat;
 				break;
 			}
 
 			// Update
-			mTimer--;
+			mTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
+			std::cout << mTimer << std::endl;
 
-			if (mTimer == 0)
+			if (mTimer < 0)
 			{
 				AdvanceRound();
 				break;
@@ -93,7 +94,7 @@ void Round::OnUpdate()
 			break;
 
 		case ROUND_COMMAND_PLAY_SOUND:
-			// PlaySound(mRoundInfo[mCurrentCommand].data);
+			// PlaySound(mRoundInfo[mCurrentCommand].data.dataInt);
 			AdvanceRound();
 			break;
 

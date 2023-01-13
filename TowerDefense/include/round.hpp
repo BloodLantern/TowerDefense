@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <math.h>
 
 enum RoundCommand
 {
@@ -14,11 +15,23 @@ enum RoundCommand
 struct RoundInfo
 {
 	RoundCommand command;
-	uint32_t data;
+	union
+	{
+		uint32_t dataInt;
+		uint32_t dataFloat;
+	} data;
 
 	RoundInfo(RoundCommand cmd, uint32_t d)
-		: command(cmd), data(d)
-	{ }
+		: command(cmd)
+	{
+		data.dataInt = d;
+	}
+
+	RoundInfo(RoundCommand cmd, float_t d)
+		: command(cmd)
+	{
+		data.dataFloat = d;
+	}
 };
 
 class Round
@@ -36,7 +49,7 @@ private:
 	static const RoundInfo* mRoundInfo;
 	static uint32_t mCurrentCommand;
 
-	static uint32_t mTimer;
+	static float_t mTimer;
 	static bool mEnded;
 };
 
