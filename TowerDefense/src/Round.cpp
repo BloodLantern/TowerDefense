@@ -35,6 +35,11 @@ bool Round::HasEnded()
 	return mEnded;
 }
 
+void Round::GrantEndRoundMoney()
+{
+	Globals::gGame->GetPlayer()->IncreaseMoney(mRoundInfo[mCurrentCommand].data);
+}
+
 void Round::OnUpdate()
 {
 	// End only once
@@ -93,8 +98,7 @@ void Round::OnUpdate()
 			break;
 
 		case ROUND_COMMAND_END:
-			// Reward end of round money
-			Globals::gGame->GetPlayer()->IncreaseMoney(mRoundInfo[mCurrentCommand].data);
+			// Set ended
 			mEnded = true;
 			break;
 	}

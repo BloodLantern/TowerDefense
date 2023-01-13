@@ -58,6 +58,7 @@ void Game::Draw()
 
     if (Round::HasEnded() && mEnemies.empty())
     {
+        Round::GrantEndRoundMoney();
         mCurrentWave++;
         mRpcDetailsText = std::string("Wave ").append(std::to_string(mCurrentWave)).append("/20");
         Globals::gDiscordRpc.details = mRpcDetailsText.c_str();

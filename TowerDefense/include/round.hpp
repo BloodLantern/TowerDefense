@@ -28,6 +28,7 @@ public:
 	static void OnUpdate();
 
 	static bool HasEnded();
+	static void GrantEndRoundMoney();
 
 private:
 	static void AdvanceRound();
