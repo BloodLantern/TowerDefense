@@ -36,7 +36,7 @@ bool RLE::CompressLevel(PlayField* pf, const char* dst)
 	fwrite(&pf->gridWidth, sizeof(pf->gridWidth), 1, f);
 	fwrite(&pf->gridHeight, sizeof(pf->gridHeight), 1, f);
 
-	// TODO tileset IDs
+	// TODO: tileset IDs
 	uint8_t zero = 0;
 	fwrite(&zero, sizeof(zero), 1, f);
 
@@ -156,7 +156,7 @@ bool RLE::DecompressLevel(PlayField* pf, const char* src)
 
 	size_t length = (size_t)width * height;
 
-	// TODO tileset
+	// TODO: tileset
 	uint8_t tileset = fgetc(f);
 
 	uint8_t* _dst8 = (uint8_t*)(pf->GetClipdataPointer());

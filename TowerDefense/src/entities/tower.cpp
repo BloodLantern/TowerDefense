@@ -8,9 +8,8 @@
 #define TOWER_SELECTION_OVERLAY_COLOR IM_COL32(0x80, 0x80, 0x80, 0x80)
 #define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
 
-#define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
-#define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
-#define TOWER_PANEL_WIDTH TOWER_PANEL_IMAGE_SIZE_MULTIPLIER * GRID_SQUARE_SIZE
+#define TOWER_PANEL_OFFSET_X 17
+#define TOWER_PANEL_WIDTH 6 * GRID_SQUARE_SIZE
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
@@ -96,17 +95,19 @@ void Tower::OnRender()
 		Globals::gDrawList->AddRect(topLeft, bottomRight, TOWER_SELECTION_OUTLINE_COLOR, 0, 3.f);
 
 		// Tower panel
-		ImVec2 panelPosition(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH, Globals::gGridY);
+		ImVec2 panelPosition(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH - TOWER_PANEL_OFFSET_X, Globals::gGridY);
 
 		// Draw stats
 		ImGui::SetNextWindowPos(panelPosition);
-		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
+		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH + TOWER_PANEL_OFFSET_X, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 		ImGui::PushFont(Globals::gFont);
 
-		// FIXME: Center tower name
+		// TODO: Center tower name
         //ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x);
 		ImGui::Text(mName.c_str());
+
+		ImGui::Image(Globals::gResources->GetTexture("towers\\test_tower")->id, ImVec2(TOWER_PANEL_WIDTH, TOWER_PANEL_WIDTH));
 		
 		ImGui::Text("%d", mKillCount);
 		ImGui::SameLine();

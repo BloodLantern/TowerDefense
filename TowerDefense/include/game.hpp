@@ -11,6 +11,7 @@ public:
 
     void Init();
     void Draw();
+    void Shutdown();
 
     PlayField* GetPlayField() const { return mPlayField; }
     Player* GetPlayer() const { return mPlayer; }

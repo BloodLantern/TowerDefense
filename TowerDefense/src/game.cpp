@@ -73,3 +73,9 @@ void Game::Draw()
         Round::StartRound(sLevel1_Wave1);
     }
 }
+
+void Game::Shutdown()
+{
+    delete mPlayField;
+    delete mPlayer;
+}

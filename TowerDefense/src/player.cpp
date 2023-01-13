@@ -6,6 +6,12 @@ Player::Player()
 
 }
 
+Player::~Player()
+{
+	for (std::vector<Tower*>::iterator it = mTowers.begin(); it != mTowers.end(); it++)
+		delete *it;
+}
+
 void Player::OnRender()
 {
 	if (ImGui::Begin("Player info"))
@@ -35,6 +41,15 @@ void Player::IncreaseLife(uint16_t amount)
 		mLife = USHRT_MAX;
 	else
 		mLife = max;
+}
+
+void Player::DecreaseMoney(uint32_t amount)
+{
+	// Prevent underflow
+	if (amount > mMoney)
+        mMoney = 0;
+    else
+		mMoney -= amount;
 }
 
 void Player::IncreaseMoney(uint32_t amount)

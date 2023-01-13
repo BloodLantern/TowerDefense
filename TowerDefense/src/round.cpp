@@ -50,7 +50,7 @@ void Round::OnUpdate()
 	switch (command)
 	{
 		case ROUND_COMMAND_SPAWN_ENEMY:
-			// TODO Spawn appropriate enemy
+			// TODO: Spawn appropriate enemy
 
 			int32_t screenX;
 			int32_t screenY;

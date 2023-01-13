@@ -52,6 +52,8 @@ int main(int argc, char** argv)
 	const char* glslVersion = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_SAMPLES, 8);
+	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
 
 	GLFWwindow* window;
 	if (Globals::fullscreen)
@@ -88,6 +90,9 @@ int main(int argc, char** argv)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable viewports
+
+	io.Fonts->AddFontDefault();
+	Globals::gFont = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE);
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);

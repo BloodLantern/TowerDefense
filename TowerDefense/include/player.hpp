@@ -8,7 +8,7 @@
 class Player {
 public:
     Player();
-    ~Player() {};
+    ~Player();
 
     std::vector<Tower*>* GetTowers() { return &mTowers; }
 

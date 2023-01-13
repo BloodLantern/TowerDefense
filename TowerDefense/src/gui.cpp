@@ -32,7 +32,7 @@ void Gui::CreateWindow(GuiWindowsid id)
 {
 	if (Gui::openedWindows[id])
 	{
-		// TODO set focus
+		// TODO: set focus
 		return;
 	}
 

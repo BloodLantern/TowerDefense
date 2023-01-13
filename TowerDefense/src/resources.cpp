@@ -8,10 +8,10 @@ Resources::Resources()
     std::filesystem::path assetsPath = std::filesystem::current_path().append("assets");
     for (const std::filesystem::directory_entry& dirEntry : std::filesystem::recursive_directory_iterator(assetsPath))
     {
-        if (dirEntry.is_directory())
+        if (dirEntry.is_directory() || dirEntry.path().extension().string() != ".png")
             continue;
 
-        std::cout << "Loading " << std::filesystem::relative(dirEntry.path(), assetsPath).string() << std::endl;
+        std::cout << "Loading '" << std::filesystem::relative(dirEntry.path(), assetsPath).string() << "'...";
         Load(std::filesystem::relative(dirEntry.path(), assetsPath).string());
     }
 }
@@ -36,7 +36,12 @@ void Resources::Load(std::string name, bool nearestFilter)
 {
     Texture* texture = ImGuiUtils::LoadTexture(("assets\\" + name).c_str(), nearestFilter);
     if (texture)
+    {
         mTextures.emplace(name, texture);
+        std::cout << " Success!" << std::endl;
+    }
     else
-        std::cerr << "Unable to load texture: " << name << std::endl;
+    {
+        std::cerr << " Error!"<< std::endl;
+    }
 }
