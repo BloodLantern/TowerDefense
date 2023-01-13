@@ -16,7 +16,7 @@
 
 #define GRID_LINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 
-#define MAPS_PATH "maps\\"
+#define MAPS_PATH "data\\maps\\"
 
 enum ClipdataType : uint8_t
 {

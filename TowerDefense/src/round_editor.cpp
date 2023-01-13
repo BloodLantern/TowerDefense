@@ -158,16 +158,12 @@ void RoundEditor::HandleSaveLoad()
     ImGui::SameLine();
 
     if (ImGui::Button("Save"))
-    {
-        Save(mRoundInfo, mFileName);
-    }
+        Save(mRoundInfo, std::string(WAVES_PATH).append(mFileName).c_str());
 
     ImGui::SameLine();
 
     if (ImGui::Button("Load"))
-    {
-        Load(mRoundInfo, mFileName);
-    }
+        Load(mRoundInfo, std::string(WAVES_PATH).append(mFileName).c_str());
 
     ImGui::SameLine();
     ImGui::Text("File name");
@@ -175,20 +171,20 @@ void RoundEditor::HandleSaveLoad()
     ImGui::InputText("FileNameInput", RoundEditor::mFileName, sizeof(RoundEditor::mFileName));
 }
 
-// Temp
+// Temp?
 
-void RoundEditor::Load(std::vector<RoundInfo>& dst, const char* const src)
+bool RoundEditor::Load(std::vector<RoundInfo>& dst, const char* const src)
 {
-    dst.clear();
-
     FILE* f;
     fopen_s(&f, src, "rb");
 
     if (!f)
     {
         std::cerr << "ERROR - Loading round info : Couldn't open " << src << " file" << std::endl;
-        return;
+        return false;
     }
+
+    dst.clear();
 
     while (true)
     {
@@ -203,6 +199,7 @@ void RoundEditor::Load(std::vector<RoundInfo>& dst, const char* const src)
     }
 
     fclose(f);
+    return true;
 }
 
 void RoundEditor::Save(std::vector<RoundInfo>& src, const char* const dst)

@@ -4,7 +4,7 @@
 
 Game::Game()
 {
-    RoundEditor::Load(roundInfo, "Wave1");
+    RoundEditor::Load(roundInfo, "data/waves/Wave1");
 
     Round::StartRound(roundInfo.data());
 }
@@ -72,6 +72,10 @@ void Game::Draw()
         mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
         Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
 
+        std::string fileName(WAVES_PATH "Wave");
+        fileName.append(std::to_string(currentWave));
+
+        RoundEditor::Load(roundInfo, fileName.c_str());
         Round::StartRound(roundInfo.data());
     }
 }

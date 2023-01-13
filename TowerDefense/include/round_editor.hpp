@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#define WAVES_PATH "data\\waves\\"
+
 class RoundEditor
 {
 private:
@@ -20,7 +22,7 @@ public:
 	static void Update();
 
 	// Temp?
-	static void Load(std::vector<RoundInfo>& dst, const char* const src);
+	static bool Load(std::vector<RoundInfo>& dst, const char* const src);
 	static void Save(std::vector<RoundInfo>& src, const char* const dst);
 };
 
