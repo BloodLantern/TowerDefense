@@ -15,8 +15,8 @@ public:
     PlayField* GetPlayField() const { return mPlayField; }
     Player* GetPlayer() const { return mPlayer; }
 
-    std::vector<Enemy*> mEnemies;
-    uint32_t mCurrentWave;
+    std::vector<Enemy*> enemies;
+    uint32_t currentWave;
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
     double_t GetDeltaTime() const { return mDeltaTime; }

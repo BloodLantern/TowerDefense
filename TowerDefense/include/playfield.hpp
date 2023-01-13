@@ -98,9 +98,9 @@ private:
 	void DrawPath();
 
 public:
-	Texture* mTileset;
-	uint16_t mGridWidth;
-	uint16_t mGridHeight;
+	Texture* tileset;
+	uint16_t gridWidth;
+	uint16_t gridHeight;
 
 	PlayField();
 	~PlayField();

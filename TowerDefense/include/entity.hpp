@@ -38,7 +38,7 @@ public:
 	Texture* GetTexture() const { return mTexture; }
 	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 
-	bool mToDelete;
+	bool toDelete;
 
 protected:
 

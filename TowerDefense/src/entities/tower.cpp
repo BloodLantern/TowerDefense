@@ -9,7 +9,7 @@
 #define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
 
 #define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
-#define TOWER_PANEL_TEXT_SIZE_MULTIPLIER 1.f
+#define TOWER_PANEL_TEXT_SIZE_MULTIPLIER 1.2f
 #define TOWER_PANEL_WIDTH TOWER_PANEL_IMAGE_SIZE_MULTIPLIER * GRID_SQUARE_SIZE
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
@@ -80,17 +80,11 @@ void Tower::OnUpdate()
 	}
 }
 
-//void ImGuiCallback_NearestInterpolation(const ImDrawList*, const ImDrawCmd*)
-//{
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//}
-
 void Tower::OnRender()
 {
 	if (mSelected)
 		DrawRange();
 
-	//ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
 	const ImVec2 topLeft = GetPixelPosition();
 	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
 	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
@@ -108,26 +102,18 @@ void Tower::OnRender()
 		ImGui::SetNextWindowPos(panelPosition);
 		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-		//ImDrawList* dl = ImGui::GetForegroundDrawList();
-		// For pixel arts upscale
-		//dl->AddCallback(ImGuiCallback_NearestInterpolation, nullptr);
 
         ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x / TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
 		ImGui::SetWindowFontScale(TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
 		ImGui::Text(mName.c_str());
-		//dl->AddText(ImVec2(ImGui::CalcTextSize(mName.c_str()).x, 50), IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), mName.c_str());
-
-		//Texture* texture = GetTexture();
-		//ImVec2 towerTexturePos(panelPosition.x, panelPosition.y + 20);
-		//dl->AddImage(texture->id, towerTexturePos, ImVec2(towerTexturePos.x + texture->width * TOWER_PANEL_IMAGE_SIZE_MULTIPLIER,
-		//	towerTexturePos.y + texture->height * TOWER_PANEL_IMAGE_SIZE_MULTIPLIER));
+		
 		ImGui::Dummy(ImVec2(1, 100));
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "%d kills", mKillCount);
 		ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "%d", mDamageDealt);
-		//ImGui::Image();
+		ImGui::SameLine();
+		ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, ImVec2(20, 20));
 		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d$", mMoneyGenerated);
 
-		//dl->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
 		ImGui::End();
 	}
 }

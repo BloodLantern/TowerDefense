@@ -18,7 +18,7 @@ void Game::Init()
     mPlayField = new PlayField;
     mPlayer = new Player;
     mPlayingSpeed = 1;
-    mCurrentWave = 1;
+    currentWave = 1;
     mDeltaTime = 0;
     mPlayingSpeedDeltaTime = 0;
 }
@@ -46,15 +46,15 @@ void Game::Draw()
         t->OnRender();
     }
 
-    for (std::vector<Enemy*>::iterator _e = mEnemies.begin(); _e != mEnemies.end(); )
+    for (std::vector<Enemy*>::iterator _e = enemies.begin(); _e != enemies.end(); )
     {
         Enemy* e = *_e;
 
         e->OnUpdate();
-        if (e->mToDelete)
+        if (e->toDelete)
         {
             // Kill enemy
-            _e = mEnemies.erase(_e);
+            _e = enemies.erase(_e);
             delete e;
             continue;
         }
@@ -63,11 +63,11 @@ void Game::Draw()
         _e++;
     }
 
-    if (Round::HasEnded() && mEnemies.empty())
+    if (Round::HasEnded() && enemies.empty())
     {
         Round::GrantEndRoundMoney();
-        mCurrentWave++;
-        mRpcDetailsText = std::string("Wave ").append(std::to_string(mCurrentWave)).append("/20");
+        currentWave++;
+        mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
         Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
 
         Round::StartRound(sLevel1_Wave1);

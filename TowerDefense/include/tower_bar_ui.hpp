@@ -14,7 +14,7 @@
 class TowerBarUI
 {
 public:
-	Texture* mTowerTextures[TOWER_COUNT];
+	Texture* towerTextures[TOWER_COUNT];
 
 	TowerBarUI();
 	~TowerBarUI();

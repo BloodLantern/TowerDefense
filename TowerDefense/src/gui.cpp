@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-bool Gui::mOpenedWindows[GUI_WINDOW_ID_COUNT];
+bool Gui::openedWindows[GUI_WINDOW_ID_COUNT];
 
 
 void Gui::HandleMenuBar()
@@ -30,13 +30,13 @@ void Gui::HandleMenuBar()
 
 void Gui::CreateWindow(GuiWindowsid id)
 {
-	if (Gui::mOpenedWindows[id])
+	if (Gui::openedWindows[id])
 	{
 		// TODO set focus
 		return;
 	}
 
-	Gui::mOpenedWindows[id] = true;
+	Gui::openedWindows[id] = true;
 }
 
 void Gui::Update()
@@ -45,7 +45,7 @@ void Gui::Update()
 
 	for (uint32_t i = 0; i < GUI_WINDOW_ID_COUNT; i++)
 	{
-		if (!Gui::mOpenedWindows[i])
+		if (!Gui::openedWindows[i])
 			continue;
 
 		switch (i)

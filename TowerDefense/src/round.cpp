@@ -64,7 +64,7 @@ void Round::OnUpdate()
 				e->SetTexture(Globals::gResources->GetTexture("ant_alpha"));
 				e->SetScale(.1f);
 
-				Globals::gGame->mEnemies.push_back(e);
+				Globals::gGame->enemies.push_back(e);
 			}
 
 			AdvanceRound();

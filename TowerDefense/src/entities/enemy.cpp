@@ -28,7 +28,7 @@ void Enemy::StickToPath()
 	{
 		PlayField* pf = Globals::gGame->GetPlayField();
 		// Failsafe
-		AStar::FindBestPath(pf->mGridWidth - 1, pf->mGridHeight / 2, 0, pf->mGridHeight / 2);
+		AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
 		return;
 	}
 
@@ -40,7 +40,7 @@ void Enemy::StickToPath()
 			// Deal damage
 			Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
 			// Flag for deletion
-			mToDelete = true;
+			toDelete = true;
 		}
 		return;
 	}

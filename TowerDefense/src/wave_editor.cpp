@@ -4,7 +4,7 @@
 
 void WaveEditor::Update()
 {
-	if (ImGui::Begin("Wave editor", &Gui::mOpenedWindows[GUI_WINDOW_ID_WAVE_EDITOR]))
+	if (ImGui::Begin("Wave editor", &Gui::openedWindows[GUI_WINDOW_ID_WAVE_EDITOR]))
 	{
 
 	}
