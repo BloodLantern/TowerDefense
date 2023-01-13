@@ -1,5 +1,6 @@
 #include "gui.hpp"
 #include "level_editor.hpp"
+#include "wave_editor.hpp"
 
 #include <imgui.h>
 
@@ -17,6 +18,10 @@ void Gui::HandleMenuBar()
 	{
 		if (ImGui::MenuItem("Level editor"))
 			Gui::CreateWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
+
+		if (ImGui::MenuItem("Wave editor"))
+			Gui::CreateWindow(GUI_WINDOW_ID_WAVE_EDITOR);
+
 		ImGui::EndMenu();
 	}
 
@@ -47,6 +52,10 @@ void Gui::Update()
 		{
 			case GUI_WINDOW_ID_LEVEL_EDITOR:
 				LevelEditor::Update();
+				break;
+
+			case GUI_WINDOW_ID_WAVE_EDITOR:
+				WaveEditor::Update();
 		}
 	}
 }
