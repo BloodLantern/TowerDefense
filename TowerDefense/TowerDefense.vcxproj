@@ -170,7 +170,7 @@
     <ClCompile Include="src\std_image.cpp" />
     <ClCompile Include="src\tower_bar_ui.cpp" />
     <ClCompile Include="src\entities\test_tower.cpp" />
-    <ClCompile Include="src\wave_editor.cpp" />
+    <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
@@ -196,7 +196,7 @@
     <ClInclude Include="include\tower_bar_ui.hpp" />
     <ClInclude Include="include\entities\test_tower.hpp" />
     <ClInclude Include="include\round.hpp" />
-    <ClInclude Include="include\wave_editor.hpp" />
+    <ClInclude Include="include\round_editor.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

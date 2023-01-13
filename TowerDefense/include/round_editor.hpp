@@ -1,6 +1,6 @@
 #pragma once
 
-class WaveEditor
+class RoundEditor
 {
 public:
 	static void Update();
