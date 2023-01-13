@@ -7,6 +7,8 @@
 class LevelEditor
 {
 private:
+	static bool mInitDone;
+
 	static int32_t mCurrentBlockType;
 	static int32_t mCurrentLayer;
 	static uint16_t mCurrentTileValue;
@@ -30,6 +32,8 @@ private:
 	static uint8_t mSelectionCopyWidth;
 	static uint8_t mSelectionCopyHeight;
 	static std::vector<ClipdataType> mSelectionCopyData;
+
+	static void Init();
 
 	static void VerticalSpace();
 

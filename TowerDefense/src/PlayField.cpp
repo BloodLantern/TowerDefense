@@ -161,6 +161,11 @@ void PlayField::Resize(uint16_t width, uint16_t height)
 	mLayer2Tilemap.resize(mGridWidth * mGridHeight);
 }
 
+PlayFieldDrawFlags PlayField::GetDrawFlags()
+{
+	return mDrawFlags;
+}
+
 void PlayField::SetDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags)
 {
 	switch (operation)

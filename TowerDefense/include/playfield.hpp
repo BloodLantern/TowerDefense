@@ -106,6 +106,8 @@ public:
 	~PlayField();
 
 	void Resize(uint16_t width, uint16_t height);
+
+	PlayFieldDrawFlags GetDrawFlags();
 	void SetDrawFlags(PlayFieldDrawFlagsOperation operation, PlayFieldDrawFlags flags);
 
 	void Draw();

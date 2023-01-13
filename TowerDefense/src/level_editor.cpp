@@ -6,6 +6,8 @@
 #include "a_star.hpp"
 #include "gui.hpp"
 
+bool LevelEditor::mInitDone;
+
 int32_t LevelEditor::mCurrentBlockType;
 int32_t LevelEditor::mCurrentLayer;
 uint16_t LevelEditor::mCurrentTileValue;
@@ -39,8 +41,23 @@ static const char* const sClipdataNames[] = {
 	"Player only",
 };
 
+void LevelEditor::Init()
+{
+	PlayField* pf = Globals::gGame->GetPlayField();
+
+	LevelEditor::mDrawFlags = pf->GetDrawFlags();
+	LevelEditor::mGridWidthInput = pf->mGridWidth;
+	LevelEditor::mGridHeightInput = pf->mGridHeight;
+}
+
 void LevelEditor::Update()
 {
+	if (!mInitDone)
+	{
+		LevelEditor::Init();
+		mInitDone = true;
+	}
+
 	if (ImGui::Begin("Level editor", &Gui::mOpenedWindows[GUI_WINDOW_ID_LEVEL_EDITOR]))
 	{
 		LevelEditor::HandleMisc();
@@ -74,28 +91,37 @@ void LevelEditor::VerticalSpace()
 
 void LevelEditor::HandleMisc()
 {
-	ImGui::RadioButton("Clipdata", &LevelEditor::mCurrentLayer, -1);
-	ImGui::SameLine();
 	ImGui::Text("Clipdata");
 	ImGui::SameLine();
 	ImGui::Combo("##", &LevelEditor::mCurrentBlockType, sClipdataNames, IM_ARRAYSIZE(sClipdataNames));
-	
-	ImGui::CheckboxFlags("Display clipdata", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_CLIPDATA);
-	ImGui::SameLine();
-	ImGui::CheckboxFlags("Display grid", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_GRID_LINES);
 
 	LevelEditor::VerticalSpace();
 
+	// Not very scalable
+	float_t posX = ImGui::GetWindowSize().x - 200.f;
+
+	ImGui::Text("Edit");
+	ImGui::SameLine(posX);
+	ImGui::Text("Display");
+
+	ImGui::Dummy(ImVec2(0, 10));
+
+	ImGui::SetCursorPosX(posX);
+	ImGui::CheckboxFlags("Display grid", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_GRID_LINES);
+	ImGui::RadioButton("Clipdata", &LevelEditor::mCurrentLayer, -1);
+	ImGui::SameLine(posX);
+	ImGui::CheckboxFlags("Display clipdata", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_CLIPDATA);
+
 	ImGui::RadioButton("Layer 0", &LevelEditor::mCurrentLayer, 0);
-	ImGui::SameLine();
+	ImGui::SameLine(posX);
 	ImGui::CheckboxFlags("Display layer 0", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_LAYER0);
 
 	ImGui::RadioButton("Layer 1", &LevelEditor::mCurrentLayer, 1);
-	ImGui::SameLine();
+	ImGui::SameLine(posX);
 	ImGui::CheckboxFlags("Display layer 1", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_LAYER1);
 
 	ImGui::RadioButton("Layer 2", &LevelEditor::mCurrentLayer, 2);
-	ImGui::SameLine();
+	ImGui::SameLine(posX);
 	ImGui::CheckboxFlags("Display layer 2", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_LAYER2);
 
 	ImGui::Text("Layer : %d ; Tile : %d", LevelEditor::mCurrentLayer, LevelEditor::mCurrentTileValue);
