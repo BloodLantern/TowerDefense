@@ -77,7 +77,7 @@ void TowerBarUI::HandleMouse()
 		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
 		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
 
-		mSelectedTower->SetPixelPosition(Point2(mousePos.x, mousePos.y));
+		mSelectedTower->SetPixelPosition(Point2(mousePos.x - Globals::gGridX, mousePos.y - Globals::gGridY));
 		const bool isOnGrid = mSelectedTower->IsOnGrid();
 		const Point2& tilePosition = mSelectedTower->GetTilePosition();
 

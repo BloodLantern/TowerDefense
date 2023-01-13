@@ -339,8 +339,8 @@ uint16_t* PlayField::GetTilemapPointer(uint8_t layer)
 
 void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY)
 {
-	uint8_t x = (pixelX - Globals::gGridX) / GRID_SQUARE_SIZE;
-	uint8_t y = (pixelY - Globals::gGridY) / GRID_SQUARE_SIZE;
+	uint8_t x = pixelX / GRID_SQUARE_SIZE;
+	uint8_t y = pixelY / GRID_SQUARE_SIZE;
 
 	if (x >= gridWidth)
 		tileX = UCHAR_MAX;
@@ -355,6 +355,6 @@ void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_
 
 void PlayField::GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY)
 {
-	pixelX = Globals::gGridX + tileX * GRID_SQUARE_SIZE;
-	pixelY = Globals::gGridY + tileY * GRID_SQUARE_SIZE;
+	pixelX = tileX * GRID_SQUARE_SIZE;
+	pixelY = tileY * GRID_SQUARE_SIZE;
 }

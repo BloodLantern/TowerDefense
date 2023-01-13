@@ -16,7 +16,7 @@ class Player;
 #define TOWER_UPGRADE_GENERIC_COST_MULTIPLIER 1.3f
 #define TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER 0.25f
 #define TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER 1.5f
-#define TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER 1.05f
+#define TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER 0.15f
 
 class Tower : public Entity
 {
@@ -26,7 +26,7 @@ public:
 	Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate);
 	//virtual ~Tower() { delete mProjectileTemplate; };
 
-	virtual void Shoot(const Projectile& projTemplate);
+	virtual void Shoot(Projectile* projTemplate);
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
@@ -57,6 +57,7 @@ private:
 	float_t mRange = 3.f;
 	// Number of attacks per second
 	float_t mAttackSpeed = 1.f;
+	double_t mTimeSinceLastAttack = 0;
 	uint32_t mDamage = 1;
 
 	Projectile* mProjectileTemplate;
@@ -78,5 +79,10 @@ private:
 	void IncrementGenericUpgrade(uint8_t upgrade);
 	uint32_t GetGenericUpgradeCost(uint8_t upgrade) { return (mGenericUpgradeLevels[upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
 
+	void HandleSelection();
+	void HandleShoot();
+	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
+	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
+	void DrawStats();
 	void DisplayTowerUpgrade(uint8_t upgrade, std::string name);
 };

@@ -25,7 +25,7 @@ void Game::Init()
     mPlayingSpeedDeltaTime = 0;
 }
 
-void Game::Draw()
+void Game::Update()
 {
     mDeltaTime = Globals::gIO->DeltaTime;
     mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
@@ -63,6 +63,23 @@ void Game::Draw()
 
         e->OnRender();
         _e++;
+    }
+
+    for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
+    {
+        Projectile* p = *_p;
+
+        p->OnUpdate();
+        if (p->toDelete)
+        {
+            // Kill projectile
+            _p = projectiles.erase(_p);
+            delete p;
+            continue;
+        }
+
+        p->OnRender();
+        _p++;
     }
 
     if (Round::HasEnded() && enemies.empty())

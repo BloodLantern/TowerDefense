@@ -7,7 +7,7 @@ TestTower::TestTower(const TestTower& other)
 }
 
 TestTower::TestTower(Texture* texture)
-	: Tower(new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
+	: Tower(new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
 	SetName("TestTower");
 	SetCost(100);
@@ -18,11 +18,11 @@ TestTower::TestTower(Texture* texture)
 }
 
 TestTower::TestTower(Point2 pixelPosition)
-	: Tower(pixelPosition, TEST_TOWER_RANGE, TEST_TOWER_ATTACK_SPEED, new Projectile(TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
+	: Tower(pixelPosition, TEST_TOWER_RANGE, TEST_TOWER_ATTACK_SPEED, new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
 }
 
-void TestTower::Shoot(const Projectile& projTemplate)
+void TestTower::Shoot(Projectile* projTemplate)
 {
 }
 

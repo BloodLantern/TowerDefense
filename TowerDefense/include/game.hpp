@@ -11,13 +11,14 @@ public:
     ~Game();
 
     void Init();
-    void Draw();
+    void Update();
     void Shutdown();
 
     PlayField* GetPlayField() const { return mPlayField; }
     Player* GetPlayer() const { return mPlayer; }
 
     std::vector<Enemy*> enemies;
+    std::vector<Projectile*> projectiles;
     uint32_t currentWave;
     std::vector<RoundInfo> roundInfo;
 

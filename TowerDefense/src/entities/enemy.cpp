@@ -20,6 +20,8 @@ void Enemy::OnRender()
 
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
+
+	Globals::gDrawList->AddCircleFilled(pos, 10, IM_COL32_BLACK);
 }
 
 void Enemy::StickToPath()

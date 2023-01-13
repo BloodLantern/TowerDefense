@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 		ImGui::NewFrame();
 
 		Globals::UpdateGlobals();
-		game.Draw();
+		game.Update();
 		Gui::Update();
 
 		Discord_UpdatePresence(&Globals::gDiscordRpc);
