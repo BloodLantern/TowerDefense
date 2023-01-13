@@ -1,10 +1,12 @@
 #include "game.hpp"
 #include "globals.hpp"
-#include "rounds_data.hpp"
-#include "round.hpp"
+#include "round_editor.hpp"
 
 Game::Game()
 {
+    RoundEditor::Load(roundInfo, "Wave1");
+
+    Round::StartRound(roundInfo.data());
 }
 
 Game::~Game()
@@ -70,7 +72,7 @@ void Game::Draw()
         mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
         Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
 
-        Round::StartRound(sLevel1_Wave1);
+        Round::StartRound(roundInfo.data());
     }
 }
 

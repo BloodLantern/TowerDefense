@@ -3,6 +3,7 @@
 #include "playfield.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
+#include "round.hpp"
 
 class Game {
 public:
@@ -18,6 +19,7 @@ public:
 
     std::vector<Enemy*> enemies;
     uint32_t currentWave;
+    std::vector<RoundInfo> roundInfo;
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
     double_t GetDeltaTime() const { return mDeltaTime; }

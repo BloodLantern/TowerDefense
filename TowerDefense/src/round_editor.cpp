@@ -22,8 +22,6 @@ char RoundEditor::mFileName[30];
 
 void RoundEditor::Update()
 {
-    //ImGui::ShowDemoWindow();
-    //return;
 	if (ImGui::Begin("Wave editor", &Gui::openedWindows[GUI_WINDOW_ID_WAVE_EDITOR]))
 	{
         if (ImGui::Button("Add"))
@@ -34,7 +32,7 @@ void RoundEditor::Update()
         ImGui::SameLine();
         RoundEditor::HandleSaveLoad();
 
-        DisplayTable();
+        RoundEditor::DisplayTable();
 	}
 
 	ImGui::End();

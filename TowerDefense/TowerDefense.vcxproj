@@ -166,7 +166,6 @@
     <ClCompile Include="src\globals.cpp" />
     <ClCompile Include="src\rle.cpp" />
     <ClCompile Include="src\entities\tower.cpp" />
-    <ClCompile Include="src\rounds_data.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\tower_bar_ui.cpp" />
     <ClCompile Include="src\entities\test_tower.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="include\resources.hpp" />
     <ClInclude Include="include\rle.hpp" />
     <ClInclude Include="include\entities\projectile.hpp" />
-    <ClInclude Include="include\rounds_data.hpp" />
     <ClInclude Include="include\tower_bar_ui.hpp" />
     <ClInclude Include="include\entities\test_tower.hpp" />
     <ClInclude Include="include\round.hpp" />

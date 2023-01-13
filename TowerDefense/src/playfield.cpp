@@ -4,7 +4,6 @@
 #include "rle.hpp"
 
 #include "round.hpp"
-#include "rounds_data.hpp"
 
 #include <cstdlib>
 #include <iostream>
@@ -15,7 +14,6 @@ PlayField::PlayField()
 	Resize(42, 18);
 
 	LoadTileset("forest.png");
-	Round::StartRound(sLevel1_Wave1);
 	
 	if (!RLE::DecompressLevel(this, MAPS_PATH "Level1.bin"))
 	{
