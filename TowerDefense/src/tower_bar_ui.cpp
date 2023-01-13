@@ -123,12 +123,13 @@ void TowerBarUI::HandleMouse()
 		// If the mouse dropped the tower somewhere
 		else
 		{
-			// TODO Remove money
-			if (available)
+			Player* player = Globals::gGame->GetPlayer();
+			if (available && player->GetMoney() >= mSelectedTower->GetCost())
 			{
-				mSelectedTower->SetOwner(Globals::gGame->GetPlayer());
+				mSelectedTower->SetOwner(player);
+				player->DecreaseMoney(mSelectedTower->GetCost());
 				mSelectedTower->SnapToGrid();
-				Globals::gGame->GetPlayer()->GetTowers()->push_back(mSelectedTower);
+				player->GetTowers()->push_back(mSelectedTower);
 
 				PlayField* playfield = Globals::gGame->GetPlayField();
 				for (uint8_t x = 0; x < mSelectedTower->GetWidth(); x++)
