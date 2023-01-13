@@ -167,7 +167,7 @@
     <ClCompile Include="src\rle.cpp" />
     <ClCompile Include="src\entities\tower.cpp" />
     <ClCompile Include="src\rounds_data.cpp" />
-    <ClCompile Include="src\std_image.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\tower_bar_ui.cpp" />
     <ClCompile Include="src\entities\test_tower.cpp" />
     <ClCompile Include="src\round_editor.cpp" />

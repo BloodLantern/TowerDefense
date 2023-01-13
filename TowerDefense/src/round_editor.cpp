@@ -20,12 +20,15 @@ std::vector<RoundInfo> RoundEditor::mRoundInfo;
 
 void RoundEditor::Update()
 {
+    //ImGui::ShowDemoWindow();
+    //return;
 	if (ImGui::Begin("Wave editor", &Gui::openedWindows[GUI_WINDOW_ID_WAVE_EDITOR]))
 	{
         if (ImGui::Button("Add"))
-        {
             mRoundInfo.push_back(RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0u));
-        }
+
+        ImGui::SameLine();
+        RoundEditor::HandleClear();
 
         DisplayTable();
 	}
@@ -35,6 +38,8 @@ void RoundEditor::Update()
 
 void RoundEditor::DisplayTable()
 {
+    ImVec2 cursor = ImGui::GetCursorPos();
+    ImGui::SetCursorPos(ImVec2(cursor.x + 80, cursor.y));
     if (!ImGui::BeginTable("Command table", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         return;
 
@@ -62,8 +67,18 @@ void RoundEditor::DisplayTable()
         DisplayParamColumn(round);
         ImGui::PopID();
     }
-
     ImGui::EndTable();
+
+    ImGui::SetCursorPos(ImVec2(cursor.x, cursor.y + 20));
+    for (size_t row = 0; row < mRoundInfo.size(); row++)
+    {
+        ImGui::PushID(row);
+        if (ImGui::Button("Delete"))
+        {
+            mRoundInfo.erase(mRoundInfo.begin() + row);
+        }
+        ImGui::PopID();
+    }
 }
 
 void RoundEditor::DisplayParamColumn(RoundInfo* round)
@@ -92,6 +107,29 @@ void RoundEditor::DisplayParamColumn(RoundInfo* round)
             uint32_t stepFast = 100;
             ImGui::InputScalar("##input", ImGuiDataType_U32, &round->data.dataInt, &step, &stepFast, "%d");
     }
-
 }
 
+void RoundEditor::HandleClear()
+{
+    if (ImGui::Button("Clear"))
+        ImGui::OpenPopup("Delete?");
+
+    if (ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Are you sure you want to clear everything?");
+
+        if (ImGui::Button("Yes", ImVec2(120, 0)))
+        {
+            mRoundInfo.clear();
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+
+        if (ImGui::Button("No", ImVec2(120, 0)))
+            ImGui::CloseCurrentPopup();
+
+        ImGui::EndPopup();
+    }
+}

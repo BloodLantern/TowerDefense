@@ -12,6 +12,7 @@ private:
 
 	static void DisplayTable();
 	static void DisplayParamColumn(RoundInfo* round);
+	static void HandleClear();
 
 public:
 	static void Update();
