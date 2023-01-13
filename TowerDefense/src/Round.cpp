@@ -80,7 +80,6 @@ void Round::OnUpdate()
 
 			// Update
 			mTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
-			std::cout << mTimer << std::endl;
 
 			if (mTimer < 0)
 			{
