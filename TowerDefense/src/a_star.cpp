@@ -21,7 +21,7 @@ double_t AStar::GetDistance(const AStarNode* n1, const AStarNode* n2)
 
 bool AStar::FindBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t startY)
 {
-	auto startTime = std::chrono::high_resolution_clock::now();
+	//auto startTime = std::chrono::high_resolution_clock::now();
 
 	uint16_t width = Globals::gGame->GetPlayField()->gridWidth;
 	uint16_t height = Globals::gGame->GetPlayField()->gridHeight;
@@ -98,8 +98,8 @@ bool AStar::FindBestPath(uint8_t dstX, uint8_t dstY, uint8_t startX, uint8_t sta
 		}
 	}
 
-	auto endTime = std::chrono::high_resolution_clock::now();
-	std::cout << "Execution time: " << (endTime - startTime).count() << "ns" << std::endl;
+	//auto endTime = std::chrono::high_resolution_clock::now();
+	//std::cout << "Execution time: " << (endTime - startTime).count() << "ns" << std::endl;
 
 	// Check could finish the path
 	if (end->parent == nullptr)
