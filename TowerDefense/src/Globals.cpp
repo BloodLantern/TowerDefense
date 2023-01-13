@@ -5,6 +5,7 @@ ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;
 
 Game* Globals::gGame;
+Resources* Globals::gResources;
 DiscordRichPresence Globals::gDiscordRpc;
 
 int32_t Globals::gWindowX;
@@ -25,7 +26,13 @@ void Globals::UpdateGlobals()
 	gGridY = gWindowY + GRID_OFFSET_Y;
 }
 
-void Globals::BindGame(Game* g)
+void Globals::InitGlobals(Game* g)
 {
 	gGame = g;
+	gResources = new Resources;
+}
+
+void Globals::DestroyGlobals()
+{
+	delete gResources;
 }

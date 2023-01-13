@@ -331,8 +331,8 @@ void LevelEditor::HandleTileset()
 	{
 		ImGui::SetScrollY(GRID_SQUARE_SIZE * (int)(ImGui::GetScrollY() / GRID_SQUARE_SIZE));
 
-		ImGui::Image(Globals::gGame->GetPlayField()->mTileset.id, ImVec2(Globals::gGame->GetPlayField()->mTileset.width,
-			Globals::gGame->GetPlayField()->mTileset.height));
+		ImGui::Image(Globals::gGame->GetPlayField()->mTileset->id, ImVec2(Globals::gGame->GetPlayField()->mTileset->width,
+			Globals::gGame->GetPlayField()->mTileset->height));
 
 		ImVec2 mousePos = Globals::gIO->MousePos;
 		ImVec2 winPos = ImGui::GetWindowPos();
@@ -352,7 +352,7 @@ void LevelEditor::HandleTileset()
 			{
 				// Tile position, accounting for Y scroll
 				LevelEditor::mCurrentTileValue = (tileY + (int)ImGui::GetScrollY() / GRID_SQUARE_SIZE) *
-					(Globals::gGame->GetPlayField()->mTileset.width / GRID_SQUARE_SIZE) + tileX;
+					(Globals::gGame->GetPlayField()->mTileset->width / GRID_SQUARE_SIZE) + tileX;
 			}
 		}
 	}

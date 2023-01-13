@@ -4,16 +4,23 @@
 #include "round.hpp"
 
 Game::Game()
-    : mPlayField(new PlayField), mPlayer(new Player), mPlayingSpeed(1), mCurrentWave(1)
 {
-    mDeltaTime = 0;
-    mPlayingSpeedDeltaTime = 0;
 }
 
 Game::~Game()
 {
     delete mPlayField;
     delete mPlayer;
+}
+
+void Game::Init()
+{
+    mPlayField = new PlayField;
+    mPlayer = new Player;
+    mPlayingSpeed = 1;
+    mCurrentWave = 1;
+    mDeltaTime = 0;
+    mPlayingSpeedDeltaTime = 0;
 }
 
 void Game::Draw()

@@ -94,7 +94,8 @@ int main(int argc, char** argv)
 	ImGui_ImplOpenGL3_Init(glslVersion);
 
 	Game game;
-	Globals::BindGame(&game);
+	Globals::InitGlobals(&game);
+	game.Init();
 
 	DiscordEventHandlers discordEvents = { 0 };
 	Discord_Initialize("1062095306986115073", &discordEvents, true, nullptr);
@@ -137,6 +138,8 @@ int main(int argc, char** argv)
 
 		glfwSwapBuffers(window);
 	}
+
+	Globals::DestroyGlobals();
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();

@@ -10,8 +10,6 @@ uint32_t Round::mCurrentCommand;
 float_t Round::mTimer;
 bool Round::mEnded;
 
-Texture mTempTex;
-
 void Round::StartRound(const RoundInfo* const info)
 {
 	assert(info != nullptr && "Round info should never be null");
@@ -60,8 +58,7 @@ void Round::OnUpdate()
 
 			{
 				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 1, 0);
-				mTempTex = ImGuiUtils::LoadTexture("assets/ant_alpha.png");
-				e->SetTexture(&mTempTex);
+				e->SetTexture(Globals::gResources->GetTexture("ant_alpha"));
 				e->SetScale(.1f);
 
 				Globals::gGame->mEnemies.push_back(e);
@@ -80,7 +77,7 @@ void Round::OnUpdate()
 
 			// Update
 			mTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
-			std::cout << mTimer << std::endl;
+			//std::cout << mTimer << std::endl;
 
 			if (mTimer < 0)
 			{

@@ -17,15 +17,13 @@
 TowerBarUI::TowerBarUI()
 {
 	for (int i = 0; i < TOWER_COUNT; i++)
-		towerTextures[i] = ImGuiUtils::LoadTexture("assets/towers/TestTower.png");
+		mTowerTextures[i] = Globals::gResources->GetTexture("towers\\TestTower");
+		
+	mTowerTemplates[0] = new TestTower(mTowerTextures[0]);
 }
 
 TowerBarUI::~TowerBarUI()
 {
-	for (int i = 0; i < TOWER_COUNT; i++) {
-		ImGuiUtils::UnloadTexture(towerTextures[i]);
-		delete mTowerTemplates[i];
-	}
 }
 
 void TowerBarUI::Draw()
@@ -37,7 +35,7 @@ void TowerBarUI::Draw()
 	Globals::gDrawList->AddRect(ImVec2(x, y), ImVec2(x + width, y + height), TOWER_BAR_UI_OUTLINE_COLOR);
 
 	for (int i = 0; i < TOWER_COUNT; i++)
-		Globals::gDrawList->AddImage(towerTextures[i].id, ImVec2(x, y + TOWER_BAR_Y_OFFSET / 2),
+		Globals::gDrawList->AddImage(mTowerTextures[i]->id, ImVec2(x, y + TOWER_BAR_Y_OFFSET / 2),
 			ImVec2(x + TOWER_BAR_TOWER_SIZE, y + TOWER_BAR_Y_OFFSET / 2 + TOWER_BAR_TOWER_SIZE));
 
 	HandleMouse();

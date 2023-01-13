@@ -98,7 +98,7 @@ private:
 	void DrawPath();
 
 public:
-	Texture mTileset;
+	Texture* mTileset;
 	uint16_t mGridWidth;
 	uint16_t mGridHeight;
 

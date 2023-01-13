@@ -7,32 +7,37 @@
 
 typedef void (*glGenerateMipmapFuncType)(GLenum);
 
-Texture ImGuiUtils::LoadTexture(const char* file)
+Texture* ImGuiUtils::LoadTexture(const char* file, bool nearestFilter)
 {
-    Texture result = {};
-    stbi_uc* pixels = stbi_load(file, &result.width, &result.height, NULL, STBI_rgb_alpha);
+    Texture* result = new Texture;
+    stbi_uc* pixels = stbi_load(file, &result->width, &result->height, NULL, STBI_rgb_alpha);
     if (pixels == nullptr)
     {
         fprintf(stderr, "Cannot load texture '%s'\n", file);
-        return result;
+        return nullptr;
     }
 
     // Create texture on OpenGL side
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, result.width, result.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, result->width, result->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // Gen mipmaps
-    glGenerateMipmapFuncType glGenerateMipmapFunc = (glGenerateMipmapFuncType)glfwGetProcAddress("glGenerateMipmap");
-    if (glGenerateMipmapFunc == nullptr)
-        fprintf(stderr, "Cannot load glGenerateMipmap func\n");
+    if (nearestFilter)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
     else
-        glGenerateMipmapFunc(GL_TEXTURE_2D);
+    {
+        // Gen mipmaps
+        glGenerateMipmapFuncType glGenerateMipmapFunc = (glGenerateMipmapFuncType)glfwGetProcAddress("glGenerateMipmap");
+        if (glGenerateMipmapFunc == nullptr)
+            fprintf(stderr, "Cannot load glGenerateMipmap func\n");
+        else
+            glGenerateMipmapFunc(GL_TEXTURE_2D);
+    }
 
     // Unbind
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -40,14 +45,14 @@ Texture ImGuiUtils::LoadTexture(const char* file)
     // Free ram
     stbi_image_free(pixels);
 
-    result.id = (ImTextureID)((size_t)texture);
+    result->id = (ImTextureID)((size_t)texture);
 
     return result;
 }
 
-void ImGuiUtils::UnloadTexture(const Texture& texture)
+void ImGuiUtils::UnloadTexture(const Texture* texture)
 {
-    GLuint tex = (GLuint)((size_t)texture.id);
+    GLuint tex = (GLuint)((size_t)texture->id);
     glDeleteTextures(1, &tex);
 }
 

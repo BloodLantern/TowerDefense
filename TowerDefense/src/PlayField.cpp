@@ -86,9 +86,9 @@ void PlayField::DrawClipdata()
 
 void PlayField::DrawLayers()
 {
-	ImTextureID texId = mTileset.id;
-	int32_t texWidth = mTileset.width;
-	int32_t texHeight = mTileset.height;
+	ImTextureID texId = mTileset->id;
+	int32_t texWidth = mTileset->width;
+	int32_t texHeight = mTileset->height;
 
 	uint32_t rowWidth = texWidth / GRID_SQUARE_SIZE;
 	uint32_t colHeight = texHeight / GRID_SQUARE_SIZE;

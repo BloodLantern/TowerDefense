@@ -6,6 +6,7 @@
 #include "discordRPC/discord_rpc.h"
 
 #include "game.hpp"
+#include "resources.hpp"
 
 class Globals
 {
@@ -14,6 +15,7 @@ public:
 	static ImGuiIO* gIO;
 
 	static Game* gGame;
+	static Resources* gResources;
 	static DiscordRichPresence gDiscordRpc;
 
 	static int32_t gWindowX;
@@ -27,5 +29,6 @@ public:
 	static bool fullscreen;
 
 	static void UpdateGlobals();
-	static void BindGame(Game* g);
+	static void InitGlobals(Game* g);
+	static void DestroyGlobals();
 };

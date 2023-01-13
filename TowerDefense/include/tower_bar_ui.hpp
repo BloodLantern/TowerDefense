@@ -14,7 +14,7 @@
 class TowerBarUI
 {
 public:
-	Texture towerTextures[TOWER_COUNT];
+	Texture* mTowerTextures[TOWER_COUNT];
 
 	TowerBarUI();
 	~TowerBarUI();
@@ -22,9 +22,7 @@ public:
 	void Draw();
 
 private:
-	const Tower* mTowerTemplates[TOWER_COUNT]{
-		new TestTower(&towerTextures[0])
-	};
+	Tower* mTowerTemplates[TOWER_COUNT];
 	Tower* mSelectedTower = nullptr;
 	bool mExtended = false;
 

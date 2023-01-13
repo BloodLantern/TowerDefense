@@ -112,6 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;include;include\entities;externals\include\maths;$(ProjectDir);$(ProjectDir)ImGui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4098</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\round.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gui.cpp" />
@@ -186,6 +188,7 @@
     <ClInclude Include="include\player.hpp" />
     <ClInclude Include="include\playfield.hpp" />
     <ClInclude Include="include\globals.hpp" />
+    <ClInclude Include="include\resources.hpp" />
     <ClInclude Include="include\rle.hpp" />
     <ClInclude Include="include\entities\projectile.hpp" />
     <ClInclude Include="include\rounds_data.hpp" />

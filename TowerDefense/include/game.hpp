@@ -9,6 +9,7 @@ public:
     Game();
     ~Game();
 
+    void Init();
     void Draw();
 
     PlayField* GetPlayField() const { return mPlayField; }
