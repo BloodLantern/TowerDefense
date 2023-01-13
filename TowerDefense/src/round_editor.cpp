@@ -17,6 +17,8 @@ static const char* const sEnemyNames[] = {
 };
 
 std::vector<RoundInfo> RoundEditor::mRoundInfo;
+char RoundEditor::mFileName[30];
+
 
 void RoundEditor::Update()
 {
@@ -29,6 +31,8 @@ void RoundEditor::Update()
 
         ImGui::SameLine();
         RoundEditor::HandleClear();
+        ImGui::SameLine();
+        RoundEditor::HandleSaveLoad();
 
         DisplayTable();
 	}
@@ -59,7 +63,10 @@ void RoundEditor::DisplayTable()
         ImGui::SetNextItemWidth(-FLT_MIN);
 
         RoundCommand prev = round->command;
-        ImGui::Combo("##combo", (int*)&round->command, sCommandNames, IM_ARRAYSIZE(sCommandNames));
+
+        int32_t _cmd = round->command;
+        ImGui::Combo("##combo", &_cmd, sCommandNames, IM_ARRAYSIZE(sCommandNames));
+        round->command = static_cast<RoundCommand>(_cmd);
         if (prev != round->command)
             round->data.dataInt = 0;
         
@@ -145,4 +152,77 @@ void RoundEditor::HandleClear()
 
         ImGui::EndPopup();
     }
+}
+
+void RoundEditor::HandleSaveLoad()
+{
+    ImGui::Dummy(ImVec2(80, 0));
+    ImGui::SameLine();
+
+    if (ImGui::Button("Save"))
+    {
+        Save(mRoundInfo, mFileName);
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Load"))
+    {
+        Load(mRoundInfo, mFileName);
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("File name");
+    ImGui::SameLine();
+    ImGui::InputText("FileNameInput", RoundEditor::mFileName, sizeof(RoundEditor::mFileName));
+}
+
+// Temp
+
+void RoundEditor::Load(std::vector<RoundInfo>& dst, const char* const src)
+{
+    dst.clear();
+
+    FILE* f;
+    fopen_s(&f, src, "rb");
+
+    if (!f)
+    {
+        std::cerr << "ERROR - Loading round info : Couldn't open " << src << " file" << std::endl;
+        return;
+    }
+
+    while (true)
+    {
+        int32_t command = fgetc(f);
+
+        if (command == EOF)
+            break;
+
+        uint32_t data;
+        fread(&data, sizeof(data), 1, f);
+        dst.push_back(RoundInfo(static_cast<RoundCommand>(command), data));
+    }
+
+    fclose(f);
+}
+
+void RoundEditor::Save(std::vector<RoundInfo>& src, const char* const dst)
+{
+    FILE* f;
+    fopen_s(&f, dst, "wb");
+
+    if (!f)
+    {
+        std::cerr << "ERROR - Saving round info : Couldn't open " << dst << " file" << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < src.size(); i++)
+    {
+        fwrite(&src[i].command, sizeof(src[i].command), 1, f);
+        fwrite(&src[i].data.dataInt, sizeof(src[i].data.dataInt), 1, f);
+    }
+
+    fclose(f);
 }

@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <math.h>
 
-enum RoundCommand
+enum RoundCommand : uint8_t
 {
 	ROUND_COMMAND_SPAWN_ENEMY,
 	ROUND_COMMAND_COOLDOWN,
