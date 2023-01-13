@@ -300,6 +300,27 @@ void PlayField::SetLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value
 	}
 }
 
+uint16_t PlayField::GetLayerTile(uint8_t x, uint8_t y, uint8_t layer)
+{
+	if (x >= gridWidth || y >= gridHeight)
+		return 0;
+
+	switch (layer)
+	{
+		case 0:
+			return mLayer0Tilemap[y * gridWidth + x];
+
+		case 1:
+			return mLayer1Tilemap[y * gridWidth + x];
+
+		case 2:
+			return mLayer2Tilemap[y * gridWidth + x];
+
+		default:
+			return 0;
+	}
+}
+
 ClipdataType* PlayField::GetClipdataPointer()
 {
 	return mClipdata.data();

@@ -142,22 +142,24 @@ void LevelEditor::HandleClear()
 
 	if (ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
+		PlayField* pf = Globals::gGame->GetPlayField();
+
 		ImGui::Text("Are you sure you want to clear everything?");
 
 		if (ImGui::Button("Yes", ImVec2(120, 0)))
 		{
-			for (int32_t x = 0; x < Globals::gGame->GetPlayField()->gridWidth; x++)
+			for (int32_t x = 0; x < pf->gridWidth; x++)
 			{
-				for (int32_t y = 0; y < Globals::gGame->GetPlayField()->gridHeight; y++)
+				for (int32_t y = 0; y < pf->gridHeight; y++)
 				{
-					Globals::gGame->GetPlayField()->SetClipdataTile(x, y, CLIPDATA_TYPE_EMPTY);
-					Globals::gGame->GetPlayField()->SetLayertile(x, y, 0, 115);
-					Globals::gGame->GetPlayField()->SetLayertile(x, y, 1, 115);
-					Globals::gGame->GetPlayField()->SetLayertile(x, y, 2, 115);
+					pf->SetClipdataTile(x, y, CLIPDATA_TYPE_EMPTY);
+					pf->SetLayertile(x, y, 0, 115);
+					pf->SetLayertile(x, y, 1, 115);
+					pf->SetLayertile(x, y, 2, 115);
 				}
 			}
 
-			AStar::FindBestPath(Globals::gGame->GetPlayField()->gridWidth - 1, Globals::gGame->GetPlayField()->gridHeight / 2, 0, Globals::gGame->GetPlayField()->gridHeight / 2);
+			AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -192,16 +194,18 @@ void LevelEditor::HandleFile()
 	ImGui::InputText("FileNameInput", LevelEditor::mFileName, sizeof(LevelEditor::mFileName));
 	ImGui::PopItemWidth();
 
+	PlayField* pf = Globals::gGame->GetPlayField();
+
 	if (ImGui::Button("Save"))
-		Globals::gGame->GetPlayField()->Save(LevelEditor::mFileName);
+		pf->Save(LevelEditor::mFileName);
 
 	ImGui::SameLine();
 
 	if (ImGui::Button("Load"))
 	{
-		Globals::gGame->GetPlayField()->Load(LevelEditor::mFileName);
+		pf->Load(LevelEditor::mFileName);
 
-		AStar::FindBestPath(Globals::gGame->GetPlayField()->gridWidth - 1, Globals::gGame->GetPlayField()->gridHeight / 2, 0, Globals::gGame->GetPlayField()->gridHeight / 2);
+		AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
 	}
 }
 
@@ -210,11 +214,13 @@ void LevelEditor::HandleCursor()
 	if (Globals::gIO->WantCaptureMouse)
 		return;
 
+	PlayField* pf = Globals::gGame->GetPlayField();
+
 	ImVec2 mouse = Globals::gIO->MousePos;
 	uint8_t tileX;
 	uint8_t tileY;
 
-	Globals::gGame->GetPlayField()->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+	pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
 	if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
 	{
 		ImVec2 pMin((float_t)Globals::gGridX + tileX * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + tileY * GRID_SQUARE_SIZE);
@@ -230,12 +236,12 @@ void LevelEditor::HandleCursor()
 			(LevelEditor::mDragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
 			if (LevelEditor::mCurrentLayer == -1)
-				Globals::gGame->GetPlayField()->SetClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::mCurrentBlockType));
+				pf->SetClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::mCurrentBlockType));
 			else
-				Globals::gGame->GetPlayField()->SetLayertile(tileX, tileY, LevelEditor::mCurrentLayer, LevelEditor::mCurrentTileValue);
+				pf->SetLayertile(tileX, tileY, LevelEditor::mCurrentLayer, LevelEditor::mCurrentTileValue);
 
 			if (LevelEditor::mUpdateAStar)
-				AStar::FindBestPath(Globals::gGame->GetPlayField()->gridWidth - 1, Globals::gGame->GetPlayField()->gridHeight / 2, 0, Globals::gGame->GetPlayField()->gridHeight / 2);
+				AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
 		}
 	}
 }
@@ -246,11 +252,13 @@ void LevelEditor::HandleSelection()
 	if (Globals::gIO->WantCaptureMouse)
 		return;
 
+	PlayField* pf = Globals::gGame->GetPlayField();
+
 	ImVec2 mouse = Globals::gIO->MousePos;
 	// Update selection positions
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 	{
-		Globals::gGame->GetPlayField()->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionStartX, mSelectionStartY);
+		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionStartX, mSelectionStartY);
 		if (mSelectionStartX == UCHAR_MAX || mSelectionStartY == UCHAR_MAX)
 			return;
 	}
@@ -260,7 +268,7 @@ void LevelEditor::HandleSelection()
 		uint8_t prevEndX = mSelectionEndX;
 		uint8_t prevEndY = mSelectionEndY;
 
-		Globals::gGame->GetPlayField()->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionEndX, mSelectionEndY);
+		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionEndX, mSelectionEndY);
 		if (mSelectionEndX == UCHAR_MAX)
 			mSelectionEndX = prevEndX;
 		if (mSelectionEndY == UCHAR_MAX)
@@ -299,15 +307,12 @@ void LevelEditor::HandleSelection()
 		{
 			for (int32_t x = 0; x < mSelectionWidth; x++)
 			{
-				ClipdataType tile = Globals::gGame->GetPlayField()->GetClipdataTile(startX + x, startY + y);
+				ClipdataType tile = pf->GetClipdataTile(startX + x, startY + y);
 				size_t offset = y * mSelectionCopyWidth + x;
 				mSelectionCopyData[offset] = tile;
 			}
 		}
 	}
-
-
-
 
 	// Draw outline
 	ImVec2 start((float_t)Globals::gGridX + mSelectionStartX * GRID_SQUARE_SIZE,
@@ -329,10 +334,11 @@ void LevelEditor::HandleTileset()
 {
 	if (ImGui::Begin("Tileset", nullptr, ImGuiWindowFlags_NoDecoration))
 	{
+		PlayField* pf = Globals::gGame->GetPlayField();
+
 		ImGui::SetScrollY(GRID_SQUARE_SIZE * (int)(ImGui::GetScrollY() / GRID_SQUARE_SIZE));
 
-		ImGui::Image(Globals::gGame->GetPlayField()->tileset->id, ImVec2(Globals::gGame->GetPlayField()->tileset->width,
-			Globals::gGame->GetPlayField()->tileset->height));
+		ImGui::Image(pf->tileset->id, ImVec2(pf->tileset->width, pf->tileset->height));
 
 		ImVec2 mousePos = Globals::gIO->MousePos;
 		ImVec2 winPos = ImGui::GetWindowPos();
@@ -362,53 +368,57 @@ void LevelEditor::HandleTileset()
 
 void LevelEditor::HandleHotkeys()
 {
-	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+	if (!ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
 	{
-		LevelEditor::mCanPlaceTile = false;
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-		{
-			uint8_t tileX;
-			uint8_t tileY;
-			ImVec2 mouse = Globals::gIO->MousePos;
-
-			Globals::gGame->GetPlayField()->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
-
-			if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
-				LevelEditor::mCurrentBlockType = Globals::gGame->GetPlayField()->GetClipdataTile(tileX, tileY);
-			return;
-		}
-
-		if (ImGui::IsKeyPressed(ImGuiKey_V) && mSelectionCopyData.size() != 0)
-		{
-			uint8_t tileX;
-			uint8_t tileY;
-			ImVec2 mouse = Globals::gIO->MousePos;
-
-			Globals::gGame->GetPlayField()->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
-
-			if (tileX == UCHAR_MAX || tileY == UCHAR_MAX)
-				return;
-
-			if (tileX + mSelectionCopyWidth > Globals::gGame->GetPlayField()->gridWidth)
-				return;
-
-			if (tileY + mSelectionCopyHeight > Globals::gGame->GetPlayField()->gridHeight)
-				return;
-
-			for (int32_t y = 0; y < mSelectionHeight; y++)
-			{
-				for (int32_t x = 0; x < mSelectionCopyWidth; x++)
-				{
-					ClipdataType tile = mSelectionCopyData[y * mSelectionCopyWidth + x];
-					Globals::gGame->GetPlayField()->SetClipdataTile(tileX + x, tileY + y, tile);
-				}
-			}
-
-			AStar::FindBestPath(Globals::gGame->GetPlayField()->gridWidth - 1, Globals::gGame->GetPlayField()->gridHeight / 2, 0, Globals::gGame->GetPlayField()->gridHeight / 2);
-		}
-
+		LevelEditor::mCanPlaceTile = true;
 		return;
 	}
 
-	LevelEditor::mCanPlaceTile = true;
+	PlayField* pf = Globals::gGame->GetPlayField();
+
+	LevelEditor::mCanPlaceTile = false;
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+	{
+		uint8_t tileX;
+		uint8_t tileY;
+		ImVec2 mouse = Globals::gIO->MousePos;
+
+		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+
+		if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
+		{
+			LevelEditor::mCurrentBlockType = pf->GetClipdataTile(tileX, tileY);
+			LevelEditor::mCurrentTileValue = pf->GetLayerTile(tileX, tileY, LevelEditor::mCurrentLayer);
+		}
+		return;
+	}
+
+	if (ImGui::IsKeyPressed(ImGuiKey_V) && mSelectionCopyData.size() != 0)
+	{
+		uint8_t tileX;
+		uint8_t tileY;
+		ImVec2 mouse = Globals::gIO->MousePos;
+
+		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+
+		if (tileX == UCHAR_MAX || tileY == UCHAR_MAX)
+			return;
+
+		if (tileX + mSelectionCopyWidth > pf->gridWidth)
+			return;
+
+		if (tileY + mSelectionCopyHeight > pf->gridHeight)
+			return;
+
+		for (int32_t y = 0; y < mSelectionHeight; y++)
+		{
+			for (int32_t x = 0; x < mSelectionCopyWidth; x++)
+			{
+				ClipdataType tile = mSelectionCopyData[y * mSelectionCopyWidth + x];
+				pf->SetClipdataTile(tileX + x, tileY + y, tile);
+			}
+		}
+
+		AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
+	}
 }

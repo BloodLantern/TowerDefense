@@ -119,6 +119,7 @@ public:
 
 	void LoadTileset(const char* name);
 	void SetLayertile(uint8_t x, uint8_t y, uint8_t layer, uint16_t value);
+	uint16_t GetLayerTile(uint8_t x, uint8_t y, uint8_t layer);
 
 	ClipdataType* GetClipdataPointer();
 	uint16_t* GetTilemapPointer(uint8_t layer);
