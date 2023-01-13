@@ -10,6 +10,7 @@
 class Player;
 
 #define TOWER_RANGE_COLOR_AVAILABLE IM_COL32(0xB0, 0xB0, 0xB0, 0x70)
+#define TOWER_PANEL_TEXT_SIZE 40
 
 class Tower : public Entity
 {
@@ -26,20 +27,24 @@ public:
 	virtual void OnUpdate() override;
 
 	std::string GetName() const { return mName; }
+	uint32_t GetCost() const { return mCost; }
 	float_t GetRange() const { return mRange; }
 	uint8_t GetWidth() const { return mWidth; }
 	uint8_t GetHeight() const { return mHeight; }
 	Player* GetOwner() const { return mOwner; }
 	void SetOwner(Player* newOwner) { mOwner = newOwner; }
 
-	void SetName(std::string newName) { mName = newName; }
 protected:
+	void SetName(std::string newName) { mName = newName; }
+	void SetCost(uint32_t newCost) { mCost = newCost; }
 	void SetRange(float_t range) { mRange = range; }
 	void SetWidth(uint8_t newWidth) { mWidth = newWidth; }
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
 
 private:
 	std::string mName;
+	
+	uint32_t mCost = 100;
 
 	float_t mRange = 3.f;
 	// Number of attacks per second

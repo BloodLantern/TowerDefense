@@ -9,7 +9,7 @@
 #define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
 
 #define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
-#define TOWER_PANEL_TEXT_SIZE_MULTIPLIER 1.2f
+#define TOWER_PANEL_IMAGE_SIZE_MULTIPLIER 5
 #define TOWER_PANEL_WIDTH TOWER_PANEL_IMAGE_SIZE_MULTIPLIER * GRID_SQUARE_SIZE
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
@@ -102,18 +102,25 @@ void Tower::OnRender()
 		ImGui::SetNextWindowPos(panelPosition);
 		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+		ImGui::PushFont(Globals::gFont);
 
-        ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x / TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
-		ImGui::SetWindowFontScale(TOWER_PANEL_TEXT_SIZE_MULTIPLIER);
+		// FIXME: Center tower name
+        //ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x);
 		ImGui::Text(mName.c_str());
 		
-		ImGui::Dummy(ImVec2(1, 100));
-		ImGui::TextColored(ImVec4(1, 0, 0, 1), "%d kills", mKillCount);
-		ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "%d", mDamageDealt);
+		ImGui::Text("%d", mKillCount);
 		ImGui::SameLine();
-		ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, ImVec2(20, 20));
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d$", mMoneyGenerated);
+		ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
 
+		ImGui::Text("%d", mDamageDealt);
+		ImGui::SameLine();
+		ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
+
+		ImGui::Text("%d", mMoneyGenerated);
+		ImGui::SameLine();
+		ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
+
+		ImGui::PopFont();
 		ImGui::End();
 	}
 }
