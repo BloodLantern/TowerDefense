@@ -20,6 +20,8 @@
 #define WINDOW_WIDTH 1350
 #define WINDOW_HEIGHT 700
 
+#define DISCORD_APP_ID "1062095306986115073"
+
 void SetupDiscordRPC(DiscordRichPresence* rpc)
 {
 	memset(rpc, 0, sizeof(*rpc));
@@ -92,7 +94,8 @@ int main(int argc, char** argv)
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable viewports
 
 	io.Fonts->AddFontDefault();
-	Globals::gFont = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE);
+	Globals::gFontBig = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE_BIG);
+	Globals::gFontMedium = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE_MEDIUM);
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -103,7 +106,7 @@ int main(int argc, char** argv)
 	game.Init();
 
 	DiscordEventHandlers discordEvents = { 0 };
-	Discord_Initialize("1062095306986115073", &discordEvents, true, nullptr);
+	Discord_Initialize(DISCORD_APP_ID, &discordEvents, true, nullptr);
 	SetupDiscordRPC(&Globals::gDiscordRpc);
 
 	// Main loop

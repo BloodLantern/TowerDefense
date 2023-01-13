@@ -17,7 +17,7 @@
 TowerBarUI::TowerBarUI()
 {
 	for (int i = 0; i < TOWER_COUNT; i++)
-		towerTextures[i] = Globals::gResources->GetTexture("towers\\test_tower");
+		towerTextures[i] = Globals::gResources->GetTexture("towers\\unicorn");
 		
 	mTowerTemplates[0] = new TestTower(towerTextures[0]);
 }

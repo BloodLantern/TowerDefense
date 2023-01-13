@@ -3,7 +3,9 @@
 
 ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;
-ImFont* Globals::gFont;
+
+ImFont* Globals::gFontBig;
+ImFont* Globals::gFontMedium;
 
 Game* Globals::gGame;
 Resources* Globals::gResources;

@@ -13,7 +13,9 @@ class Globals
 public:
 	static ImDrawList* gDrawList;
 	static ImGuiIO* gIO;
-	static ImFont* gFont;
+	
+	static ImFont* gFontBig;
+	static ImFont* gFontMedium;
 
 	static Game* gGame;
 	static Resources* gResources;

@@ -13,6 +13,12 @@
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
+#define TOWER_PANEL_UPGRADE_TAB_WIDTH 12
+#define IMGUI_SET_CURSOR_POS_X(x) ImGui::SetCursorPosX(ImGui::GetCursorPosX() + x)
+#define IMGUI_LINE_SPACING_HEIGHT 10
+#define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
+#define TOWER_PANEL_IMAGE_SIZE_MEDIUM ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM, TOWER_PANEL_TEXT_SIZE_MEDIUM)
+
 Tower::Tower(const Tower& other)
 	: Entity(other),
 	mName(other.mName),
@@ -39,7 +45,6 @@ Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectil
 	: Entity(pixelPosition), mRange(range), mAttackSpeed(attackSpeed), mProjectileTemplate(projectileTemplate)
 {
 	mCustomUpgradeLevel = 0;
-	mGenericUpgradeLevel = 0;
 
 	mOwner = nullptr;
 	mTarget = nullptr;
@@ -75,7 +80,44 @@ void Tower::OnUpdate()
 		uint8_t tileX, tileY;
 		Globals::gGame->GetPlayField()->GetGridPositionFromPixels(pixelX, pixelY, tileX, tileY);
 
-		mSelected = tileX == GetTilePosition().x && tileY == GetTilePosition().y;
+		mSelected = tileX == GetTilePosition().x && tileY == GetTilePosition().y && !mSelected;
+	}
+}
+
+void Tower::IncrementGenericUpgrade(uint8_t upgrade)
+{
+	mOwner->DecreaseMoney(GetGenericUpgradeCost(upgrade));
+	mGenericUpgradeLevels[upgrade]++;
+}
+
+void Tower::DisplayTowerUpgrade(uint8_t upgrade, std::string name)
+{
+	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
+
+	bool notEnoughMoney = mOwner->GetMoney() < GetGenericUpgradeCost(upgrade);
+	if (notEnoughMoney)
+		ImGui::BeginDisabled();
+
+	if (ImGui::ImageButton(("upgrade" + name + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+		IncrementGenericUpgrade(upgrade);
+
+	if (notEnoughMoney)
+		ImGui::EndDisabled();
+
+	ImGui::SameLine();
+	ImGui::Text(name.c_str());
+	ImGui::SameLine();
+	switch (upgrade)
+	{
+		case 0:
+			ImGui::Text("%d", GetDamage());
+			break;
+		case 1:
+			ImGui::Text("%.2f", GetAttackSpeed());
+			break;
+		case 2:
+			ImGui::Text("%.2f", GetRange());
+			break;
 	}
 }
 
@@ -101,25 +143,58 @@ void Tower::OnRender()
 		ImGui::SetNextWindowPos(panelPosition);
 		ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH + TOWER_PANEL_OFFSET_X, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 		ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-		ImGui::PushFont(Globals::gFont);
+		ImDrawList* dl = ImGui::GetWindowDrawList();
+		ImGui::PushFont(Globals::gFontBig);
 
 		// TODO: Center tower name
         //ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x);
 		ImGui::Text(mName.c_str());
 
-		ImGui::Image(Globals::gResources->GetTexture("towers\\test_tower")->id, ImVec2(TOWER_PANEL_WIDTH, TOWER_PANEL_WIDTH));
+		// Tower image
+		ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
+		ImGui::Image(GetTexture()->id, ImVec2(TOWER_PANEL_WIDTH, TOWER_PANEL_WIDTH));
+
+		// Tower upgrades
+		ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
+		ImGui::PushFont(Globals::gFontMedium);
+		ImVec2 cursorPos = ImGui::GetCursorPos();
+		cursorPos.x += panelPosition.x;
+		cursorPos.y += panelPosition.y - 2; // -2 for offset
+		dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 3), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
+
+		DisplayTowerUpgrade(0, "Damage");
+		DisplayTowerUpgrade(1, "Attack speed");
+		DisplayTowerUpgrade(2, "Range");
+
+		ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
+		cursorPos = ImGui::GetCursorPos();
+		cursorPos.x += panelPosition.x;
+		cursorPos.y += panelPosition.y - 2; // -2 for offset
+		dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 1), IM_COL32(0xFF, 0xB0, 0x0, 0xD0), 4);
+
+		IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
+		if (ImGui::ImageButton("upgradeCustomButton", Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+		{
+			std::cout << "Custom upgrade" << std::endl;
+		}
+		ImGui::SameLine();
+		ImGui::Text("Custom");
+
+		ImGui::PopFont();
 		
+		// Tower stats
+		ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_BIG));
 		ImGui::Text("%d", mKillCount);
 		ImGui::SameLine();
-		ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
+		ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
 
 		ImGui::Text("%d", mDamageDealt);
 		ImGui::SameLine();
-		ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
+		ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
 
 		ImGui::Text("%d", mMoneyGenerated);
 		ImGui::SameLine();
-		ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, ImVec2(TOWER_PANEL_TEXT_SIZE, TOWER_PANEL_TEXT_SIZE));
+		ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
 
 		ImGui::PopFont();
 		ImGui::End();
