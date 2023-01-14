@@ -27,4 +27,5 @@ private:
 	uint16_t mPierce;
 	float_t mLifetime;
 	Enemy* mTarget;
+	std::vector<Enemy*> mHitEnemies;
 };

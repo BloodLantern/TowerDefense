@@ -1,6 +1,8 @@
 #include "projectile.hpp"
 #include "globals.hpp"
 
+#include <algorithm>
+
 Projectile::Projectile(const Projectile &other)
     : Entity(other), mSpeed(other.mSpeed), mDamage(other.mDamage), mPierce(other.mPierce), mLifetime(other.mLifetime)
 {
@@ -31,13 +33,17 @@ void Projectile::OnUpdate()
 	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
 	{
 		Enemy* enemy = *it;
+		if (std::find(mHitEnemies.begin(), mHitEnemies.end(), enemy) != mHitEnemies.end())
+			continue;
+
 		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 20.f * 20.f)
 		{
 			enemy->DealDamage(mDamage);
+			mHitEnemies.push_back(enemy);
 
 			mPierce--;
 			// If all the pierce was used, destroy the projectile
-			if (mPierce <= 0)
+			if (mPierce == 0)
 			{
                 toDelete = true;
                 return;
