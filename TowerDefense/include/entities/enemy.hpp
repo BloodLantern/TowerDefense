@@ -20,9 +20,11 @@ public:
 
 	uint32_t GetMoneyDrop() const { return mMoneyDrop; }
 
+protected:
+	float mSpeed;
+
 private:
 	Vector2 mVelocity;
-	float mSpeed;
 
 	uint32_t mHealth;
 	uint32_t mSpawnHealth;

@@ -1,6 +1,8 @@
 #include "round.hpp"
 #include "globals.hpp"
 #include "imgui_utils.hpp"
+#include "ant_enemy.h"
+
 #include <assert.h>
 
 
@@ -56,14 +58,7 @@ void Round::OnUpdate()
 			int32_t screenY;
 			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
 
-			{
-				// Offset by grid because GetPixelPositionFromGrid adds it
-				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 5, 1, 5);
-				e->SetTexture(Globals::gResources->GetTexture("ant_alpha"));
-				e->SetScale(.1f);
-
-				Globals::gGame->enemies.push_back(e);
-			}
+			Globals::gGame->enemies.push_back(new AntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2)));
 
 			AdvanceRound();
 			break;

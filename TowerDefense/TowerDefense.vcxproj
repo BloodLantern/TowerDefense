@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\ant_enemy.cpp" />
     <ClCompile Include="src\path.cpp" />
     <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\round.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\entities\ant_enemy.h" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h" />
     <ClInclude Include="externals\include\stb_image.h" />

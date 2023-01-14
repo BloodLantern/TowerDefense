@@ -41,6 +41,7 @@ public:
 	bool toDelete;
 
 protected:
+	Texture* mTexture = nullptr;
 
 private:
 	Point2 mPixelPosition;
@@ -48,6 +49,5 @@ private:
 	float_t mScale = 1;
 	float_t mRotation = 0;
 
-	Texture* mTexture = nullptr;
 };
 
