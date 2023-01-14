@@ -41,6 +41,9 @@ public:
 	uint8_t GetHeight() const { return mHeight; }
 	Player* GetOwner() const { return mOwner; }
 	void SetOwner(Player* newOwner) { mOwner = newOwner; }
+	void IncreaseDamageDealt(uint32_t damage) { mDamageDealt += damage; }
+	void IncreaseKillCount(uint32_t kills) { mKillCount += kills; }
+	void IncreaseMoneyGenerated(uint32_t money) { mMoneyGenerated += money; }
 
 protected:
 	void SetName(std::string newName) { mName = newName; }

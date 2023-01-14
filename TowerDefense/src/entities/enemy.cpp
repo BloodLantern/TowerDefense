@@ -2,7 +2,7 @@
 #include "a_star.hpp"
 #include "globals.hpp"
 
-Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop)
+Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint32_t moneyDrop)
 	: Entity(pixelPosition), mHealth(health), mSpawnHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 	mCurrentPathIndex = 0;
@@ -70,13 +70,17 @@ void Enemy::StickToPath()
 	mVelocity = Vector2(pixelPos, Point2(dstPos.x, dstPos.y)).Normalize() * 60;
 }
 
-void Enemy::DealDamage(uint32_t damage)
+bool Enemy::DealDamage(uint32_t damage, uint32_t& damageDealt)
 {
 	if (damage >= mHealth)
     {
+		damageDealt = mHealth;
         toDelete = true;
 		Globals::gGame->GetPlayer()->IncreaseMoney(mMoneyDrop);
-		return;
+		return true;
 	}
+	
 	mHealth -= damage;
+	damageDealt = damage;
+	return false;
 }

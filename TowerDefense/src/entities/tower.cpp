@@ -58,6 +58,7 @@ void Tower::Shoot(Projectile* projTemplate)
 	Point2 pixelPosition(GetPixelPosition().x + mWidth, GetPixelPosition().y + mHeight);
 	projTemplate->SetPixelPosition(pixelPosition);
 	projTemplate->SetVelocity(Vector2(pixelPosition, mTarget->GetPixelPosition()).Normalize() * 60);
+	projTemplate->SetOwner(this);
 
 	Globals::gGame->projectiles.push_back(projTemplate);
 }

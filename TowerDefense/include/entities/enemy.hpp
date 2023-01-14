@@ -8,14 +8,17 @@
 class Enemy : public Entity
 {
 public:
-	Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop);
+	Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint32_t moneyDrop);
 
 	virtual void OnUpdate() override;
 	virtual void OnRender() override;
 
 	virtual void StickToPath();
 
-	void DealDamage(uint32_t damage);
+	// Returns whether the enemy died
+	bool DealDamage(uint32_t damage, uint32_t& damageDealt);
+
+	uint32_t GetMoneyDrop() const { return mMoneyDrop; }
 
 private:
 	Vector2 mVelocity;
@@ -25,7 +28,7 @@ private:
 	uint32_t mSpawnHealth;
 	uint8_t mDamage;
 
-	uint16_t mMoneyDrop;
+	uint32_t mMoneyDrop;
 	bool mSlowed;
 
 	uint16_t mCurrentPathIndex;

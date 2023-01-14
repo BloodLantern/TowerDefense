@@ -22,14 +22,23 @@ void Projectile::OnUpdate()
 		return;
 	}
 
-	// Compute velocity
+	// Update velocity if the projectile has a target
 	if (mTarget && !mTarget->toDelete)
-	{
-		// Update velocity
 		mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
-	}
 
-	// If the projectile hit an enemy, deal its damage and reduce its pierce
+	// If the projectile hits an enemy, deal its damage and reduce its pierce
+	HandleEnemyCollision();
+
+	// Update its position
+	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
+
+
+    // Update lifetime
+	mLifetime -= Globals::gGame->GetPlayingSpeedDeltaTime();
+}
+
+void Projectile::HandleEnemyCollision()
+{
 	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
 	{
 		Enemy* enemy = *it;
@@ -38,8 +47,14 @@ void Projectile::OnUpdate()
 
 		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 20.f * 20.f)
 		{
-			enemy->DealDamage(mDamage);
-			mHitEnemies.push_back(enemy);
+			// If the enemy died, update tower kill stat
+			uint32_t damageDealt;
+			if (enemy->DealDamage(mDamage, damageDealt))
+				mOwner->IncreaseKillCount(1);
+			else
+				mHitEnemies.push_back(enemy);
+			mOwner->IncreaseDamageDealt(damageDealt);
+			mOwner->IncreaseMoneyGenerated(enemy->GetMoneyDrop());
 
 			mPierce--;
 			// If all the pierce was used, destroy the projectile
@@ -50,13 +65,6 @@ void Projectile::OnUpdate()
 			}
 		}
 	}
-
-	// Update its position
-	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
-
-
-    // Update lifetime
-	mLifetime -= Globals::gGame->GetPlayingSpeedDeltaTime();
 }
 
 void Projectile::OnRender()
