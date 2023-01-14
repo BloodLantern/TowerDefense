@@ -4,8 +4,9 @@
 
 #include "ant_enemy.hpp"
 #include "mite_enemy.hpp"
-#include "gold_scarb_enemy.hpp"
+#include "gold_scarab_enemy.hpp"
 #include "ladybug_enemy.hpp"
+#include "red_ant_enemy.hpp"
 
 #include <assert.h>
 
@@ -80,6 +81,10 @@ void Round::OnUpdate()
 
 				case 3:
 					e = new LadybugEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+					break;
+					
+				case 4:
+					e = new RedAntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
 					break;
 			}
 

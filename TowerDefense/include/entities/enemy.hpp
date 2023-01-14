@@ -25,6 +25,8 @@ protected:
 	uint32_t mHealth;
 	uint32_t mSpawnHealth;
 
+    virtual void DrawHealthBar(ImVec2& pos);
+
 private:
 	Vector2 mVelocity;
 

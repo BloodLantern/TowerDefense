@@ -141,10 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\gold_scarab_enemy.cpp" />
     <ClCompile Include="src\entities\ladybug_enemy.cpp" />
-    <ClCompile Include="src\entities\gold_scarb_enemy.cpp" />
     <ClCompile Include="src\entities\mite_enemy.cpp" />
     <ClCompile Include="src\entities\ant_enemy.cpp" />
+    <ClCompile Include="src\entities\red_ant_enemy.cpp" />
     <ClCompile Include="src\path.cpp" />
     <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\round.cpp" />
@@ -177,11 +178,12 @@
     <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\entities\gold_scarb_enemy.hpp" />
+    <ClInclude Include="include\entities\gold_scarab_enemy.hpp" />
     <ClInclude Include="include\entities\ant_enemy.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h" />
     <ClInclude Include="externals\include\stb_image.h" />
+    <ClInclude Include="include\entities\red_ant_enemy.hpp" />
     <ClInclude Include="include\game.hpp" />
     <ClInclude Include="include\gui.hpp" />
     <ClInclude Include="include\a_star.hpp" />
