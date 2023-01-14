@@ -1,4 +1,4 @@
-#include "ant_enemy.h"
+#include "ant_enemy.hpp"
 #include "globals.hpp"
 
 AntEnemy::AntEnemy(Point2 pos)

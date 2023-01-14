@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\gold_scarb_enemy.cpp" />
     <ClCompile Include="src\entities\mite_enemy.cpp" />
     <ClCompile Include="src\entities\ant_enemy.cpp" />
     <ClCompile Include="src\path.cpp" />
@@ -175,7 +176,8 @@
     <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\entities\ant_enemy.h" />
+    <ClInclude Include="include\entities\gold_scarb_enemy.hpp" />
+    <ClInclude Include="include\entities\ant_enemy.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h" />
     <ClInclude Include="externals\include\stb_image.h" />
@@ -200,7 +202,7 @@
     <ClInclude Include="include\round.hpp" />
     <ClInclude Include="include\round_editor.hpp" />
     <ClInclude Include="include\path.h" />
-    <ClInclude Include="include\entities\mite_enemy.h" />
+    <ClInclude Include="include\entities\mite_enemy.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

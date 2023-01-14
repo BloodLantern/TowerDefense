@@ -123,6 +123,12 @@
     <ClCompile Include="src\entities\ant_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\mite_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\gold_scarb_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\maths\Point2.h">
@@ -197,7 +203,13 @@
     <ClInclude Include="include\path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\ant_enemy.h">
+    <ClInclude Include="include\entities\ant_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entities\mite_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entities\gold_scarb_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

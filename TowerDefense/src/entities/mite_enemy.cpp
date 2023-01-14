@@ -1,4 +1,4 @@
-#include "mite_enemy.h"
+#include "mite_enemy.hpp"
 #include "globals.hpp"
 
 MiteEnemy::MiteEnemy(Point2 pos)
