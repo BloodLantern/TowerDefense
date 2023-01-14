@@ -1,7 +1,9 @@
 #include "round.hpp"
 #include "globals.hpp"
 #include "imgui_utils.hpp"
+
 #include "ant_enemy.h"
+#include "mite_enemy.h"
 
 #include <assert.h>
 
@@ -58,7 +60,17 @@ void Round::OnUpdate()
 			int32_t screenY;
 			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
 
-			Globals::gGame->enemies.push_back(new AntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2)));
+			switch (mRoundInfo[mCurrentCommand].data.dataInt)
+			{
+				case 0:
+					Globals::gGame->enemies.push_back(new AntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2)));
+					break;
+
+				case 1:
+					Globals::gGame->enemies.push_back(new MiteEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2)));
+					break;
+			}
+
 
 			AdvanceRound();
 			break;
