@@ -180,6 +180,18 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	if (ImGui::Button(buffer))
 	{
 		mOwner->IncreaseMoney(GetSellingPrice());
+
+		PlayField* pf = Globals::gGame->GetPlayField();
+		Point2 pos = GetTilePosition();
+		// TODO replace by original tile
+		for (int32_t x = 0; x < mWidth; x++)
+		{
+			for (int32_t y = 0; y < mHeight; y++)
+			{
+				pf->SetClipdataTile(pos.x + x, pos.y + y, CLIPDATA_TYPE_EMPTY);
+			}
+		}
+
 		toDelete = true;
 	}
 
