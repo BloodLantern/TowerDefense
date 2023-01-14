@@ -32,7 +32,7 @@ void Game::Update()
     
     // Delta time
     ImGui::Begin("Delta time");
-    ImGui::SliderFloat("Play speed", &mPlayingSpeed, .1f, 5.f);
+    ImGui::SliderFloat("Play speed", &mPlayingSpeed, .0f, 5.f);
     ImGui::End();
 
     // Hp, money and waves
