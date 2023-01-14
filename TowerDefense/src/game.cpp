@@ -85,6 +85,14 @@ void Game::Update()
     if (Round::HasEnded() && enemies.empty())
     {
         Round::GrantEndRoundMoney();
+
+        for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
+        {
+            Projectile* p = *_p;
+            _p = projectiles.erase(_p);
+            delete p;
+        }
+
         currentWave++;
         mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
         Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
