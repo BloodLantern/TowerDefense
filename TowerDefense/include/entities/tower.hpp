@@ -20,6 +20,13 @@ class Player;
 
 class Tower : public Entity
 {
+	enum GenericUpgradeType : uint8_t
+	{
+		DAMAGE = 0,
+		ATTACK_SPEED = 1,
+		RANGE = 2
+	};
+
 public:
 	Tower(const Tower& other);
 	Tower(Projectile* projectileTemplate);
@@ -34,9 +41,9 @@ public:
 
 	std::string GetName() const { return mName; }
 	uint32_t GetCost() const { return mCost; }
-	uint32_t GetDamage() const { return mDamage + mGenericUpgradeLevels[0] * TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER; }
-	float_t GetAttackSpeed() const { return mAttackSpeed + mGenericUpgradeLevels[1] * TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER; }
-	float_t GetRange() const { return mRange + mGenericUpgradeLevels[2] * TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER; }
+	uint32_t GetDamage() const { return mDamage + mGenericUpgradeLevels[GenericUpgradeType::DAMAGE] * TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER; }
+	float_t GetAttackSpeed() const { return mAttackSpeed + mGenericUpgradeLevels[GenericUpgradeType::ATTACK_SPEED] * TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER; }
+	float_t GetRange() const { return mRange + mGenericUpgradeLevels[GenericUpgradeType::RANGE] * TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER; }
 	uint8_t GetWidth() const { return mWidth; }
 	uint8_t GetHeight() const { return mHeight; }
 	Player* GetOwner() const { return mOwner; }
@@ -55,16 +62,10 @@ protected:
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
 
 private:
-	enum class GenericUpgradeType : uint8_t
-	{
-		DAMAGE = 0,
-		ATTACK_SPEED = 1,
-		RANGE = 2
-	};
-
 	std::string mName;
 	
 	uint32_t mCost = 100;
+	uint32_t mSellingPrice = mCost * 0.7f;
 
 	float_t mRange = 3.f;
 	// Number of attacks per second
@@ -75,7 +76,7 @@ private:
 	Projectile* mProjectileTemplate;
 	Enemy* mTarget;
 
-	uint8_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
+	uint16_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
 	uint8_t mCustomUpgradeLevel = 0;
 
 	uint8_t mWidth = 1, mHeight = 1;
@@ -89,7 +90,7 @@ private:
 	bool mSelected;
 
 	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
-	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return (mGenericUpgradeLevels[(uint8_t) upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
+	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return (mGenericUpgradeLevels[upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
 
 	void HandleSelection();
 	void HandleShoot();

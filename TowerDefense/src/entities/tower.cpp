@@ -9,7 +9,7 @@
 #define TOWER_SELECTION_OUTLINE_COLOR IM_COL32(0xFF, 0xFF, 0xFF, 0xFF)
 
 #define TOWER_PANEL_OFFSET_X 17
-#define TOWER_PANEL_WIDTH 6 * GRID_SQUARE_SIZE
+#define TOWER_PANEL_WIDTH 7 * GRID_SQUARE_SIZE
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
@@ -91,7 +91,7 @@ void Tower::OnUpdate()
 void Tower::IncrementGenericUpgrade(GenericUpgradeType upgrade)
 {
 	mOwner->DecreaseMoney(GetGenericUpgradeCost(upgrade));
-	mGenericUpgradeLevels[(uint8_t) upgrade]++;
+	mGenericUpgradeLevels[upgrade]++;
 }
 
 void Tower::HandleSelection()
@@ -165,6 +165,12 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	
 	// Draw stats
 	DrawStats();
+
+	// Draw selling button
+	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_BIG));
+	char buffer[25];
+	sprintf_s(buffer, "Sell for %d$", mSellingPrice);
+	ImGui::ColorButton(buffer, ImVec4(0xD4, 0x2C, 0x02, 0xE0));
 
 	ImGui::PopFont();
 	ImGui::End();
