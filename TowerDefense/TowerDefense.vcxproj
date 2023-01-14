@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\ladybug_enemy.cpp" />
     <ClCompile Include="src\entities\gold_scarb_enemy.cpp" />
     <ClCompile Include="src\entities\mite_enemy.cpp" />
     <ClCompile Include="src\entities\ant_enemy.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="include\round_editor.hpp" />
     <ClInclude Include="include\path.h" />
     <ClInclude Include="include\entities\mite_enemy.hpp" />
+    <ClInclude Include="include\entities\ladybug_enemy.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

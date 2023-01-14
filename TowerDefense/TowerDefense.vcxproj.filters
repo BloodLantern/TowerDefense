@@ -129,6 +129,9 @@
     <ClCompile Include="src\entities\gold_scarb_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\ladybug_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\maths\Point2.h">
@@ -210,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\entities\gold_scarb_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entities\ladybug_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

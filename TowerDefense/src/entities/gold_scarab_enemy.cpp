@@ -1,4 +1,4 @@
-#include "gold_scarb_enemy.hpp"
+#include "gold_scarab_enemy.hpp"
 
 #include "globals.hpp"
 

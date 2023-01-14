@@ -15,7 +15,8 @@ static const char* const sCommandNames[] = {
 static const char* const sEnemyNames[] = {
     "Ant",
     "Mite",
-    "Gold scarab"
+    "Gold scarab",
+    "Ladybug",
 };
 
 std::vector<RoundInfo> RoundEditor::mRoundInfo;
