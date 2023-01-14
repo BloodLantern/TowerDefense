@@ -50,11 +50,15 @@ void Projectile::HandleEnemyCollision()
 			// If the enemy died, update tower kill stat
 			uint32_t damageDealt;
 			if (enemy->DealDamage(mDamage, damageDealt))
+			{
 				mOwner->IncreaseKillCount(1);
+				mOwner->IncreaseMoneyGenerated(enemy->GetMoneyDrop());
+			}
 			else
+			{
 				mHitEnemies.push_back(enemy);
+			}
 			mOwner->IncreaseDamageDealt(damageDealt);
-			mOwner->IncreaseMoneyGenerated(enemy->GetMoneyDrop());
 
 			mPierce--;
 			// If all the pierce was used, destroy the projectile

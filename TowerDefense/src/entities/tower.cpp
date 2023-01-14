@@ -88,10 +88,10 @@ void Tower::OnUpdate()
 	mTimeSinceLastAttack += Globals::gGame->GetPlayingSpeedDeltaTime();
 }
 
-void Tower::IncrementGenericUpgrade(uint8_t upgrade)
+void Tower::IncrementGenericUpgrade(GenericUpgradeType upgrade)
 {
 	mOwner->DecreaseMoney(GetGenericUpgradeCost(upgrade));
-	mGenericUpgradeLevels[upgrade]++;
+	mGenericUpgradeLevels[(uint8_t) upgrade]++;
 }
 
 void Tower::HandleSelection()
@@ -146,12 +146,13 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH + TOWER_PANEL_OFFSET_X, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 	ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 	ImDrawList* dl = ImGui::GetWindowDrawList();
-	ImGui::PushFont(Globals::gFontBig);
 
 	// Draw name
 	// TODO: Center tower name
+	ImGui::PushFont(Globals::gFontBig);
 	//ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x);
 	ImGui::Text(mName.c_str());
+	ImGui::PopFont();
 
 	// Draw image
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
@@ -161,7 +162,6 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	ImGui::PushFont(Globals::gFontMedium);
 	DrawUpgrades(panelPosition, dl);
-	ImGui::PopFont();
 	
 	// Draw stats
 	DrawStats();
@@ -177,9 +177,9 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	cursorPos.y += panelPosition.y - 2; // -2 for offset
 	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 3), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
 
-	DisplayTowerUpgrade(0, "Damage");
-	DisplayTowerUpgrade(1, "Attack speed");
-	DisplayTowerUpgrade(2, "Range");
+	DisplayTowerUpgrade(GenericUpgradeType::DAMAGE, "Damage");
+	DisplayTowerUpgrade(GenericUpgradeType::ATTACK_SPEED, "Attack speed");
+	DisplayTowerUpgrade(GenericUpgradeType::RANGE, "Range");
 
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	cursorPos = ImGui::GetCursorPos();
@@ -198,21 +198,21 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 
 void Tower::DrawStats()
 {
-	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_BIG));
+	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	ImGui::Text("%d", mKillCount);
 	ImGui::SameLine();
-	ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
+	ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 
 	ImGui::Text("%d", mDamageDealt);
 	ImGui::SameLine();
-	ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
+	ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 
 	ImGui::Text("%d", mMoneyGenerated);
 	ImGui::SameLine();
-	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_BIG);
+	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 }
 
-void Tower::DisplayTowerUpgrade(uint8_t upgrade, std::string name)
+void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name)
 {
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 
@@ -231,13 +231,13 @@ void Tower::DisplayTowerUpgrade(uint8_t upgrade, std::string name)
 	ImGui::SameLine();
 	switch (upgrade)
 	{
-		case 0:
+		case GenericUpgradeType::DAMAGE:
 			ImGui::Text("%d", GetDamage());
 			break;
-		case 1:
+		case GenericUpgradeType::ATTACK_SPEED:
 			ImGui::Text("%.2f", GetAttackSpeed());
 			break;
-		case 2:
+		case GenericUpgradeType::RANGE:
 			ImGui::Text("%.2f", GetRange());
 			break;
 	}

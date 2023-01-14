@@ -55,6 +55,13 @@ protected:
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }
 
 private:
+	enum class GenericUpgradeType : uint8_t
+	{
+		DAMAGE = 0,
+		ATTACK_SPEED = 1,
+		RANGE = 2
+	};
+
 	std::string mName;
 	
 	uint32_t mCost = 100;
@@ -81,13 +88,13 @@ private:
 
 	bool mSelected;
 
-	void IncrementGenericUpgrade(uint8_t upgrade);
-	uint32_t GetGenericUpgradeCost(uint8_t upgrade) { return (mGenericUpgradeLevels[upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
+	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
+	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return (mGenericUpgradeLevels[(uint8_t) upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
 
 	void HandleSelection();
 	void HandleShoot();
 	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
 	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
 	void DrawStats();
-	void DisplayTowerUpgrade(uint8_t upgrade, std::string name);
+	void DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name);
 };
