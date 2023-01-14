@@ -14,15 +14,18 @@ public:
 
     void OnRender();
 
+    uint16_t GetLife() const { return mLife; }
+    uint16_t& GetLife() { return mLife; }
     void DecreaseLife(uint16_t amount);
     void IncreaseLife(uint16_t amount);
 
     uint32_t GetMoney() const { return mMoney; }
+    uint32_t& GetMoney() { return mMoney; }
     void DecreaseMoney(uint32_t amount);
     void IncreaseMoney(uint32_t amount);
 
 private:
-    uint32_t mMoney = 500;
+    uint32_t mMoney = 200;
     uint16_t mLife = 10;
 
     std::vector<Tower*> mTowers;
