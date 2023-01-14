@@ -10,6 +10,7 @@ bool LevelEditor::mInitDone;
 
 int32_t LevelEditor::mCurrentBlockType;
 int32_t LevelEditor::mCurrentLayer;
+bool LevelEditor::mEditingClipdata;
 uint16_t LevelEditor::mCurrentTileValue;
 
 bool LevelEditor::mDragEnabled;
@@ -21,17 +22,7 @@ int32_t LevelEditor::mGridWidthInput;
 int32_t LevelEditor::mGridHeightInput;
 PlayFieldDrawFlags LevelEditor::mDrawFlags;
 
-
-bool LevelEditor::mSelectionActive;
-uint8_t LevelEditor::mSelectionStartX;
-uint8_t LevelEditor::mSelectionStartY;
-uint8_t LevelEditor::mSelectionEndX;
-uint8_t LevelEditor::mSelectionEndY;
-uint8_t LevelEditor::mSelectionWidth;
-uint8_t LevelEditor::mSelectionHeight;
-uint8_t LevelEditor::mSelectionCopyWidth;
-uint8_t LevelEditor::mSelectionCopyHeight;
-std::vector<ClipdataType> LevelEditor::mSelectionCopyData;
+LevelEditor::SelectionInfo LevelEditor::mSelectionInfo;
 
 static const char* const sClipdataNames[] = {
 	"Empty",
@@ -108,7 +99,7 @@ void LevelEditor::HandleMisc()
 
 	ImGui::SetCursorPosX(posX);
 	ImGui::CheckboxFlags("Display grid", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_GRID_LINES);
-	ImGui::RadioButton("Clipdata", &LevelEditor::mCurrentLayer, -1);
+	ImGui::Checkbox("Clipdata", &LevelEditor::mEditingClipdata);
 	ImGui::SameLine(posX);
 	ImGui::CheckboxFlags("Display clipdata", (uint32_t*)&LevelEditor::mDrawFlags, PLAYFIELD_DRAW_FLAGS_CLIPDATA);
 
@@ -220,11 +211,11 @@ void LevelEditor::HandleCursor()
 	uint8_t tileX;
 	uint8_t tileY;
 
-	pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+	pf->GetGridPositionFromPixels(mouse.x - Globals::gGridX, mouse.y - Globals::gGridY, tileX, tileY);
 	if (tileX != UCHAR_MAX && tileY != UCHAR_MAX)
 	{
-		ImVec2 pMin((float_t)Globals::gGridX + tileX * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + tileY * GRID_SQUARE_SIZE);
-		ImVec2 pMax((float_t)Globals::gGridX + (tileX + 1) * GRID_SQUARE_SIZE, (float_t)Globals::gGridY + (tileY + 1) * GRID_SQUARE_SIZE);
+		ImVec2 pMin(Globals::gGridX + tileX * GRID_SQUARE_SIZE, Globals::gGridY + tileY * GRID_SQUARE_SIZE);
+		ImVec2 pMax(pMin.x + GRID_SQUARE_SIZE, pMin.y + GRID_SQUARE_SIZE);
 
 		Globals::gDrawList->AddRectFilled(pMin, pMax, IM_COL32(0xFF, 0, 0, 0x50));
 		ImGui::Text("Cursor position : (%d ; %d)", tileX, tileY);
@@ -235,9 +226,10 @@ void LevelEditor::HandleCursor()
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
 			(LevelEditor::mDragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))
 		{
-			if (LevelEditor::mCurrentLayer == -1)
+			if (LevelEditor::mEditingClipdata)
 				pf->SetClipdataTile(tileX, tileY, static_cast<ClipdataType>(LevelEditor::mCurrentBlockType));
-			else
+
+			if (LevelEditor::mCurrentLayer != -1)
 				pf->SetLayertile(tileX, tileY, LevelEditor::mCurrentLayer, LevelEditor::mCurrentTileValue);
 
 			if (LevelEditor::mUpdateAStar)
@@ -255,79 +247,87 @@ void LevelEditor::HandleSelection()
 	PlayField* pf = Globals::gGame->GetPlayField();
 
 	ImVec2 mouse = Globals::gIO->MousePos;
+	mouse.x -= Globals::gGridX;
+	mouse.y -= Globals::gGridY;
 	// Update selection positions
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 	{
-		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionStartX, mSelectionStartY);
-		if (mSelectionStartX == UCHAR_MAX || mSelectionStartY == UCHAR_MAX)
+		pf->GetGridPositionFromPixels(mouse.x, mouse.y, mSelectionInfo.startX, mSelectionInfo.startY);
+		if (mSelectionInfo.startX == UCHAR_MAX || mSelectionInfo.startY == UCHAR_MAX)
 			return;
 	}
 
 	if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
 	{
-		uint8_t prevEndX = mSelectionEndX;
-		uint8_t prevEndY = mSelectionEndY;
+		uint8_t prevEndX = mSelectionInfo.endX;
+		uint8_t prevEndY = mSelectionInfo.endY;
 
-		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, mSelectionEndX, mSelectionEndY);
-		if (mSelectionEndX == UCHAR_MAX)
-			mSelectionEndX = prevEndX;
-		if (mSelectionEndY == UCHAR_MAX)
-			mSelectionEndY = prevEndY;
+		pf->GetGridPositionFromPixels(mouse.x, mouse.y, mSelectionInfo.endX, mSelectionInfo.endY);
+		if (mSelectionInfo.endX == UCHAR_MAX)
+			mSelectionInfo.endX = prevEndX;
+		if (mSelectionInfo.endY == UCHAR_MAX)
+			mSelectionInfo.endY = prevEndY;
 
-		if (mSelectionEndX < mSelectionStartX)
-			mSelectionEndX--;
+		if (mSelectionInfo.endX < mSelectionInfo.startX)
+			mSelectionInfo.endX--;
 
-		if (mSelectionEndY < mSelectionStartY)
-			mSelectionEndY--;
+		if (mSelectionInfo.endY < mSelectionInfo.startY)
+			mSelectionInfo.endY--;
 
-		if (mSelectionStartX == mSelectionEndX && mSelectionStartY == mSelectionEndY)
-			mSelectionActive = false;
+		if (mSelectionInfo.startX == mSelectionInfo.endX && mSelectionInfo.startY == mSelectionInfo.endY)
+			mSelectionInfo.active = false;
 		else
-			mSelectionActive = true;
+			mSelectionInfo.active = true;
 	}
 
-	if (!mSelectionActive)
+	if (!mSelectionInfo.active)
 		return;
 
 
-	LevelEditor::mSelectionWidth = std::abs(mSelectionEndX - mSelectionStartX) + 1;
-	LevelEditor::mSelectionHeight = std::abs(mSelectionEndY - mSelectionStartY) + 1;
+	mSelectionInfo.width = std::abs(mSelectionInfo.endX - mSelectionInfo.startX) + 1;
+	mSelectionInfo.height = std::abs(mSelectionInfo.endY - mSelectionInfo.startY) + 1;
 
 	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyPressed(ImGuiKey_C))
 	{
-		mSelectionCopyData.resize((size_t)(mSelectionWidth * mSelectionHeight));
+		mSelectionInfo.clipdataData.resize((size_t)(mSelectionInfo.width * mSelectionInfo.height));
+		mSelectionInfo.layerData.resize((size_t)(mSelectionInfo.width * mSelectionInfo.height));
 
-		uint8_t startX = mSelectionStartX < mSelectionEndX ? mSelectionStartX : mSelectionEndX;
-		uint8_t startY = mSelectionStartY < mSelectionEndY ? mSelectionStartY : mSelectionEndY;
+		mSelectionInfo.layer = mCurrentLayer;
 
-		mSelectionCopyWidth = mSelectionWidth;
-		mSelectionCopyHeight = mSelectionHeight;
+		uint8_t startX = mSelectionInfo.startX < mSelectionInfo.endX ? mSelectionInfo.startX : mSelectionInfo.endX;
+		uint8_t startY = mSelectionInfo.startY < mSelectionInfo.endY ? mSelectionInfo.startY : mSelectionInfo.endY;
 
-		for (int32_t y = 0; y < mSelectionHeight; y++)
+		mSelectionInfo.copyWidth = mSelectionInfo.width;
+		mSelectionInfo.copyHeight = mSelectionInfo.height;
+
+		for (int32_t y = 0; y < mSelectionInfo.height; y++)
 		{
-			for (int32_t x = 0; x < mSelectionWidth; x++)
+			for (int32_t x = 0; x < mSelectionInfo.width; x++)
 			{
-				ClipdataType tile = pf->GetClipdataTile(startX + x, startY + y);
-				size_t offset = y * mSelectionCopyWidth + x;
-				mSelectionCopyData[offset] = tile;
+				ClipdataType clipdata = pf->GetClipdataTile(startX + x, startY + y);
+				uint16_t tile = pf->GetLayerTile(startX + x, startY + y, mSelectionInfo.layer);
+
+				size_t offset = (size_t)y * mSelectionInfo.copyWidth + x;
+				mSelectionInfo.clipdataData[offset] = clipdata;
+				mSelectionInfo.layerData[offset] = tile;
 			}
 		}
 	}
 
 	// Draw outline
-	ImVec2 start((float_t)Globals::gGridX + mSelectionStartX * GRID_SQUARE_SIZE,
-		(float_t)Globals::gGridY + mSelectionStartY * GRID_SQUARE_SIZE);
-	ImVec2 end(Globals::gGridX + mSelectionEndX * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f,
-		Globals::gGridY + mSelectionEndY * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f);
+	ImVec2 start((float_t)Globals::gGridX + mSelectionInfo.startX * GRID_SQUARE_SIZE,
+		(float_t)Globals::gGridY + mSelectionInfo.startY * GRID_SQUARE_SIZE);
+	ImVec2 end(Globals::gGridX + mSelectionInfo.endX * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f,
+		Globals::gGridY + mSelectionInfo.endY * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE - 1.f);
 
 	Globals::gDrawList->AddRect(start, end, IM_COL32(0x80, 0x80, 0xB0, 0xC0), 0, 0, 4);
 
 	LevelEditor::VerticalSpace();
 
 	ImGui::Text("Selection:");
-	ImGui::Text("\tStart: (%d ; %d)", mSelectionStartX, mSelectionStartY);
-	ImGui::Text("\tEnd:   (%d ; %d)", mSelectionEndX, mSelectionEndY);
-	ImGui::Text("\tSize:  (%d ; %d)", mSelectionWidth, mSelectionHeight);
+	ImGui::Text("\tStart: (%d ; %d)", mSelectionInfo.startX, mSelectionInfo.startY);
+	ImGui::Text("\tEnd:   (%d ; %d)", mSelectionInfo.endX, mSelectionInfo.endY);
+	ImGui::Text("\tSize:  (%d ; %d)", mSelectionInfo.width, mSelectionInfo.height);
 }
 
 void LevelEditor::HandleTileset()
@@ -393,29 +393,37 @@ void LevelEditor::HandleHotkeys()
 		return;
 	}
 
-	if (ImGui::IsKeyPressed(ImGuiKey_V) && mSelectionCopyData.size() != 0)
+	if (ImGui::IsKeyPressed(ImGuiKey_V) && mSelectionInfo.clipdataData.size() != 0)
 	{
 		uint8_t tileX;
 		uint8_t tileY;
 		ImVec2 mouse = Globals::gIO->MousePos;
 
-		pf->GetGridPositionFromPixels((int32_t)mouse.x, (int32_t)mouse.y, tileX, tileY);
+		pf->GetGridPositionFromPixels(mouse.x - Globals::gGridX, mouse.y - Globals::gGridY, tileX, tileY);
 
 		if (tileX == UCHAR_MAX || tileY == UCHAR_MAX)
 			return;
 
-		if (tileX + mSelectionCopyWidth > pf->gridWidth)
+		if (tileX + mSelectionInfo.copyWidth > pf->gridWidth)
 			return;
 
-		if (tileY + mSelectionCopyHeight > pf->gridHeight)
+		if (tileY + mSelectionInfo.copyHeight > pf->gridHeight)
 			return;
 
-		for (int32_t y = 0; y < mSelectionHeight; y++)
+		for (int32_t y = 0; y < mSelectionInfo.height; y++)
 		{
-			for (int32_t x = 0; x < mSelectionCopyWidth; x++)
+			for (int32_t x = 0; x < mSelectionInfo.copyWidth; x++)
 			{
-				ClipdataType tile = mSelectionCopyData[y * mSelectionCopyWidth + x];
-				pf->SetClipdataTile(tileX + x, tileY + y, tile);
+				size_t offset = (size_t)y * mSelectionInfo.copyWidth + x;
+
+				ClipdataType clipdata = mSelectionInfo.clipdataData[offset];
+				uint16_t tile = mSelectionInfo.layerData[offset];
+
+				if (LevelEditor::mEditingClipdata)
+					pf->SetClipdataTile(tileX + x, tileY + y, clipdata);
+
+				if (LevelEditor::mCurrentLayer != -1)
+					pf->SetLayertile(tileX + x, tileY + y, mSelectionInfo.layer, tile);
 			}
 		}
 
