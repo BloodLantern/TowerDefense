@@ -1,10 +1,13 @@
 #include "level_editor.hpp"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <imgui.h>
 
 #include "globals.hpp"
 #include "a_star.hpp"
 #include "gui.hpp"
+
 
 bool LevelEditor::mInitDone;
 
@@ -58,13 +61,14 @@ void LevelEditor::Update()
 		
 		LevelEditor::VerticalSpace();
 		LevelEditor::HandlePath();
+		LevelEditor::DrawPath();
 
 		LevelEditor::VerticalSpace();
 		LevelEditor::HandleFile();
 
 		LevelEditor::VerticalSpace();
 		LevelEditor::HandleResize();
-
+		
 		LevelEditor::VerticalSpace();
 		LevelEditor::HandleCursor();
 		LevelEditor::HandleSelection();
@@ -131,21 +135,102 @@ void LevelEditor::HandleMisc()
 
 void LevelEditor::HandlePath()
 {
-	// ImGui::begin
-	if (ImGui::Button("Set start"))
+	PathEditInfo* info = &LevelEditor::mPathEditInfo;
+
+	if (ImGui::Button("Add node"))
 	{
-		mPathEditInfo.placingStart ^= true;
-		mPathEditInfo.placingEnd = false;
-		mPathEditInfo.selectedNode = -1;
+		info->active ^= true;
+
+		info->placingNodeDir = PathNodeDir::DIR_LEFT;
+		info->selectedNode = -1;
+	}
+}
+
+void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
+{
+	Texture* tex = Globals::gResources->GetTexture("ui\\arrow");
+	PathEditInfo* info = &LevelEditor::mPathEditInfo;
+
+	ImVec2 pos(Globals::gGridX + x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+		Globals::gGridY + y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+
+	if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow))
+		info->placingNodeDir = PathNodeDir::DIR_LEFT;
+
+	if (ImGui::IsKeyPressed(ImGuiKey_RightArrow))
+		info->placingNodeDir = PathNodeDir::DIR_RIGHT;
+
+	if (ImGui::IsKeyPressed(ImGuiKey_UpArrow))
+		info->placingNodeDir = PathNodeDir::DIR_UP;
+
+	if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))
+		info->placingNodeDir = PathNodeDir::DIR_DOWN;
+
+	float_t rotation;
+	switch (info->placingNodeDir)
+	{
+		case PathNodeDir::DIR_RIGHT:
+			rotation = 3 * M_PI / 2;
+			break;
+
+		case PathNodeDir::DIR_LEFT:
+			rotation = M_PI / 2;
+			break;
+		
+		case PathNodeDir::DIR_UP:
+			rotation = M_PI;
+			break;
+		
+		default:
+		case PathNodeDir::DIR_DOWN:
+			rotation = 0;
 	}
 
-	ImGui::SameLine();
+	ImVec2 scale(GRID_SQUARE_SIZE / (float_t)tex->width, GRID_SQUARE_SIZE / (float_t)tex->height);
+	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *tex, pos, scale, rotation);
 
-	if (ImGui::Button("Set end"))
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 	{
-		mPathEditInfo.placingEnd ^= true;
-		mPathEditInfo.placingStart = false;
-		mPathEditInfo.selectedNode = -1;
+		info->nodes.push_back(PathNode(x, y, info->placingNodeDir));
+
+		info->active = false;
+	}
+}
+
+void LevelEditor::DrawPath()
+{
+	Texture* tex = Globals::gResources->GetTexture("ui\\arrow");
+	PathEditInfo* info = &LevelEditor::mPathEditInfo;
+
+	for (std::vector<PathNode>::iterator _n = info->nodes.begin(); _n != info->nodes.end(); _n++)
+	{
+		PathNode* node = &*_n;
+
+		float_t rotation;
+		switch (node->direction)
+		{
+			case PathNodeDir::DIR_RIGHT:
+				rotation = 3 * M_PI / 2;
+				break;
+
+			case PathNodeDir::DIR_LEFT:
+				rotation = M_PI / 2;
+				break;
+
+			case PathNodeDir::DIR_UP:
+				rotation = M_PI;
+				break;
+
+			default:
+			case PathNodeDir::DIR_DOWN:
+				rotation = 0;
+		}
+
+		ImVec2 pos(Globals::gGridX + node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+			Globals::gGridY + node->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+
+		ImVec2 scale(GRID_SQUARE_SIZE / (float_t)tex->width, GRID_SQUARE_SIZE / (float_t)tex->height);
+		ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *tex, pos, scale, rotation);
 	}
 }
 
@@ -245,6 +330,12 @@ void LevelEditor::HandleCursor()
 
 		if (!LevelEditor::mCanPlaceTile)
 			return;
+
+		if (LevelEditor::mPathEditInfo.active)
+		{
+			LevelEditor::HandleNodePlacement(tileX, tileY);
+			return;
+		}
 
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
 			(LevelEditor::mDragEnabled && ImGui::IsMouseDown(ImGuiMouseButton_Left)))

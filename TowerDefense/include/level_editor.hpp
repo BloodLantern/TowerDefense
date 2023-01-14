@@ -27,9 +27,9 @@ private:
 
 	struct PathEditInfo
 	{
-		bool placingStart;
-		bool placingEnd;
+		bool active = false;
 
+		PathNodeDir placingNodeDir;
 		int16_t selectedNode;
 
 		std::vector<PathNode> nodes;
@@ -59,7 +59,11 @@ private:
 	static void VerticalSpace();
 
 	static void HandleMisc();
+	
 	static void HandlePath();
+	static void DrawPath();
+	static void HandleNodePlacement(uint8_t x, uint8_t y);
+
 	static void HandleClear();
 	static void HandleResize();
 
