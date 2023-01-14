@@ -337,6 +337,11 @@ uint16_t* PlayField::GetTilemapPointer(uint8_t layer)
 	return pLayers[layer];
 }
 
+std::vector<PathNode>& PlayField::GetPathNodes()
+{
+	return mPathNodes;
+}
+
 void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY)
 {
 	uint8_t x = pixelX / GRID_SQUARE_SIZE;

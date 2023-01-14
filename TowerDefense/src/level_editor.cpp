@@ -144,6 +144,9 @@ void LevelEditor::HandlePath()
 		info->placingNodeDir = PathNodeDir::DIR_LEFT;
 		info->selectedNode = -1;
 	}
+
+	ImGui::SameLine();
+	ImGui::Checkbox("Draw path", &info->render);
 }
 
 void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
@@ -166,7 +169,7 @@ void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
 	if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))
 		info->placingNodeDir = PathNodeDir::DIR_DOWN;
 
-	float_t rotation;
+	double_t rotation;
 	switch (info->placingNodeDir)
 	{
 		case PathNodeDir::DIR_RIGHT:
@@ -191,7 +194,22 @@ void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
 
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 	{
-		info->nodes.push_back(PathNode(x, y, info->placingNodeDir));
+		PathNode node(x, y, info->placingNodeDir);
+
+		int32_t i = 0;
+
+		std::vector<PathNode>& nodes = Globals::gGame->GetPlayField()->GetPathNodes();
+		for (; i < nodes.size(); i++)
+		{
+			if (nodes[i].x == x && nodes[i].y == y)
+				break;
+		}
+
+		if (i != nodes.size())
+			nodes[i].direction = info->placingNodeDir;
+		else
+			nodes.push_back(node);
+
 
 		info->active = false;
 	}
@@ -199,14 +217,21 @@ void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
 
 void LevelEditor::DrawPath()
 {
-	Texture* tex = Globals::gResources->GetTexture("ui\\arrow");
 	PathEditInfo* info = &LevelEditor::mPathEditInfo;
+	
+	if (!info->render)
+		return;
 
-	for (std::vector<PathNode>::iterator _n = info->nodes.begin(); _n != info->nodes.end(); _n++)
+	Texture* tex = Globals::gResources->GetTexture("ui\\arrow");
+
+	std::vector<PathNode>& nodes = Globals::gGame->GetPlayField()->GetPathNodes();
+
+	PathNode* prevNode = nullptr;
+	for (std::vector<PathNode>::iterator _n = nodes.begin(); _n != nodes.end(); _n++)
 	{
 		PathNode* node = &*_n;
 
-		float_t rotation;
+		double_t rotation;
 		switch (node->direction)
 		{
 			case PathNodeDir::DIR_RIGHT:
@@ -231,6 +256,18 @@ void LevelEditor::DrawPath()
 
 		ImVec2 scale(GRID_SQUARE_SIZE / (float_t)tex->width, GRID_SQUARE_SIZE / (float_t)tex->height);
 		ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *tex, pos, scale, rotation);
+
+		if (prevNode)
+		{
+			ImVec2 start(Globals::gGridX + prevNode->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+				Globals::gGridY + prevNode->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+			ImVec2 end(Globals::gGridX + node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+				Globals::gGridY + node->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+
+			Globals::gDrawList->AddLine(start, end, IM_COL32(0xFF, 0, 0, 0xFF), 5.f);
+		}
+
+		prevNode = node;
 	}
 }
 

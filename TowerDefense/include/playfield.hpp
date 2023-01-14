@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "tower_bar_ui.hpp"
 #include "imgui_utils.hpp"
+#include "path.h"
 #include <stdint.h>
 
 #define GRID_OFFSET_X 0
@@ -84,6 +85,7 @@ private:
 	std::vector<uint16_t> mLayer2Tilemap;
 	std::vector<uint16_t> mLayer1Tilemap;
 	std::vector<uint16_t> mLayer0Tilemap;
+	std::vector<PathNode> mPathNodes;
 
 	PlayFieldDrawFlags mDrawFlags;
 
@@ -123,6 +125,8 @@ public:
 
 	ClipdataType* GetClipdataPointer();
 	uint16_t* GetTilemapPointer(uint8_t layer);
+
+	std::vector<PathNode>& GetPathNodes();
 
 	void GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY);
 	void GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY);

@@ -28,11 +28,10 @@ private:
 	struct PathEditInfo
 	{
 		bool active = false;
+		bool render = true;
 
 		PathNodeDir placingNodeDir;
 		int16_t selectedNode;
-
-		std::vector<PathNode> nodes;
 	};
 
 	static bool mInitDone;
