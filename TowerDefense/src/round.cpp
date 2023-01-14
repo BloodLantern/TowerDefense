@@ -58,7 +58,7 @@ void Round::OnUpdate()
 
 			{
 				// Offset by grid because GetPixelPositionFromGrid adds it
-				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 0, 1, 0);
+				Enemy* e = new Enemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2), 2, 1, 5);
 				e->SetTexture(Globals::gResources->GetTexture("ant_alpha"));
 				e->SetScale(.1f);
 

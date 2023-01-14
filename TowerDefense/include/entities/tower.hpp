@@ -45,6 +45,8 @@ public:
 protected:
 	void SetName(std::string newName) { mName = newName; }
 	void SetCost(uint32_t newCost) { mCost = newCost; }
+	void SetDamage(uint32_t newDamage) { mDamage = newDamage; }
+	void SetAttackSpeed(float_t newAttackSpeed) { mAttackSpeed = newAttackSpeed; }
 	void SetRange(float_t range) { mRange = range; }
 	void SetWidth(uint8_t newWidth) { mWidth = newWidth; }
 	void SetHeight(uint8_t newHeight) { mHeight = newHeight; }

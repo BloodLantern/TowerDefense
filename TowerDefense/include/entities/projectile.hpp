@@ -16,8 +16,9 @@ public:
 	virtual void OnUpdate() override;
 
 	Vector2 GetVelocity() const { return mVelocity; }
-	void SetVelocity(Vector2& velocity) { mVelocity = velocity; }
+	void SetVelocity(Vector2 velocity) { mVelocity = velocity; }
 	void SetTarget(Enemy* target) { mTarget = target; }
+	void SetDamage(uint32_t damage) { mDamage = damage; }
 
 private:
 	Vector2 mVelocity;

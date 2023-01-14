@@ -25,13 +25,23 @@ void Projectile::OnUpdate()
 	{
 		// Update velocity
 		mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
+	}
 
-		// If the projectile reached its target, deal its damage and destroy it
-		if (Vector2(mTarget->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 10.f)
+	// If the projectile hit an enemy, deal its damage and reduce its pierce
+	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
+	{
+		Enemy* enemy = *it;
+		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 20.f)
 		{
-			mTarget->DealDamage(mDamage);
-			toDelete = true;
-			return;
+			enemy->DealDamage(mDamage);
+
+			mPierce--;
+			// If all the pierce was used, destroy the projectile
+			if (mPierce <= 0)
+			{
+                toDelete = true;
+                return;
+			}
 		}
 	}
 
@@ -45,5 +55,8 @@ void Projectile::OnUpdate()
 
 void Projectile::OnRender()
 {
-	Globals::gDrawList->AddCircleFilled(ImVec2(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y), 5, IM_COL32(0xFF, 0x0, 0x0, 0xFF));
+	Point2 pixelPosition(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
+	Globals::gDrawList->AddCircleFilled(pixelPosition, 5, IM_COL32(0xFF, 0x0, 0x0, 0xFF));
+
+	//Globals::gDrawList->AddLine(pixelPosition, pixelPosition + mVelocity / 2, IM_COL32_BLACK, 3);
 }

@@ -7,31 +7,21 @@ TestTower::TestTower(const TestTower& other)
 }
 
 TestTower::TestTower(Texture* texture)
-	: Tower(new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 1))
+	: Tower(new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, TEST_TOWER_LIFETIME))
 {
 	SetName("TestTower");
+
+	SetDamage(TEST_TOWER_DAMAGE);
+	SetAttackSpeed(TEST_TOWER_ATTACK_SPEED);
+	SetRange(TEST_TOWER_RANGE);
+
 	SetCost(100);
 	SetWidth(1);
 	SetHeight(1);
-	SetRange(5);
 	SetTexture(texture);
 }
 
 TestTower::TestTower(Point2 pixelPosition)
 	: Tower(pixelPosition, TEST_TOWER_RANGE, TEST_TOWER_ATTACK_SPEED, new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
 {
-}
-
-void TestTower::Shoot(Projectile* projTemplate)
-{
-}
-
-void TestTower::OnUpdate()
-{
-
-}
-
-void TestTower::OnRender()
-{
-
 }
