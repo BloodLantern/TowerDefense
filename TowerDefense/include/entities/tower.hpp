@@ -51,6 +51,7 @@ public:
 	void IncreaseDamageDealt(uint32_t damage) { mDamageDealt += damage; }
 	void IncreaseKillCount(uint32_t kills) { mKillCount += kills; }
 	void IncreaseMoneyGenerated(uint32_t money) { mMoneyGenerated += money; }
+	uint32_t GetSellingPrice() const { return mMoneyInvested * mSellingFactor; }
 
 protected:
 	void SetName(std::string newName) { mName = newName; }
@@ -65,12 +66,13 @@ private:
 	std::string mName;
 	
 	uint32_t mCost = 100;
-	uint32_t mSellingPrice = mCost * 0.7f;
+	uint32_t mMoneyInvested = mCost;
+	float_t mSellingFactor = 0.7f;
 
 	float_t mRange = 3.f;
 	// Number of attacks per second
 	float_t mAttackSpeed = 1.f;
-	double_t mTimeSinceLastAttack = 0;
+	double_t mTimeSinceLastAttack = DBL_MAX;
 	uint32_t mDamage = 1;
 
 	Projectile* mProjectileTemplate;

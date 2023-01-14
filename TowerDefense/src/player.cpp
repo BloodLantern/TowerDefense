@@ -14,13 +14,6 @@ Player::~Player()
 
 void Player::OnRender()
 {
-	if (ImGui::Begin("Player info"))
-	{
-		ImGui::Text("HP : %d", mLife);
-		ImGui::Text("Money : %d", mMoney);
-	}
-
-	ImGui::End();
 }
 
 void Player::DecreaseLife(uint16_t amount)

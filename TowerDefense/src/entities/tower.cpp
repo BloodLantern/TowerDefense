@@ -90,7 +90,9 @@ void Tower::OnUpdate()
 
 void Tower::IncrementGenericUpgrade(GenericUpgradeType upgrade)
 {
-	mOwner->DecreaseMoney(GetGenericUpgradeCost(upgrade));
+	uint32_t cost = GetGenericUpgradeCost(upgrade);
+	mOwner->DecreaseMoney(cost);
+	mMoneyInvested += cost;
 	mGenericUpgradeLevels[upgrade]++;
 }
 
@@ -150,7 +152,7 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	// Draw name
 	// TODO: Center tower name
 	ImGui::PushFont(Globals::gFontBig);
-	//ImGui::SetCursorPosX(ImGui::CalcTextSize(mName.c_str()).x);
+	ImGui::SetCursorPosX((TOWER_PANEL_WIDTH - ImGui::CalcTextSize(mName.c_str()).x) * 0.5f);
 	ImGui::Text(mName.c_str());
 	ImGui::PopFont();
 
@@ -167,10 +169,21 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	DrawStats();
 
 	// Draw selling button
-	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_BIG));
 	char buffer[25];
-	sprintf_s(buffer, "Sell for %d$", mSellingPrice);
-	ImGui::ColorButton(buffer, ImVec4(0xD4, 0x2C, 0x02, 0xE0));
+	sprintf_s(buffer, "Sell for %d$", GetSellingPrice());
+	ImGui::SetCursorPosX(TOWER_PANEL_WIDTH - ImGui::CalcTextSize(buffer).x);
+	
+	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0xE3 / 255.f, 0x14 / 255.f, 0x02 / 255.f, 0xDD / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	ImVec4(0xCC / 255.f, 0x04 / 255.f, 0x00 / 255.f, 0xE0 / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0xA3 / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xE0 / 255.f));
+	
+	if (ImGui::Button(buffer))
+	{
+		mOwner->IncreaseMoney(GetSellingPrice());
+		toDelete = true;
+	}
+
+	ImGui::PopStyleColor(3);
 
 	ImGui::PopFont();
 	ImGui::End();

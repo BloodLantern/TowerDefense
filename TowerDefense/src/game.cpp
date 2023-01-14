@@ -30,9 +30,19 @@ void Game::Update()
     mDeltaTime = Globals::gIO->DeltaTime;
     mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
     
+    // Delta time
     ImGui::Begin("Delta time");
     ImGui::SliderFloat("Play speed", &mPlayingSpeed, .1f, 5.f);
     ImGui::End();
+
+    // Hp, money and waves
+	if (ImGui::Begin("Player info"))
+	{
+        ImGui::InputScalar("HP", ImGuiDataType_U16, &mPlayer->GetLife());
+        ImGui::InputScalar("Money", ImGuiDataType_U32, &mPlayer->GetMoney());
+        ImGui::InputScalar("Wave", ImGuiDataType_U32, &currentWave);
+	}
+	ImGui::End();
 
     mPlayField->Draw();
 
@@ -40,12 +50,28 @@ void Game::Update()
 
     mPlayer->OnRender();
     
-    for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
+    for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); )
     {
         Tower* t = *_t;
 
         t->OnUpdate();
         t->OnRender();
+
+        if (t->toDelete)
+        {
+            // Destroy tower
+            _t = mPlayer->GetTowers()->erase(_t);
+
+            // Set its projectiles' pointers to nullptr
+            for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
+                if ((*_p)->GetOwner() == t)
+                    (*_p)->SetOwner(nullptr);
+
+            delete t;
+            continue;
+        }
+
+        _t++;
     }
 
     for (std::vector<Enemy*>::iterator _e = enemies.begin(); _e != enemies.end(); )

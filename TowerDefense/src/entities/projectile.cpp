@@ -51,14 +51,18 @@ void Projectile::HandleEnemyCollision()
 			uint32_t damageDealt;
 			if (enemy->DealDamage(mDamage, damageDealt))
 			{
-				mOwner->IncreaseKillCount(1);
-				mOwner->IncreaseMoneyGenerated(enemy->GetMoneyDrop());
+				if (mOwner)
+				{
+					mOwner->IncreaseKillCount(1);
+					mOwner->IncreaseMoneyGenerated(enemy->GetMoneyDrop());
+				}
 			}
 			else
 			{
 				mHitEnemies.push_back(enemy);
 			}
-			mOwner->IncreaseDamageDealt(damageDealt);
+			if (mOwner)
+				mOwner->IncreaseDamageDealt(damageDealt);
 
 			mPierce--;
 			// If all the pierce was used, destroy the projectile
