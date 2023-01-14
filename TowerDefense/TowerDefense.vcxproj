@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\path.cpp" />
     <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\round.cpp" />
     <ClCompile Include="src\game.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\entities\test_tower.hpp" />
     <ClInclude Include="include\round.hpp" />
     <ClInclude Include="include\round_editor.hpp" />
+    <ClInclude Include="include\path.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

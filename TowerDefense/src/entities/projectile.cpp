@@ -31,7 +31,7 @@ void Projectile::OnUpdate()
 	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
 	{
 		Enemy* enemy = *it;
-		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 20.f)
+		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 20.f * 20.f)
 		{
 			enemy->DealDamage(mDamage);
 

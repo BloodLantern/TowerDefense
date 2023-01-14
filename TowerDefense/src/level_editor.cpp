@@ -23,6 +23,8 @@ int32_t LevelEditor::mGridHeightInput;
 PlayFieldDrawFlags LevelEditor::mDrawFlags;
 
 LevelEditor::SelectionInfo LevelEditor::mSelectionInfo;
+struct LevelEditor::PathEditInfo LevelEditor::mPathEditInfo;
+
 
 static const char* const sClipdataNames[] = {
 	"Empty",
@@ -52,8 +54,10 @@ void LevelEditor::Update()
 	if (ImGui::Begin("Level editor", &Gui::openedWindows[GUI_WINDOW_ID_LEVEL_EDITOR]))
 	{
 		LevelEditor::HandleMisc();
-
 		LevelEditor::HandleClear();
+		
+		LevelEditor::VerticalSpace();
+		LevelEditor::HandlePath();
 
 		LevelEditor::VerticalSpace();
 		LevelEditor::HandleFile();
@@ -125,6 +129,25 @@ void LevelEditor::HandleMisc()
 	ImGui::Checkbox("Update A* live", &LevelEditor::mUpdateAStar);
 }
 
+void LevelEditor::HandlePath()
+{
+	// ImGui::begin
+	if (ImGui::Button("Set start"))
+	{
+		mPathEditInfo.placingStart ^= true;
+		mPathEditInfo.placingEnd = false;
+		mPathEditInfo.selectedNode = -1;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Set end"))
+	{
+		mPathEditInfo.placingEnd ^= true;
+		mPathEditInfo.placingStart = false;
+		mPathEditInfo.selectedNode = -1;
+	}
+}
 
 void LevelEditor::HandleClear()
 {

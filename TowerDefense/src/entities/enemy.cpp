@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t moneyDrop)
-	: Entity(pixelPosition), mHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
+	: Entity(pixelPosition), mHealth(health), mSpawnHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 	mCurrentPathIndex = 0;
 	mSpeed = 2.f;
@@ -12,16 +12,20 @@ Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint16_t mon
 void Enemy::OnUpdate()
 {
 	StickToPath();
+	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
 }
 
 void Enemy::OnRender()
 {
-	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
-
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
 
-	Globals::gDrawList->AddCircleFilled(pos, 20, IM_COL32_BLACK);
+	// Globals::gDrawList->AddCircleFilled(pos, 20, IM_COL32_BLACK);
+
+	pos.y -= 30.f;
+	pos.x -= 30.f;
+	Globals::gDrawList->AddRectFilled(ImVec2(pos.x, pos.y), ImVec2(pos.x + 60.f, pos.y + 8.f), IM_COL32(0xFF, 0, 0, 0xFF));
+	Globals::gDrawList->AddRectFilled(ImVec2(pos.x, pos.y), ImVec2(pos.x + (60.f * mHealth / mSpawnHealth), pos.y + 8), IM_COL32(0, 0xFF, 0, 0xFF));
 }
 
 void Enemy::StickToPath()

@@ -22,6 +22,7 @@ private:
 	float mSpeed;
 
 	uint32_t mHealth;
+	uint32_t mSpawnHealth;
 	uint8_t mDamage;
 
 	uint16_t mMoneyDrop;

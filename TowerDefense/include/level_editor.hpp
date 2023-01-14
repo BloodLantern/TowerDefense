@@ -3,13 +3,14 @@
 #include <stdint.h>
 #include "playfield.hpp"
 #include "imgui_utils.hpp"
+#include "path.h"
 
 class LevelEditor
 {
 private:
 	struct SelectionInfo
 	{
-		bool active;
+		bool active = false;
 		uint8_t startX;
 		uint8_t startY;
 		uint8_t endX;
@@ -22,6 +23,16 @@ private:
 		std::vector<ClipdataType> clipdataData;
 		std::vector<uint16_t> layerData;
 		uint8_t layer;
+	};
+
+	struct PathEditInfo
+	{
+		bool placingStart;
+		bool placingEnd;
+
+		int16_t selectedNode;
+
+		std::vector<PathNode> nodes;
 	};
 
 	static bool mInitDone;
@@ -41,12 +52,14 @@ private:
 	static PlayFieldDrawFlags mDrawFlags;
 
 	static struct SelectionInfo mSelectionInfo;
+	static struct PathEditInfo mPathEditInfo;
 
 	static void Init();
 
 	static void VerticalSpace();
 
 	static void HandleMisc();
+	static void HandlePath();
 	static void HandleClear();
 	static void HandleResize();
 
