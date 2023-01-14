@@ -13,11 +13,14 @@ void Enemy::OnUpdate()
 {
 	StickToPath();
 	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
+
+	SetRotation(mVelocity.Angle());
 }
 
 void Enemy::OnRender()
 {
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
+
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
 
 	// Globals::gDrawList->AddCircleFilled(pos, 20, IM_COL32_BLACK);
