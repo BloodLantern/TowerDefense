@@ -7,7 +7,7 @@ TestTower::TestTower(const TestTower& other)
 }
 
 TestTower::TestTower(Texture* texture)
-	: Tower(new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 3))
+	: Tower(new Projectile(TEST_TOWER_PROJECTILE_SPEED, TEST_TOWER_DAMAGE, TEST_TOWER_PIERCE, 1))
 {
 	SetName("TestTower");
 	SetCost(100);

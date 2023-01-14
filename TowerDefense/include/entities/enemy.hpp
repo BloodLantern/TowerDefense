@@ -15,6 +15,8 @@ public:
 
 	virtual void StickToPath();
 
+	void DealDamage(uint32_t damage);
+
 private:
 	Vector2 mVelocity;
 	float mSpeed;

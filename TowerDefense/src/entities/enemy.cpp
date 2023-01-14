@@ -21,7 +21,7 @@ void Enemy::OnRender()
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
 
-	Globals::gDrawList->AddCircleFilled(pos, 10, IM_COL32_BLACK);
+	//Globals::gDrawList->AddCircleFilled(pos, 10, IM_COL32_BLACK);
 }
 
 void Enemy::StickToPath()
@@ -61,4 +61,14 @@ void Enemy::StickToPath()
 
 	// Move to path at standard speed
 	mVelocity = Vector2(pixelPos, Point2(dstPos.x, dstPos.y)).Normalize() * 60;
+}
+
+void Enemy::DealDamage(uint32_t damage)
+{
+	if (damage >= mHealth)
+    {
+        toDelete = true;
+		return;
+	}
+	mHealth -= damage;
 }

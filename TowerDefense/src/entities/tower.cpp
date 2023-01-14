@@ -105,14 +105,25 @@ void Tower::HandleSelection()
 
 void Tower::HandleShoot()
 {
+	// If the tower can attack
 	if (mTimeSinceLastAttack > 1 / GetAttackSpeed())
 	{
-		for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
-			if (Vector2(GetPixelPosition(), (*it)->GetPixelPosition()).GetNorm() <= mRange * GRID_SQUARE_SIZE)
-			{
-				mTarget = *it;
-				break;
-			}
+		if (mTarget)
+		{
+			// If the target is too far away
+			if (mTarget->toDelete || Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).GetNorm() > GetRange() * GRID_SQUARE_SIZE)
+				mTarget = nullptr;
+		}
+		
+		// If the tower doesn't have a target, try to find one
+		if (!mTarget)
+			for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
+				if (Vector2(GetPixelPosition(), (*it)->GetPixelPosition()).GetNorm() <= GetRange() * GRID_SQUARE_SIZE)
+				{
+					mTarget = *it;
+					break;
+				}
+
 		if (mTarget)
 		{
 			mTimeSinceLastAttack = 0;

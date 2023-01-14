@@ -21,8 +21,23 @@ void Projectile::OnUpdate()
 	}
 
 	// Compute velocity
-	mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
+	if (mTarget && !mTarget->toDelete)
+	{
+		// Update velocity
+		mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
+
+		// If the projectile reached its target, deal its damage and destroy it
+		if (Vector2(mTarget->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < 10.f)
+		{
+			mTarget->DealDamage(mDamage);
+			toDelete = true;
+			return;
+		}
+	}
+
+	// Update its position
 	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
+
 
     // Update lifetime
 	mLifetime -= Globals::gGame->GetPlayingSpeedDeltaTime();
@@ -30,5 +45,5 @@ void Projectile::OnUpdate()
 
 void Projectile::OnRender()
 {
-	Globals::gDrawList->AddCircleFilled(ImVec2(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y), 10, IM_COL32(0xFF, 0x0, 0x0, 0xFF));
+	Globals::gDrawList->AddCircleFilled(ImVec2(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y), 5, IM_COL32(0xFF, 0x0, 0x0, 0xFF));
 }
