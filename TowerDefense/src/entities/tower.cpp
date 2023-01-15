@@ -14,7 +14,7 @@
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
 #define TOWER_PANEL_UPGRADE_TAB_WIDTH 12
-#define IMGUI_SET_CURSOR_POS_X(x) ImGui::SetCursorPosX(ImGui::GetCursorPosX() + x)
+#define IMGUI_SET_CURSOR_POS_X(x) ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (x))
 #define IMGUI_LINE_SPACING_HEIGHT 10
 #define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
 #define TOWER_PANEL_IMAGE_SIZE_MEDIUM ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM, TOWER_PANEL_TEXT_SIZE_MEDIUM)
@@ -150,7 +150,6 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	ImDrawList* dl = ImGui::GetWindowDrawList();
 
 	// Draw name
-	// TODO: Center tower name
 	ImGui::PushFont(Globals::gFontBig);
 	ImGui::SetCursorPosX((TOWER_PANEL_WIDTH - ImGui::CalcTextSize(mName.c_str()).x) * 0.5f);
 	ImGui::Text(mName.c_str());
@@ -247,15 +246,24 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name)
 {
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 
-	bool notEnoughMoney = mOwner->GetMoney() < GetGenericUpgradeCost(upgrade);
-	if (notEnoughMoney)
-		ImGui::BeginDisabled();
+	// If the upgrade level is less than 10, show the button
+	if (mGenericUpgradeLevels[upgrade] < TOWER_UPGRADE_GENERIC_LEVEL_MAX)
+	{
 
-	if (ImGui::ImageButton(("upgrade" + name + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
-		IncrementGenericUpgrade(upgrade);
+		bool canUpgrade = mOwner->GetMoney() >= GetGenericUpgradeCost(upgrade);
+		if (!canUpgrade)
+			ImGui::BeginDisabled();
 
-	if (notEnoughMoney)
-		ImGui::EndDisabled();
+		if (ImGui::ImageButton(("upgrade" + name + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+			IncrementGenericUpgrade(upgrade);
+
+		if (!canUpgrade)
+			ImGui::EndDisabled();
+	}
+	else
+	{
+		ImGui::Dummy(ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM + 8, TOWER_PANEL_TEXT_SIZE_MEDIUM + 6));
+	}
 
 	ImGui::SameLine();
 	ImGui::Text(name.c_str());
