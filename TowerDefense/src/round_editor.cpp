@@ -21,15 +21,18 @@ static const char* const sEnemyNames[] = {
 };
 
 std::vector<RoundInfo> RoundEditor::mRoundInfo;
+std::vector<bool> RoundEditor::mSeparators;
 char RoundEditor::mFileName[30];
-
 
 void RoundEditor::Update()
 {
 	if (ImGui::Begin("Wave editor", &Gui::openedWindows[GUI_WINDOW_ID_WAVE_EDITOR]))
 	{
         if (ImGui::Button("Add"))
+        {
             mRoundInfo.push_back(RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0u));
+            mSeparators.push_back(false);
+        }
 
         ImGui::SameLine();
         RoundEditor::HandleClear();
@@ -45,7 +48,7 @@ void RoundEditor::Update()
 void RoundEditor::DisplayTable()
 {
     ImVec2 cursor = ImGui::GetCursorPos();
-    ImGui::SetCursorPos(ImVec2(cursor.x + 130, cursor.y));
+    ImGui::SetCursorPos(ImVec2(cursor.x + 220, cursor.y));
     if (!ImGui::BeginTable("Command table", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         return;
 
@@ -56,6 +59,9 @@ void RoundEditor::DisplayTable()
     for (size_t row = 0; row < mRoundInfo.size(); row++)
     {
         RoundInfo* round = &mRoundInfo[row];
+
+        if (mSeparators[row])
+            ImGui::Dummy(ImVec2(0, 10));
 
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
@@ -79,23 +85,40 @@ void RoundEditor::DisplayTable()
     ImGui::EndTable();
 
     ImGui::SetCursorPos(ImVec2(cursor.x, cursor.y + 20));
+    size_t roundID = -1;
     for (std::vector<RoundInfo>::iterator _r = mRoundInfo.begin(); _r != mRoundInfo.end(); )
     {
+        roundID++;
         RoundInfo* round = &*_r;
         ImGui::PushID(round);
+        
+        if (mSeparators[roundID])
+            ImGui::Dummy(ImVec2(0, 10));
 
         if (ImGui::Button("Delete"))
         {
             _r = mRoundInfo.erase(_r);
+            mSeparators.erase(mSeparators.begin() + roundID);
+            roundID--;
             ImGui::PopID();
             continue;
         }
+
         ImGui::SameLine();
         if (ImGui::Button("Insert"))
         {
             _r = mRoundInfo.insert(_r, RoundInfo(ROUND_COMMAND_SPAWN_ENEMY, 0u));
+            mSeparators.insert(mSeparators.begin() + roundID, false);
+            roundID--;
             ImGui::PopID();
             continue;
+        }
+
+        if (_r != mRoundInfo.begin())
+        {
+            ImGui::SameLine();
+            if (ImGui::Button("Separator"))
+                mSeparators[roundID] = (mSeparators[roundID] ^ true);
         }
 
         ImGui::PopID();
@@ -143,6 +166,7 @@ void RoundEditor::HandleClear()
         if (ImGui::Button("Yes", ImVec2(120, 0)))
         {
             mRoundInfo.clear();
+            mSeparators.clear();
             ImGui::CloseCurrentPopup();
         }
 

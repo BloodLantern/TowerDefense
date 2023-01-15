@@ -10,8 +10,8 @@ class RoundEditor
 {
 private:
 	static std::vector<RoundInfo> mRoundInfo;
+	static std::vector<bool> mSeparators;
 	static char mFileName[30];
-
 
 	static void DisplayTable();
 	static void DisplayParamColumn(RoundInfo* round);
