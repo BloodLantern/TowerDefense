@@ -102,5 +102,5 @@ private:
 	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
 	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
 	void DrawStats();
-	void DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name);
+	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
 };

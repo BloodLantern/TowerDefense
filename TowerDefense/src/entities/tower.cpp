@@ -207,9 +207,9 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	cursorPos.y += panelPosition.y - 2; // -2 for offset
 	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 3), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
 
-	DisplayTowerUpgrade(GenericUpgradeType::DAMAGE, "Damage");
-	DisplayTowerUpgrade(GenericUpgradeType::ATTACK_SPEED, "Attack speed");
-	DisplayTowerUpgrade(GenericUpgradeType::RANGE, "Range");
+	DisplayTowerUpgrade(GenericUpgradeType::DAMAGE);
+	DisplayTowerUpgrade(GenericUpgradeType::ATTACK_SPEED);
+	DisplayTowerUpgrade(GenericUpgradeType::RANGE);
 
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	cursorPos = ImGui::GetCursorPos();
@@ -242,7 +242,7 @@ void Tower::DrawStats()
 	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 }
 
-void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name)
+void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 {
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 
@@ -254,7 +254,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name)
 		if (!canUpgrade)
 			ImGui::BeginDisabled();
 
-		if (ImGui::ImageButton(("upgrade" + name + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+		if (ImGui::ImageButton(("upgrade" + std::to_string(upgrade) + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
 			IncrementGenericUpgrade(upgrade);
 
 		if (!canUpgrade)
@@ -266,17 +266,21 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade, std::string name)
 	}
 
 	ImGui::SameLine();
-	ImGui::Text(name.c_str());
-	ImGui::SameLine();
 	switch (upgrade)
 	{
 		case GenericUpgradeType::DAMAGE:
+			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::SameLine();
 			ImGui::Text("%d", GetDamage());
 			break;
 		case GenericUpgradeType::ATTACK_SPEED:
+			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::SameLine();
 			ImGui::Text("%.2f", GetAttackSpeed());
 			break;
 		case GenericUpgradeType::RANGE:
+			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::SameLine();
 			ImGui::Text("%.2f", GetRange());
 			break;
 	}
