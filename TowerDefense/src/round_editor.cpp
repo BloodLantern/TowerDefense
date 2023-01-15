@@ -1,6 +1,7 @@
 #include "round_editor.hpp"
 #include "gui.hpp"
 #include "imgui.h"
+#include "globals.hpp"
 
 #include <iostream>
 
@@ -37,8 +38,9 @@ void RoundEditor::Update()
         ImGui::SameLine();
         RoundEditor::HandleClear();
         ImGui::SameLine();
+        RoundEditor::HandleCurrentWaveLoad();
+        ImGui::SameLine();
         RoundEditor::HandleSaveLoad();
-
         RoundEditor::DisplayTable();
 	}
 
@@ -177,6 +179,26 @@ void RoundEditor::HandleClear()
             ImGui::CloseCurrentPopup();
 
         ImGui::EndPopup();
+    }
+}
+
+void RoundEditor::HandleCurrentWaveLoad()
+{
+    if (ImGui::Button("Load current"))
+    {
+        std::string fullPath(WAVES_PATH);
+        std::string fileName("Wave");
+        fileName.append(std::to_string(Globals::gGame->currentWave));
+        fullPath.append(fileName);
+
+        RoundEditor::Load(mRoundInfo, fullPath.c_str());
+        mSeparators.resize(mRoundInfo.size());
+
+        size_t i = 0;
+        for (; i < fileName.length(); i++)
+            mFileName[i] = fileName.c_str()[i];
+
+        mFileName[i] = '\0';
     }
 }
 

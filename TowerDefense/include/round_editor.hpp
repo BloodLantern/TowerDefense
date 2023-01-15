@@ -15,7 +15,9 @@ private:
 
 	static void DisplayTable();
 	static void DisplayParamColumn(RoundInfo* round);
+
 	static void HandleClear();
+	static void HandleCurrentWaveLoad();
 	static void HandleSaveLoad();
 
 public:
