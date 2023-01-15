@@ -112,12 +112,17 @@ void Game::Update()
     {
         Round::GrantEndRoundMoney();
 
+        // Kill all projectiles
         for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
         {
             Projectile* p = *_p;
             _p = projectiles.erase(_p);
             delete p;
         }
+    
+        // Reset attack cooldown for towers
+        for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
+            (*_t)->SetTimeSinceLastAttack(DBL_MAX);
 
         currentWave++;
         mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
