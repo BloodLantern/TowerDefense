@@ -23,6 +23,13 @@
 #define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
 #define TOWER_PANEL_IMAGE_SIZE_MEDIUM ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM, TOWER_PANEL_TEXT_SIZE_MEDIUM)
 
+#define TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT "Attack damage"
+#define TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT "Attack speed - number of attacks per second"
+#define TOWER_PANEL_RANGE_TOOLTIP_TEXT "Range - in tiles"
+#define TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT "Kill count"
+#define TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT "Damage dealt"
+#define TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT "Money generated"
+
 Tower::Tower(const Tower& other)
 	: Entity(other),
 	mName(other.mName),
@@ -197,7 +204,7 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 bool Tower::DrawSellingButton()
 {
 	char buffer[25];
-	sprintf_s(buffer, "Sell for %d$", GetSellingPrice());
+	sprintf_s(buffer, "Sell for $%d", GetSellingPrice());
 	ImGui::SetCursorPosX(TOWER_PANEL_WIDTH - ImGui::CalcTextSize(buffer).x);
 	
 	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0xE3 / 255.f, 0x14 / 255.f, 0x02 / 255.f, 0xDD / 255.f));
@@ -264,22 +271,22 @@ void Tower::DrawStats()
 {
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-	AddTooltip("Kill count");
+	AddTooltip(TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT);
 	ImGui::SameLine();
 	ImGui::Text("%d", mKillCount);
-	AddTooltip("Kill count");
+	AddTooltip(TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT);
 
 	ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-	AddTooltip("Damage dealt");
+	AddTooltip(TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT);
 	ImGui::SameLine();
 	ImGui::Text("%d", mDamageDealt);
-	AddTooltip("Damage dealt");
+	AddTooltip(TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT);
 
 	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-	AddTooltip("Money generated");
+	AddTooltip(TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT);
 	ImGui::SameLine();
-	ImGui::Text("%d", mMoneyGenerated);
-	AddTooltip("Money generated");
+	ImGui::Text("$%d", mMoneyGenerated);
+	AddTooltip(TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT);
 }
 
 void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
@@ -291,41 +298,48 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 	{
 		case GenericUpgradeType::DAMAGE:
 			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-			AddTooltip("Attack damage");
+			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
 			
-			ImGui::Text("%-7d", GetDamage());
-			AddTooltip("Attack damage");
+			ImGui::Text("%-d", GetDamage());
+			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 			break;
 
 		case GenericUpgradeType::ATTACK_SPEED:
+		{
 			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-			AddTooltip("Attack speed");
+			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
 
-			ImGui::Text("%-5.2f", GetAttackSpeed());
-			AddTooltip("Attack speed");
+			float_t attackSpeed = GetAttackSpeed();
+			if (attackSpeed >= 10.f)
+				ImGui::Text("%-.1f", attackSpeed);
+			else
+				ImGui::Text("%-.2f", GetAttackSpeed());
+			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 			break;
+		}
 
 		case GenericUpgradeType::RANGE:
 			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-			AddTooltip("Range");
+			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
 
-			ImGui::Text("%-5.2f", GetRange());
-			AddTooltip("Range");
+			ImGui::Text("%-.2f", GetRange());
+			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 			break;
 	}
 
-	ImGui::SameLine();
-	IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 
 	// If the upgrade level is less than 10, show the button
 	if (mGenericUpgradeLevels[upgrade] < TOWER_UPGRADE_GENERIC_LEVEL_MAX)
 	{
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(100);
+		IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 
 		bool canUpgrade = mOwner->GetMoney() >= GetGenericUpgradeCost(upgrade);
 		if (!canUpgrade)
@@ -346,6 +360,10 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 			ImGui::SameLine();
 			ImGui::Text("$%d", GetGenericUpgradeCost(upgrade));
 		}
+	}
+	else
+	{
+		IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 	}
 
 }
