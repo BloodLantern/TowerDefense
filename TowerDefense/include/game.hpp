@@ -20,6 +20,7 @@ public:
     std::vector<Enemy*> enemies;
     std::vector<Projectile*> projectiles;
     uint32_t currentWave;
+    uint32_t maxWave;
     std::vector<RoundInfo> roundInfo;
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }

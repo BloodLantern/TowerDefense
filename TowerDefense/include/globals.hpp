@@ -15,6 +15,7 @@ public:
 	static ImGuiIO* gIO;
 	
 	static ImFont* gFontBig;
+	static ImFont* gFontSemiBig;
 	static ImFont* gFontMedium;
 
 	static Game* gGame;

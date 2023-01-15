@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\hud.cpp" />
     <ClCompile Include="src\entities\gold_scarab_enemy.cpp" />
     <ClCompile Include="src\entities\ladybug_enemy.cpp" />
     <ClCompile Include="src\entities\mite_enemy.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hud.hpp" />
     <ClInclude Include="include\entities\gold_scarab_enemy.hpp" />
     <ClInclude Include="include\entities\ant_enemy.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />

@@ -126,10 +126,16 @@
     <ClCompile Include="src\entities\mite_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\gold_scarb_enemy.cpp">
+    <ClCompile Include="src\entities\ladybug_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\ladybug_enemy.cpp">
+    <ClCompile Include="src\entities\gold_scarab_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\red_ant_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,10 +218,16 @@
     <ClInclude Include="include\entities\mite_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\gold_scarb_enemy.hpp">
+    <ClInclude Include="include\entities\ladybug_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\ladybug_enemy.hpp">
+    <ClInclude Include="include\entities\gold_scarab_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entities\red_ant_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hud.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
