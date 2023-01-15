@@ -20,6 +20,7 @@ public:
 	Vector2 GetVelocity() const { return mVelocity; }
 	void SetVelocity(Vector2 velocity) { mVelocity = velocity; }
 	void SetTarget(Enemy* target) { mTarget = target; }
+	uint32_t GetDamage() const { return mDamage; }
 	void SetDamage(uint32_t damage) { mDamage = damage; }
 	Tower* GetOwner() const { return mOwner; }
 	void SetOwner(Tower* owner) { mOwner = owner; }

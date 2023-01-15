@@ -48,7 +48,7 @@ void TowerBarUI::HandleMouse()
 		return;
 
 	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;
-	const int32_t width = TOWER_BAR_WIDTH, height = TOWER_BAR_HEIGHT;
+	const int32_t height = TOWER_BAR_HEIGHT;
 
 	// Overlay
 

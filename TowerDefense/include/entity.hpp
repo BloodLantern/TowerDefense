@@ -2,7 +2,7 @@
 
 #include "imgui_utils.hpp"
 
-#include <Maths/Point2.h>
+#include <Point2.h>
 #include <stdint.h>
 
 class Entity
@@ -38,7 +38,7 @@ public:
 	Texture* GetTexture() const { return mTexture; }
 	void SetTexture(Texture* newTexture) { mTexture = newTexture; }
 
-	bool toDelete;
+	bool toDelete = false;
 
 protected:
 	Texture* mTexture = nullptr;

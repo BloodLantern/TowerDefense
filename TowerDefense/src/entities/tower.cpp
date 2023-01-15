@@ -39,32 +39,27 @@ Tower::Tower(const Tower& other)
 	mWidth(other.mWidth),
 	mHeight(other.mHeight)
 {
-	mOwner = nullptr;
-	mTarget = nullptr;
-	mSelected = false;
 }
 
-Tower::Tower(Projectile* projectileTemplate)
-	: Entity(), mProjectileTemplate(projectileTemplate)
+Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
+	: Entity(),
+	mProjectileTemplate(projectileTemplate),
+	mStartDamage(projectileTemplate->GetDamage()),
+	mDamage(mStartDamage),
+	mStartAttackSpeed(attackSpeed),
+	mAttackSpeed(attackSpeed),
+	mStartRange(range),
+    mRange(range),
+	mName(name),
+	mCost(cost),
+	mMoneyInvested(cost)
 {
-	mOwner = nullptr;
-	mTarget = nullptr;
-	mSelected = false;
-}
-
-Tower::Tower(Point2 pixelPosition, float_t range, float_t attackSpeed, Projectile* projectileTemplate)
-	: Entity(pixelPosition), mRange(range), mAttackSpeed(attackSpeed), mProjectileTemplate(projectileTemplate)
-{
-	mCustomUpgradeLevel = 0;
-
-	mOwner = nullptr;
-	mTarget = nullptr;
-	mSelected = false;
+	mTexture = texture;
 }
 
 void Tower::Shoot(Projectile* projTemplate)
 {
-	projTemplate->SetDamage(GetDamage());
+	projTemplate->SetDamage(mDamage);
 	//projTemplate->SetTarget(mTarget);
 	Point2 pixelPosition(GetPixelPosition().x + mWidth, GetPixelPosition().y + mHeight);
 	projTemplate->SetPixelPosition(pixelPosition);
@@ -86,9 +81,6 @@ void Tower::DrawRange(ImU32 color) const
 
 void Tower::OnUpdate()
 {
-	// Update pixel position from tile position
-	SnapToGrid();
-
 	// Check for selection
 	HandleSelection();
 
@@ -99,12 +91,46 @@ void Tower::OnUpdate()
 	mTimeSinceLastAttack += Globals::gGame->GetPlayingSpeedDeltaTime();
 }
 
+void Tower::UpdateGeneric(GenericUpgradeType upgrade)
+{
+	switch (upgrade)
+	{
+		case GenericUpgradeType::DAMAGE:
+		    UpdateDamage();
+            break;
+			
+        case GenericUpgradeType::ATTACK_SPEED:
+            UpdateAttackSpeed();
+			break;
+			
+        case GenericUpgradeType::RANGE:
+            UpdateRange();
+            break;
+	}
+}
+
+void Tower::UpdateDamage()
+{
+	mDamage = mStartDamage + mGenericUpgradeLevels[GenericUpgradeType::DAMAGE] * TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER;
+}
+
+void Tower::UpdateAttackSpeed()
+{
+	mAttackSpeed = mStartAttackSpeed + mGenericUpgradeLevels[GenericUpgradeType::ATTACK_SPEED] * TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER;
+}
+
+void Tower::UpdateRange()
+{
+	mRange = mStartRange + mGenericUpgradeLevels[GenericUpgradeType::RANGE] * TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER;
+}
+
 void Tower::IncrementGenericUpgrade(GenericUpgradeType upgrade)
 {
 	uint32_t cost = GetGenericUpgradeCost(upgrade);
 	mOwner->DecreaseMoney(cost);
 	mMoneyInvested += cost;
 	mGenericUpgradeLevels[upgrade]++;
+	UpdateGeneric(upgrade);
 }
 
 void Tower::HandleSelection()
@@ -163,7 +189,7 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	// Draw name
 	ImGui::PushFont(Globals::gFontBig);
 	ImGui::SetCursorPosX((TOWER_PANEL_WIDTH - ImGui::CalcTextSize(mName.c_str()).x) * 0.5f);
-	ImGui::Text(mName.c_str());
+	ImGui::Text("%s", mName.c_str());
 	ImGui::PopFont();
 
 	// Draw image
@@ -302,7 +328,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 
 			ImGui::SameLine();
 			
-			ImGui::Text("%-d", GetDamage());
+			ImGui::Text("%-d", mDamage);
 			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 			break;
 
@@ -312,12 +338,11 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
-
-			float_t attackSpeed = GetAttackSpeed();
-			if (attackSpeed >= 10.f)
-				ImGui::Text("%-.1f", attackSpeed);
+			
+			if (mAttackSpeed >= 10.f)
+				ImGui::Text("%-.1f", mAttackSpeed);
 			else
-				ImGui::Text("%-.2f", GetAttackSpeed());
+				ImGui::Text("%-.2f", mAttackSpeed);
 			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 			break;
 		}
@@ -328,7 +353,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 
 			ImGui::SameLine();
 
-			ImGui::Text("%-.2f", GetRange());
+			ImGui::Text("%-.2f", mRange);
 			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 			break;
 	}
@@ -371,7 +396,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 void Tower::AddTooltip(const char* text)
 {
 	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
-		ImGui::SetTooltip(text);
+		ImGui::SetTooltip("%s", text);
 }
 
 void Tower::OnRender()
