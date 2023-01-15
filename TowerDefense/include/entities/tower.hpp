@@ -13,9 +13,11 @@ class Player;
 #define TOWER_PANEL_TEXT_SIZE_BIG 40
 #define TOWER_PANEL_TEXT_SIZE_MEDIUM 20
 
+#define TOWER_UPGRADE_GENERIC_LEVEL_MAX 10
+#define TOWER_UPGRADE_GENERIC_COST_BASE 20
 #define TOWER_UPGRADE_GENERIC_COST_MULTIPLIER 1.3f
-#define TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER 0.25f
-#define TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER 1.5f
+#define TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER 0.2f
+#define TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER 1.1f
 #define TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER 0.15f
 
 class Tower : public Entity
@@ -52,6 +54,7 @@ public:
 	void IncreaseKillCount(uint32_t kills) { mKillCount += kills; }
 	void IncreaseMoneyGenerated(uint32_t money) { mMoneyGenerated += money; }
 	uint32_t GetSellingPrice() const { return mMoneyInvested * mSellingFactor; }
+	void SetTimeSinceLastAttack(double_t newTimeSinceLastAttack) { mTimeSinceLastAttack = newTimeSinceLastAttack; }
 
 protected:
 	void SetName(std::string newName) { mName = newName; }
@@ -92,7 +95,7 @@ private:
 	bool mSelected;
 
 	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
-	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return (mGenericUpgradeLevels[upgrade] + 1) * TOWER_UPGRADE_GENERIC_COST_MULTIPLIER; };
+	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };
 
 	void HandleSelection();
 	void HandleShoot();
