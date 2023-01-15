@@ -42,6 +42,8 @@ void RoundEditor::Update()
         ImGui::SameLine();
         RoundEditor::HandleCurrentWaveLoad();
         ImGui::SameLine();
+        RoundEditor::HandleTest();
+        ImGui::SameLine();
         RoundEditor::HandleSaveLoad();
         RoundEditor::DisplayTable();
 	}
@@ -193,23 +195,34 @@ void RoundEditor::HandleClear()
 
 void RoundEditor::HandleCurrentWaveLoad()
 {
-    if (ImGui::Button("Load current"))
-    {
-        std::string fullPath(WAVES_PATH);
-        std::string fileName("Wave");
-        fileName.append(std::to_string(Globals::gGame->currentWave));
-        fullPath.append(fileName);
+    if (!ImGui::Button("Load current"))
+        return;
 
-        RoundEditor::Load(mRoundInfo, fullPath.c_str());
-        mSeparators.resize(mRoundInfo.size());
+    std::string fullPath(WAVES_PATH);
+    std::string fileName("Wave");
+    fileName.append(std::to_string(Globals::gGame->currentWave));
+    fullPath.append(fileName);
 
-        size_t i = 0;
-        for (; i < fileName.length(); i++)
-            mFileName[i] = fileName.c_str()[i];
+    RoundEditor::Load(mRoundInfo, fullPath.c_str());
+    mSeparators.clear();
+    mSeparators.resize(mRoundInfo.size());
 
-        mFileName[i] = '\0';
-    }
+    size_t i = 0;
+    for (; i < fileName.length(); i++)
+        mFileName[i] = fileName.c_str()[i];
+
+    mFileName[i] = '\0';
 }
+
+void RoundEditor::HandleTest()
+{
+    if (!ImGui::Button("Test"))
+        return;
+
+    Globals::gGame->Restart();
+    Round::StartRound(mRoundInfo.data());
+}
+
 
 void RoundEditor::HandleSaveLoad()
 {
@@ -224,6 +237,7 @@ void RoundEditor::HandleSaveLoad()
     if (ImGui::Button("Load"))
     {
         Load(mRoundInfo, std::string(WAVES_PATH).append(mFileName).c_str());
+        mSeparators.clear();
         mSeparators.resize(mRoundInfo.size());
     }
 

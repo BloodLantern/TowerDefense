@@ -18,6 +18,7 @@ private:
 
 	static void HandleClear();
 	static void HandleCurrentWaveLoad();
+	static void HandleTest();
 	static void HandleSaveLoad();
 
 public:
