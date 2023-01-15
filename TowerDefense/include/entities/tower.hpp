@@ -100,7 +100,11 @@ private:
 	void HandleSelection();
 	void HandleShoot();
 	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
+	// Returns whether the button was clicked
+	bool DrawSellingButton();
 	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
+	// Returns whether the button was clicked
+	bool DrawUpgradeButton(GenericUpgradeType upgrade);
 	void DrawStats();
 	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
 	void AddTooltip(const char* text);
