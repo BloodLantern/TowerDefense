@@ -95,6 +95,7 @@ int main(int argc, char** argv)
 
 	io.Fonts->AddFontDefault();
 	Globals::gFontBig = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE_BIG);
+	Globals::gFontSemiBig = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", 30);
 	Globals::gFontMedium = io.Fonts->AddFontFromFileTTF("assets\\fonts\\arial.ttf", TOWER_PANEL_TEXT_SIZE_MEDIUM);
 
 	ImGui::StyleColorsDark();

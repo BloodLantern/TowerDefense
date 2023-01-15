@@ -1,12 +1,16 @@
 #include "game.hpp"
 #include "globals.hpp"
 #include "round_editor.hpp"
+#include "hud.hpp"
 
 Game::Game()
 {
     RoundEditor::Load(roundInfo, "data/waves/Wave1");
 
     Round::StartRound(roundInfo.data());
+    
+    // Temp
+    maxWave = 20;
 }
 
 Game::~Game()
@@ -52,50 +56,45 @@ void Game::Shutdown()
 
 void Game::DrawHud()
 {
-    // Delta time
-    ImGui::Begin("Delta time");
-    ImGui::SliderFloat("Play speed", &mPlayingSpeed, .0f, 5.f);
-    ImGui::End();
+    ImVec2 position(Globals::gGridX + 10, Globals::gGridY + 10);
+    
+    Hud::DrawHealth(position);
 
-    // Hp, money and waves
-    if (ImGui::Begin("Player info"))
-    {
-        ImGui::InputScalar("HP", ImGuiDataType_U16, &mPlayer->GetLife());
-        ImGui::InputScalar("Money", ImGuiDataType_U32, &mPlayer->GetMoney());
-        ImGui::InputScalar("Wave", ImGuiDataType_U32, &currentWave);
-    }
-    ImGui::End();
+    position.x += 100;
+    Hud::DrawMoney(position);
+
+    position.x += 300;
+    Hud::DrawRounds(position);
 }
 
 void Game::CheckEndRound()
 {
+    if (!Round::HasEnded() || !enemies.empty())
+        return;
+     
+    Round::GrantEndRoundMoney();
 
-    if (Round::HasEnded() && enemies.empty())
+    // Kill all projectiles
+    for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
     {
-        Round::GrantEndRoundMoney();
-
-        // Kill all projectiles
-        for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
-        {
-            Projectile* p = *_p;
-            _p = projectiles.erase(_p);
-            delete p;
-        }
-
-        // Reset attack cooldown for towers
-        for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
-            (*_t)->SetTimeSinceLastAttack(DBL_MAX);
-
-        currentWave++;
-        mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
-        Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
-
-        std::string fileName(WAVES_PATH "Wave");
-        fileName.append(std::to_string(currentWave));
-
-        RoundEditor::Load(roundInfo, fileName.c_str());
-        Round::StartRound(roundInfo.data());
+        Projectile* p = *_p;
+        _p = projectiles.erase(_p);
+        delete p;
     }
+
+    // Reset attack cooldown for towers
+    for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
+        (*_t)->SetTimeSinceLastAttack(DBL_MAX);
+
+    currentWave++;
+    mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/").append(std::to_string(maxWave));
+    Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
+
+    std::string fileName(WAVES_PATH "Wave");
+    fileName.append(std::to_string(currentWave));
+
+    RoundEditor::Load(roundInfo, fileName.c_str());
+    Round::StartRound(roundInfo.data());
 }
 
 void Game::UpdateTowers()
