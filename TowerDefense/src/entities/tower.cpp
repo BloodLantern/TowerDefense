@@ -13,8 +13,12 @@
 #define TOWER_PANEL_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_PANEL_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 
-#define TOWER_PANEL_UPGRADE_TAB_WIDTH 12
 #define IMGUI_SET_CURSOR_POS_X(x) ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (x))
+#define IMGUI_SET_CURSOR_POS_Y(y) ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (y))
+#define IMGUI_IMAGE_BUTTON_OFFSET_X 8
+#define IMGUI_IMAGE_BUTTON_OFFSET_Y 6
+
+#define TOWER_PANEL_UPGRADE_TAB_WIDTH 12
 #define IMGUI_LINE_SPACING_HEIGHT 10
 #define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
 #define TOWER_PANEL_IMAGE_SIZE_MEDIUM ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM, TOWER_PANEL_TEXT_SIZE_MEDIUM)
@@ -229,17 +233,20 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 void Tower::DrawStats()
 {
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
-	ImGui::Text("%d", mKillCount);
-	ImGui::SameLine();
 	ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-
-	ImGui::Text("%d", mDamageDealt);
+	AddTooltip("Kill count");
 	ImGui::SameLine();
+	ImGui::Text("%d", mKillCount);
+
 	ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
-
-	ImGui::Text("%d", mMoneyGenerated);
+	AddTooltip("Damage dealt");
 	ImGui::SameLine();
+	ImGui::Text("%d", mDamageDealt);
+
 	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+	AddTooltip("Money generated");
+	ImGui::SameLine();
+	ImGui::Text("%d", mMoneyGenerated);
 }
 
 void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
@@ -262,27 +269,52 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 	}
 	else
 	{
-		ImGui::Dummy(ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM + 8, TOWER_PANEL_TEXT_SIZE_MEDIUM + 6));
+		ImGui::Dummy(ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_IMAGE_BUTTON_OFFSET_X, TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_IMAGE_BUTTON_OFFSET_Y));
 	}
 
 	ImGui::SameLine();
 	switch (upgrade)
 	{
 		case GenericUpgradeType::DAMAGE:
-			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
+			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			AddTooltip("Attack damage");
+
 			ImGui::SameLine();
+			
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 			ImGui::Text("%d", GetDamage());
 			break;
+
 		case GenericUpgradeType::ATTACK_SPEED:
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			AddTooltip("Attack speed");
+
 			ImGui::SameLine();
+
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 			ImGui::Text("%.2f", GetAttackSpeed());
 			break;
+
 		case GenericUpgradeType::RANGE:
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			AddTooltip("Range");
+
 			ImGui::SameLine();
+
+		    IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 			ImGui::Text("%.2f", GetRange());
 			break;
+	}
+}
+
+void Tower::AddTooltip(const char* text)
+{
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+	{
+		ImGui::SetTooltip(text);
 	}
 }
 

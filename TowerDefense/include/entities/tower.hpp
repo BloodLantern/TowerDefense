@@ -103,4 +103,5 @@ private:
 	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
 	void DrawStats();
 	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
+	void AddTooltip(const char* text);
 };
