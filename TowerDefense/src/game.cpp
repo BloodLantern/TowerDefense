@@ -11,6 +11,8 @@ Game::Game()
     
     // Temp
     maxWave = 20;
+
+    Hud::canInteract = true;
 }
 
 Game::~Game()
@@ -29,6 +31,44 @@ void Game::Init()
     mPlayingSpeedDeltaTime = 0;
 }
 
+void Game::EndGame(bool lost)
+{
+    mEnded = true;
+    Hud::canInteract = false;
+    SetPlayingSpeed(0);
+}
+
+void Game::Restart()
+{
+    mEnded = false;
+    Hud::canInteract = true;
+
+    currentWave = 1;
+    RoundEditor::Load(roundInfo, (WAVES_PATH "Wave1"));
+    Round::StartRound(roundInfo.data());
+    SetPlayingSpeed(1);
+    mPlayer->Reset();
+    
+    Cleanup();
+}
+
+void Game::Cleanup()
+{
+    std::vector<Tower*>* towers = mPlayer->GetTowers();
+
+    for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
+        delete *_t;
+    towers->clear();
+
+    for (std::vector<Enemy*>::iterator _e = enemies.begin(); _e != enemies.end(); _e++)
+        delete *_e;
+    enemies.clear();
+
+    for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
+        delete *_p;
+    projectiles.clear();
+}
+
 void Game::Update()
 {
     mDeltaTime = Globals::gIO->DeltaTime;
@@ -38,13 +78,17 @@ void Game::Update()
 
     Round::OnUpdate();
 
-    mPlayer->OnRender();
-
     UpdateTowers();
     UpdateEnemies();
     UpdateProjectiles();
 
+    mPlayer->OnUpdate();
+
     DrawHud();
+
+    if (mEnded)
+        return;
+
     CheckEndRound();
 }
 
@@ -68,6 +112,12 @@ void Game::DrawHud()
 
     position = ImVec2(Globals::gGridX + Globals::gWindowWidth - 230, Globals::gGridY + Globals::gWindowHeight - 70);
     Hud::DrawSpeed(position);
+
+    if (mEnded)
+    {
+        position = ImVec2(Globals::gGridX + Globals::gWindowWidth / 2 - 250, Globals::gGridY + Globals::gWindowHeight / 2 - 125);
+        Hud::DrawGameOver(position);
+    }
 }
 
 void Game::CheckEndRound()

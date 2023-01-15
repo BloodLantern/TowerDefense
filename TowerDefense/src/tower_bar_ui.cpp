@@ -1,6 +1,7 @@
 #include "tower_bar_ui.hpp"
 #include "globals.hpp"
 #include "playfield.hpp"
+#include "hud.hpp"
 
 #define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
@@ -43,7 +44,7 @@ void TowerBarUI::Draw()
 
 void TowerBarUI::HandleMouse()
 {
-	if (Globals::gIO->WantCaptureMouse)
+	if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
 		return;
 
 	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;

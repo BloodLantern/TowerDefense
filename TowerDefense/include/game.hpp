@@ -28,9 +28,14 @@ public:
     int32_t GetPlayingSpeed() const { return mPlayingSpeed; }
     void SetPlayingSpeed(int32_t speed) { mPlayingSpeed = speed; }
 
+    void EndGame(bool lost);
+    void Restart();
+
 private:
     PlayField* mPlayField;
     Player* mPlayer;
+
+    bool mEnded;
 
     std::string mRpcDetailsText;
 
@@ -44,4 +49,6 @@ private:
     void UpdateTowers();
     void UpdateEnemies();
     void UpdateProjectiles();
+
+    void Cleanup();
 };

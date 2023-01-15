@@ -12,7 +12,7 @@ public:
 
     std::vector<Tower*>* GetTowers() { return &mTowers; }
 
-    void OnRender();
+    void OnUpdate();
 
     uint16_t GetLife() const { return mLife; }
     uint16_t& GetLife() { return mLife; }
@@ -24,9 +24,11 @@ public:
     void DecreaseMoney(uint32_t amount);
     void IncreaseMoney(uint32_t amount);
 
+    void Reset();
+
 private:
     uint32_t mMoney = 200;
-    uint16_t mLife = 10;
+    uint16_t mLife = 1;
 
     std::vector<Tower*> mTowers;
 };

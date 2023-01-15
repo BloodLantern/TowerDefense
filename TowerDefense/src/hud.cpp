@@ -3,6 +3,8 @@
 #include "game.hpp"
 #include "globals.hpp"
 
+bool Hud::canInteract;
+
 void Hud::DrawHealth(ImVec2 position)
 {
     Texture* tex = Globals::gResources->GetTexture("ui\\heart");
@@ -55,7 +57,7 @@ void Hud::DrawSpeed(ImVec2 position)
     //mouse.y -= Globals::gGridY;
 
     Globals::gDrawList->AddText(position, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), "x1");
-    if (mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
+    if (canInteract && mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
         && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         Globals::gGame->SetPlayingSpeed(1);
@@ -63,7 +65,7 @@ void Hud::DrawSpeed(ImVec2 position)
 
     position.x += 50;
     Globals::gDrawList->AddText(position, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), "x2");
-    if (mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
+    if (canInteract && mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
         && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         Globals::gGame->SetPlayingSpeed(2);
@@ -71,7 +73,7 @@ void Hud::DrawSpeed(ImVec2 position)
 
     position.x += 50;
     Globals::gDrawList->AddText(position, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), "x4");
-    if (mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
+    if (canInteract && mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
         && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         Globals::gGame->SetPlayingSpeed(4);
@@ -79,11 +81,41 @@ void Hud::DrawSpeed(ImVec2 position)
 
     position.x += 50;
     Globals::gDrawList->AddText(position, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), "x0");
-    if (mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
+    if (canInteract && mouse.x > position.x && mouse.y > position.y && mouse.x < position.x + 40 && mouse.y < position.y + 40
         && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         Globals::gGame->SetPlayingSpeed(0);
     }
 
     ImGui::PopFont();
+}
+
+void Hud::DrawGameOver(ImVec2 position)
+{
+    ImGui::SetNextWindowPos(position);
+    ImGui::SetNextWindowSize(ImVec2(500, 250));
+    
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.f);
+
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0x64 / 255.f, 0x6c / 255.f, 0x73 / 255.f, 0xFF / 255.f));
+
+    if (ImGui::Begin("Game over", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove))
+    {
+        ImGui::PushFont(Globals::gFontBig);
+        ImGui::SetCursorPosX(250.f - ImGui::CalcTextSize("GAME OVER").x / 2);
+        ImGui::Text("GAME OVER");
+        ImGui::PopFont();
+
+        ImGui::SetCursorPos(ImVec2(250.f - 120.f / 2, 250.f / 2 - 40.f / 2));
+
+        ImGui::PushFont(Globals::gFontMedium);
+        if (ImGui::Button("Retry", ImVec2(120, 40)))
+            Globals::gGame->Restart();
+        ImGui::PopFont();
+    }
+
+    ImGui::End();
+
+    ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
 }

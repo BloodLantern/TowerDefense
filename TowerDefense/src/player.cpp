@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "globals.hpp"
 #include <limits.h>
 
 Player::Player()
@@ -12,8 +13,12 @@ Player::~Player()
 		delete *it;
 }
 
-void Player::OnRender()
+void Player::OnUpdate()
 {
+	if (mLife == 0)
+	{
+		Globals::gGame->EndGame(true);
+	}
 }
 
 void Player::DecreaseLife(uint16_t amount)
@@ -48,4 +53,10 @@ void Player::DecreaseMoney(uint32_t amount)
 void Player::IncreaseMoney(uint32_t amount)
 {
 	mMoney += amount;
+}
+
+void Player::Reset()
+{
+	mLife = 10;
+	mMoney = 200;
 }
