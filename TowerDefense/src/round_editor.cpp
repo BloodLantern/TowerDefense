@@ -10,6 +10,8 @@ static const char* const sCommandNames[] = {
     "Cooldown",
     "GFX effect",
     "SFX",
+    "Loop start",
+    "Loop end",
     "End"
 };
 
@@ -142,11 +144,18 @@ void RoundEditor::DisplayParamColumn(RoundInfo* round)
             break;
 
         case ROUND_COMMAND_GFX_EFFECT:
+        case ROUND_COMMAND_PLAY_SOUND:
             ImGui::InputScalar("##input", ImGuiDataType_U32, &round->data.dataInt);
             break;
 
-        case ROUND_COMMAND_PLAY_SOUND:
-            ImGui::InputScalar("##input", ImGuiDataType_U32, &round->data.dataInt);
+        case ROUND_COMMAND_LOOP_START:
+        {
+            uint32_t step = 1;
+            ImGui::InputScalar("##input", ImGuiDataType_U32, &round->data.dataInt, &step);
+            break;
+        }
+
+        case ROUND_COMMAND_LOOP_END:
             break;
 
         case ROUND_COMMAND_END:
@@ -213,7 +222,10 @@ void RoundEditor::HandleSaveLoad()
     ImGui::SameLine();
 
     if (ImGui::Button("Load"))
+    {
         Load(mRoundInfo, std::string(WAVES_PATH).append(mFileName).c_str());
+        mSeparators.resize(mRoundInfo.size());
+    }
 
     ImGui::SameLine();
     ImGui::Text("File name");

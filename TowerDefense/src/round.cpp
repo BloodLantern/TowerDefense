@@ -17,6 +17,9 @@ uint32_t Round::mCurrentCommand;
 float_t Round::mTimer;
 bool Round::mEnded;
 
+std::stack<Round::LoopInfo> Round::mLoopStack;
+
+
 void Round::StartRound(const RoundInfo* const info)
 {
 	assert(info != nullptr && "Round info should never be null");
@@ -57,8 +60,6 @@ void Round::OnUpdate()
 	switch (command)
 	{
 		case ROUND_COMMAND_SPAWN_ENEMY:
-			// TODO: Spawn appropriate enemy
-
 			int32_t screenX;
 			int32_t screenY;
 			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
@@ -118,6 +119,38 @@ void Round::OnUpdate()
 			// PlaySound(mRoundInfo[mCurrentCommand].data.dataInt);
 			AdvanceRound();
 			break;
+
+		case ROUND_COMMAND_LOOP_START:
+			mLoopStack.push(LoopInfo(mCurrentCommand, mRoundInfo[mCurrentCommand].data.dataInt));
+
+			AdvanceRound();
+			break;
+
+		case ROUND_COMMAND_LOOP_END:
+		{
+			LoopInfo& info = mLoopStack.top();
+
+			if (info.length == 0)
+			{
+				mLoopStack.pop();
+				AdvanceRound();
+				break;
+			}
+
+			info.length--;
+
+			if (info.length == 0)
+			{
+				mLoopStack.pop();
+				AdvanceRound();
+				break;
+			}
+
+			mCurrentCommand = info.startCommandID;
+
+			AdvanceRound();
+			break;
+		}
 
 		case ROUND_COMMAND_END:
 			// Set ended
