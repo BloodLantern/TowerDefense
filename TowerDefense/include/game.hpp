@@ -35,4 +35,11 @@ private:
     double_t mDeltaTime;
     double_t mPlayingSpeedDeltaTime;
     float_t mPlayingSpeed;
+
+    void DrawHud();
+    void CheckEndRound();
+
+    void UpdateTowers();
+    void UpdateEnemies();
+    void UpdateProjectiles();
 };

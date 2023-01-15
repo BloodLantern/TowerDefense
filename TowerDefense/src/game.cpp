@@ -30,26 +30,76 @@ void Game::Update()
     mDeltaTime = Globals::gIO->DeltaTime;
     mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
     
+    mPlayField->Draw();
+
+    Round::OnUpdate();
+
+    mPlayer->OnRender();
+
+    UpdateTowers();
+    UpdateEnemies();
+    UpdateProjectiles();
+
+    DrawHud();
+    CheckEndRound();
+}
+
+void Game::Shutdown()
+{
+    delete mPlayField;
+    delete mPlayer;
+}
+
+void Game::DrawHud()
+{
     // Delta time
     ImGui::Begin("Delta time");
     ImGui::SliderFloat("Play speed", &mPlayingSpeed, .0f, 5.f);
     ImGui::End();
 
     // Hp, money and waves
-	if (ImGui::Begin("Player info"))
-	{
+    if (ImGui::Begin("Player info"))
+    {
         ImGui::InputScalar("HP", ImGuiDataType_U16, &mPlayer->GetLife());
         ImGui::InputScalar("Money", ImGuiDataType_U32, &mPlayer->GetMoney());
         ImGui::InputScalar("Wave", ImGuiDataType_U32, &currentWave);
-	}
-	ImGui::End();
+    }
+    ImGui::End();
+}
 
-    mPlayField->Draw();
+void Game::CheckEndRound()
+{
 
-    Round::OnUpdate();
+    if (Round::HasEnded() && enemies.empty())
+    {
+        Round::GrantEndRoundMoney();
 
-    mPlayer->OnRender();
-    
+        // Kill all projectiles
+        for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
+        {
+            Projectile* p = *_p;
+            _p = projectiles.erase(_p);
+            delete p;
+        }
+
+        // Reset attack cooldown for towers
+        for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
+            (*_t)->SetTimeSinceLastAttack(DBL_MAX);
+
+        currentWave++;
+        mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
+        Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
+
+        std::string fileName(WAVES_PATH "Wave");
+        fileName.append(std::to_string(currentWave));
+
+        RoundEditor::Load(roundInfo, fileName.c_str());
+        Round::StartRound(roundInfo.data());
+    }
+}
+
+void Game::UpdateTowers()
+{
     for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); )
     {
         Tower* t = *_t;
@@ -64,15 +114,21 @@ void Game::Update()
 
             // Set its projectiles' pointers to nullptr
             for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
-                if ((*_p)->GetOwner() == t)
-                    (*_p)->SetOwner(nullptr);
+            {
+                Projectile* p = *_p;
+                if (p->GetOwner() == t)
+                    p->SetOwner(nullptr);
 
+            }
             delete t;
             continue;
         }
 
         _t++;
     }
+}
+void Game::UpdateEnemies()
+{
 
     for (std::vector<Enemy*>::iterator _e = enemies.begin(); _e != enemies.end(); )
     {
@@ -90,7 +146,10 @@ void Game::Update()
         e->OnRender();
         _e++;
     }
+}
 
+void Game::UpdateProjectiles()
+{
     for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
     {
         Projectile* p = *_p;
@@ -107,37 +166,4 @@ void Game::Update()
         p->OnRender();
         _p++;
     }
-
-    if (Round::HasEnded() && enemies.empty())
-    {
-        Round::GrantEndRoundMoney();
-
-        // Kill all projectiles
-        for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
-        {
-            Projectile* p = *_p;
-            _p = projectiles.erase(_p);
-            delete p;
-        }
-    
-        // Reset attack cooldown for towers
-        for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
-            (*_t)->SetTimeSinceLastAttack(DBL_MAX);
-
-        currentWave++;
-        mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/20");
-        Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
-
-        std::string fileName(WAVES_PATH "Wave");
-        fileName.append(std::to_string(currentWave));
-
-        RoundEditor::Load(roundInfo, fileName.c_str());
-        Round::StartRound(roundInfo.data());
-    }
-}
-
-void Game::Shutdown()
-{
-    delete mPlayField;
-    delete mPlayer;
 }
