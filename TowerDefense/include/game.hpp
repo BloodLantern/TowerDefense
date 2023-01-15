@@ -25,7 +25,8 @@ public:
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
     double_t GetDeltaTime() const { return mDeltaTime; }
-    void SetPlayingSpeed(float speed) { mPlayingSpeed = speed; }
+    int32_t GetPlayingSpeed() const { return mPlayingSpeed; }
+    void SetPlayingSpeed(int32_t speed) { mPlayingSpeed = speed; }
 
 private:
     PlayField* mPlayField;
@@ -35,7 +36,7 @@ private:
 
     double_t mDeltaTime;
     double_t mPlayingSpeedDeltaTime;
-    float_t mPlayingSpeed;
+    int32_t mPlayingSpeed;
 
     void DrawHud();
     void CheckEndRound();

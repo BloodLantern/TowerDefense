@@ -10,7 +10,7 @@
 
 #define TOWER_BAR_X Globals::gWindowX
 #define TOWER_BAR_Y (Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_HEIGHT)
-#define TOWER_BAR_WIDTH Globals::gWindowWidth
+#define TOWER_BAR_WIDTH (Globals::gWindowWidth - 7 * GRID_SQUARE_SIZE - GRID_SQUARE_SIZE / 2)
 
 #define TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED IM_COL32(0xC0, 0x00, 0x00, 0x70)
 

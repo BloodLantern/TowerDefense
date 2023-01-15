@@ -65,6 +65,9 @@ void Game::DrawHud()
 
     position.x += 300;
     Hud::DrawRounds(position);
+
+    position = ImVec2(Globals::gGridX + Globals::gWindowWidth - 230, Globals::gGridY + Globals::gWindowHeight - 70);
+    Hud::DrawSpeed(position);
 }
 
 void Game::CheckEndRound()
