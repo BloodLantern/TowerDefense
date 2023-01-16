@@ -141,12 +141,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\projectiles\bee_projectile.cpp" />
     <ClCompile Include="src\entities\enemies\ant_enemy.cpp" />
     <ClCompile Include="src\entities\enemies\gold_scarab_enemy.cpp" />
     <ClCompile Include="src\entities\enemies\ladybug_enemy.cpp" />
     <ClCompile Include="src\entities\enemies\mite_enemy.cpp" />
     <ClCompile Include="src\entities\enemies\red_ant_enemy.cpp" />
     <ClCompile Include="src\entities\projectiles\cannon_ball_projectile.cpp" />
+    <ClCompile Include="src\entities\towers\beehive_tower.cpp" />
     <ClCompile Include="src\entities\towers\cannon_tower.cpp" />
     <ClCompile Include="src\entities\towers\test_tower.cpp" />
     <ClCompile Include="src\hud.cpp" />
@@ -181,6 +183,7 @@
     <ClCompile Include="src\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\entities\projectiles\bee_projectile.hpp" />
     <ClInclude Include="include\entities\enemies\ant_enemy.hpp" />
     <ClInclude Include="include\entities\enemies\gold_scarab_enemy.hpp" />
     <ClInclude Include="include\entities\enemies\ladybug_enemy.hpp" />

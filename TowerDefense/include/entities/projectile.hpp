@@ -33,6 +33,7 @@ protected:
 	uint32_t mDamage;
 	uint16_t mPierce;
 
+	Enemy* mTarget = nullptr;
 	Tower* mOwner = nullptr;
 
 	virtual void HandleEnemyCollision();
@@ -42,6 +43,4 @@ private:
 	
 	float_t mSpeed;
 	float_t mLifetime;
-
-	Enemy* mTarget = nullptr;
 };
