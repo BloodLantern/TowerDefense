@@ -46,7 +46,7 @@ void Projectile::HandleEnemyCollision()
 			continue;
 
 		// If it collides
-		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < PROJECTILE_COLLISION_RADIUS * 20.f)
+		if (Vector2(enemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < PROJECTILE_COLLISION_RADIUS * PROJECTILE_COLLISION_RADIUS)
 		{
 			uint32_t damageDealt;
 			// If the enemy died, update tower kill stat

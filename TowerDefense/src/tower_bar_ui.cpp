@@ -5,6 +5,7 @@
 
 #include "test_tower.hpp"
 #include "cannon_tower.hpp"
+#include "beehive_tower.hpp"
 
 #define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
@@ -22,9 +23,11 @@ TowerBarUI::TowerBarUI()
 {
 	towerTextures[0] = Globals::gResources->GetTexture("towers\\unicorn");
 	towerTextures[1] = Globals::gResources->GetTexture("towers\\cannon_icon");
+	towerTextures[2] = Globals::gResources->GetTexture("towers\\beehive");
 		
 	mTowerTemplates[0] = new TestTower(towerTextures[0]);
 	mTowerTemplates[1] = new CannonTower(towerTextures[1]);
+	mTowerTemplates[2] = new BeehiveTower(towerTextures[2]);
 }
 
 TowerBarUI::~TowerBarUI()
