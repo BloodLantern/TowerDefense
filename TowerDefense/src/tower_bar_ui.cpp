@@ -87,30 +87,35 @@ void TowerBarUI::HandleMouse()
 		if (!mSelectedTower)
 			mSelectedTower = mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->Clone();
 
-		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
-		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
+		const uint8_t selectedTowerWidthTiles = mSelectedTower->GetWidth();
+		const uint8_t selectedTowerHeightTiles = mSelectedTower->GetHeight();
+		const int32_t selectedTowerWidthPixels = selectedTowerWidthTiles * GRID_SQUARE_SIZE;
+		const int32_t selectedTowerHeightPixels = selectedTowerHeightTiles * GRID_SQUARE_SIZE;
 
 		mSelectedTower->SetPixelPosition(Point2(mousePos.x - Globals::gGridX, mousePos.y - Globals::gGridY));
 		const bool isOnGrid = mSelectedTower->IsOnGrid();
-		const Point2& tilePosition = mSelectedTower->GetTilePosition();
 
-		// If it is on the grid, snap it
 		if (isOnGrid)
 		{
+			// If it is on the grid, snap it according to its size
+			const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
+			mSelectedTower->SetPixelPosition(Point2(pixelPosition.x - (selectedTowerWidthTiles / 2.f - 0.5f) * GRID_SQUARE_SIZE,
+													pixelPosition.y - (selectedTowerHeightTiles / 2.f - 0.5f) * GRID_SQUARE_SIZE));
 			mSelectedTower->SnapToGrid();
 		}
-		// Otherwise, make it follow the mouse
 		else
 		{
+			// Otherwise, make it follow the mouse
 			const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
-			mSelectedTower->SetPixelPosition(Point2(pixelPosition.x - selectedTowerWidth / 2, pixelPosition.y - selectedTowerHeight / 2));
+			mSelectedTower->SetPixelPosition(Point2(pixelPosition.x - selectedTowerWidthPixels / 2, pixelPosition.y - selectedTowerHeightPixels / 2));
 		}
 
+		const Point2& tilePosition = mSelectedTower->GetTilePosition();
 		// Check for tile availability
 		bool available = true;
-		for (uint8_t x = 0; x < mSelectedTower->GetWidth(); x++)
+		for (uint8_t x = 0; x < selectedTowerWidthTiles; x++)
 		{
-			for (uint8_t y = 0; y < mSelectedTower->GetHeight(); y++)
+			for (uint8_t y = 0; y < selectedTowerHeightTiles; y++)
 			{
 				if (available)
 				{
@@ -132,7 +137,6 @@ void TowerBarUI::HandleMouse()
 
 			// Tower rendering
 			mSelectedTower->DrawRange(available ? TOWER_RANGE_COLOR_AVAILABLE : TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
-			//Globals::gDrawList->AddImage(mSelectedTower->GetTexture()->id, topLeft, ImVec2(topLeft.x + selectedTowerWidth, topLeft.y + selectedTowerHeight));
 			mSelectedTower->OnRender();
 		}
 		// If the mouse dropped the tower somewhere
