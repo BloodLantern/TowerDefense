@@ -12,9 +12,5 @@
 class TestTower : public Tower
 {
 public:
-	TestTower(const TestTower& other);
 	TestTower(Texture* texture);
-
-private:
-
 };
