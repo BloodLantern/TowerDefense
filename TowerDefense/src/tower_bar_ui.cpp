@@ -12,8 +12,7 @@
 
 #define TOWER_BAR_TOWER_OFFSET_X 8
 
-#define TOWER_BAR_X Globals::gWindowX
-#define TOWER_BAR_Y (Globals::gWindowY + Globals::gWindowHeight - TOWER_BAR_HEIGHT)
+#define TOWER_BAR_Y (Globals::gWindowHeight - TOWER_BAR_HEIGHT)
 #define TOWER_BAR_WIDTH (Globals::gWindowWidth - 7 * GRID_SQUARE_SIZE - GRID_SQUARE_SIZE / 2)
 
 #define TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED IM_COL32(0xC0, 0x00, 0x00, 0x70)
@@ -33,7 +32,7 @@ TowerBarUI::~TowerBarUI()
 
 void TowerBarUI::Draw()
 {
-	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;
+	const int32_t x = Globals::gWindowX, y = Globals::gWindowY + TOWER_BAR_Y;
 	const int32_t width = TOWER_BAR_WIDTH, height = TOWER_BAR_HEIGHT;
 
 	Globals::gDrawList->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), TOWER_BAR_UI_BACKGROUND_COLOR);
@@ -51,17 +50,19 @@ void TowerBarUI::HandleMouse()
 	if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
 		return;
 
-	const int32_t x = TOWER_BAR_X, y = TOWER_BAR_Y;
+	const int32_t x = 0, y = TOWER_BAR_Y;
 	const int32_t height = TOWER_BAR_HEIGHT;
 
 	// Overlay
 
 	const ImVec2 mousePos = Globals::gIO->MousePos;
 	// If on the tower bar
-	if (mousePos.x > x && mousePos.y > y && mousePos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y + height)
+	if (mousePos.x > Globals::gWindowX && mousePos.y > Globals::gWindowY + y
+		&& mousePos.x < Globals::gWindowX + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < Globals::gWindowY + y + height)
 	{
-		ImVec2 topLeft(mousePos.x - x, y + TOWER_BAR_Y_OFFSET / 2);
-		topLeft.x = (float)(((int32_t)topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + x;
+		// Draw an overlay on the tower
+		ImVec2 topLeft(mousePos.x - Globals::gWindowX, Globals::gWindowY + y + TOWER_BAR_Y_OFFSET / 2);
+		topLeft.x = (float_t)(((int32_t)topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + Globals::gWindowX;
 		ImVec2 bottomRight(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
 
 		Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR);
@@ -70,12 +71,15 @@ void TowerBarUI::HandleMouse()
 
 	// Drag and drop
 
-	const ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+	mouseClickedPos.x -= Globals::gWindowX;
+	mouseClickedPos.y -= Globals::gWindowY;
 	// If the click started on the tower bar and the mouse is dragging outside
 	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y
 		// Optimization
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
+		// Create the tower if it doesn't already exist
 		if (!mSelectedTower)
 			mSelectedTower = mTowerTemplates[std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1)]->Clone();
 
@@ -86,10 +90,12 @@ void TowerBarUI::HandleMouse()
 		const bool isOnGrid = mSelectedTower->IsOnGrid();
 		const Point2& tilePosition = mSelectedTower->GetTilePosition();
 
+		// If it is on the grid, snap it
 		if (isOnGrid)
 		{
 			mSelectedTower->SnapToGrid();
 		}
+		// Otherwise, make it follow the mouse
 		else
 		{
 			const Point2& pixelPosition = mSelectedTower->GetPixelPosition();
