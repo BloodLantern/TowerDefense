@@ -41,6 +41,8 @@ public:
 	virtual void OnRender() override;
 	virtual void OnUpdate() override;
 
+	static void InitUITextures();
+
 	std::string GetName() const { return mName; }
 	uint32_t GetCost() const { return mCost; }
 	uint32_t GetDamage() const { return mDamage; }
@@ -92,6 +94,14 @@ private:
 	Player* mOwner = nullptr;
 
 	bool mSelected = false;
+
+	static Texture* mUpgradeIconTexture;
+	static Texture* mKillIconTexture;
+	static Texture* mDamageIconTexture;
+	static Texture* mMoneyIconTexture;
+	static Texture* mGenericUpgradeAttackDamageIconTexture;
+	static Texture* mGenericUpgradeAtackSpeedIconTexture;
+	static Texture* mGenericUpgradeRangeIconTexture;
 
 	void UpdateGeneric(GenericUpgradeType upgrade);
 	void UpdateDamage();

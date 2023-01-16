@@ -30,6 +30,14 @@ static const char* TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT = "Kill count";
 static const char* TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT = "Damage dealt";
 static const char* TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT = "Money generated";
 
+Texture* Tower::mUpgradeIconTexture = nullptr;
+Texture* Tower::mKillIconTexture = nullptr;
+Texture* Tower::mDamageIconTexture = nullptr;
+Texture* Tower::mMoneyIconTexture = nullptr;
+Texture* Tower::mGenericUpgradeAttackDamageIconTexture = nullptr;
+Texture* Tower::mGenericUpgradeAtackSpeedIconTexture = nullptr;
+Texture* Tower::mGenericUpgradeRangeIconTexture = nullptr;
+
 Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
 	: Entity(),
 	mProjectileTemplate(projectileTemplate)
@@ -85,6 +93,17 @@ void Tower::OnUpdate()
 
 	// Update attack cooldown
 	mTimeSinceLastAttack += Globals::gGame->GetPlayingSpeedDeltaTime();
+}
+
+void Tower::InitUITextures()
+{
+	Tower::mUpgradeIconTexture = Globals::gResources->GetTexture("ui\\upgrade_icon");
+	Tower::mKillIconTexture = Globals::gResources->GetTexture("ui\\kill_icon");
+	Tower::mDamageIconTexture = Globals::gResources->GetTexture("ui\\damage_icon");
+	Tower::mMoneyIconTexture = Globals::gResources->GetTexture("ui\\money_icon");
+	Tower::mGenericUpgradeAttackDamageIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_attack_damage_icon");
+	Tower::mGenericUpgradeAtackSpeedIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon");
+	Tower::mGenericUpgradeRangeIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon");
 }
 
 void Tower::UpdateGeneric(GenericUpgradeType upgrade)
@@ -262,7 +281,7 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
 	ImGui::BeginDisabled();
-	if (ImGui::ImageButton("upgradeCustomButton", Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+	if (ImGui::ImageButton("upgradeCustomButton", mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
 	{
 		std::cout << "Custom upgrade" << std::endl;
 	}
@@ -281,7 +300,7 @@ bool Tower::DrawUpgradeButton(GenericUpgradeType upgrade)
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0x16 / 255.f, 0xB0 / 255.f, 0x2B / 255.f, 0xC0 / 255.f));
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
 
-	bool clicked = ImGui::ImageButton(("upgrade" + std::to_string(upgrade) + "Button").c_str(), Globals::gResources->GetTexture("ui\\upgrade_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+	bool clicked = ImGui::ImageButton(("upgrade" + std::to_string(upgrade) + "Button").c_str(), mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 	
 	ImGui::PopStyleVar();
 	ImGui::PopStyleColor(3);
@@ -306,19 +325,19 @@ void Tower::InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::
 void Tower::DrawStats()
 {
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
-	ImGui::Image(Globals::gResources->GetTexture("ui\\kill_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+	ImGui::Image(mKillIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 	AddTooltip(TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT);
 	ImGui::SameLine();
 	ImGui::Text("%d", mKillCount);
 	AddTooltip(TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT);
 
-	ImGui::Image(Globals::gResources->GetTexture("ui\\damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+	ImGui::Image(mDamageIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 	AddTooltip(TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT);
 	ImGui::SameLine();
 	ImGui::Text("%d", mDamageDealt);
 	AddTooltip(TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT);
 
-	ImGui::Image(Globals::gResources->GetTexture("ui\\money_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+	ImGui::Image(mMoneyIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 	AddTooltip(TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT);
 	ImGui::SameLine();
 	ImGui::Text("$%d", mMoneyGenerated);
@@ -333,7 +352,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 	switch (upgrade)
 	{
 		case GenericUpgradeType::DAMAGE:
-			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_damage_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(mGenericUpgradeAttackDamageIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
@@ -344,7 +363,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 
 		case GenericUpgradeType::ATTACK_SPEED:
 		{
-			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(mGenericUpgradeAtackSpeedIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
@@ -358,7 +377,7 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 		}
 
 		case GenericUpgradeType::RANGE:
-			ImGui::Image(Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon")->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(mGenericUpgradeRangeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();

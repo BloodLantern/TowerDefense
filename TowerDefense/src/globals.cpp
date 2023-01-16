@@ -34,6 +34,8 @@ void Globals::InitGlobals(Game* g)
 {
 	gGame = g;
 	gResources = new Resources;
+
+	Tower::InitUITextures();
 }
 
 void Globals::DestroyGlobals()
