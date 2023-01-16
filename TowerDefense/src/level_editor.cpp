@@ -320,6 +320,7 @@ void LevelEditor::HandleClear()
 				}
 			}
 
+			pf->GetPathNodes().clear();
 			AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
 			ImGui::CloseCurrentPopup();
 		}
