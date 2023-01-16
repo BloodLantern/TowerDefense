@@ -111,4 +111,5 @@ private:
 	void DrawStats();
 	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
 	void AddTooltip(const char* text);
+	void InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
 };

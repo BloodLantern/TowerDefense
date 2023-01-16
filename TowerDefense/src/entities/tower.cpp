@@ -23,42 +23,41 @@
 #define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
 #define TOWER_PANEL_IMAGE_SIZE_MEDIUM ImVec2(TOWER_PANEL_TEXT_SIZE_MEDIUM, TOWER_PANEL_TEXT_SIZE_MEDIUM)
 
-#define TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT "Attack damage"
-#define TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT "Attack speed - number of attacks per second"
-#define TOWER_PANEL_RANGE_TOOLTIP_TEXT "Range - in tiles"
-#define TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT "Kill count"
-#define TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT "Damage dealt"
-#define TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT "Money generated"
+static const char* TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT = "Attack damage";
+static const char* TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT = "Attack speed - number of attacks per second";
+static const char* TOWER_PANEL_RANGE_TOOLTIP_TEXT = "Range - in tiles";
+static const char* TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT = "Kill count";
+static const char* TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT = "Damage dealt";
+static const char* TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT = "Money generated";
 
 Tower::Tower(const Tower& other)
 	: Entity(other),
-	mName(other.mName),
 	mProjectileTemplate(other.mProjectileTemplate),
-	mStartDamage(other.mProjectileTemplate->GetDamage()),
-	mDamage(mStartDamage),
-	mStartAttackSpeed(other.mAttackSpeed),
-	mAttackSpeed(mStartAttackSpeed),
-	mStartRange(other.mRange),
-	mRange(mStartRange),
 	mWidth(other.mWidth),
 	mHeight(other.mHeight)
 {
+	InitStats(
+		other.mStartDamage,
+		other.mStartAttackSpeed,
+		other.mStartRange,
+		other.mName,
+		other.mCost,
+		other.mTexture
+	);
 }
 
 Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
 	: Entity(),
-	mProjectileTemplate(projectileTemplate),
-	mStartDamage(projectileTemplate->GetDamage()),
-	mDamage(mStartDamage),
-	mStartAttackSpeed(attackSpeed),
-	mAttackSpeed(attackSpeed),
-	mStartRange(range),
-    mRange(range),
-	mName(name),
-	mCost(cost),
-	mMoneyInvested(cost)
+	mProjectileTemplate(projectileTemplate)
 {
-	mTexture = texture;
+	InitStats(
+		projectileTemplate->GetDamage(),
+		attackSpeed,
+		range,
+		name,
+		cost,
+		texture
+	);
 }
 
 void Tower::Shoot(Projectile* projTemplate)
@@ -295,6 +294,20 @@ bool Tower::DrawUpgradeButton(GenericUpgradeType upgrade)
 	ImGui::PopStyleColor(3);
 
 	return clicked;
+}
+
+void Tower::InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture * texture)
+{
+	mStartDamage = damage;
+	mDamage = damage;
+	mStartAttackSpeed = attackSpeed;
+	mAttackSpeed = attackSpeed;
+	mStartRange = range;
+	mRange = range;
+	mName = name;
+    mCost = cost;
+	mMoneyInvested = cost;
+	mTexture = texture;
 }
 
 void Tower::DrawStats()
