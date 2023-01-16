@@ -13,8 +13,7 @@ BeeProjectile::BeeProjectile(BeehiveTower* hive)
 	SetScale(.05f);
 
 	mIdleVelocityTimer = 0.f;
-	mOnTarget = false;
-	mGoingBackToHive = false;
+	mPose = BEE_POSE_IDLE;
 }
 
 BeeProjectile::~BeeProjectile()
@@ -22,56 +21,56 @@ BeeProjectile::~BeeProjectile()
 	mHive->RemoveBee();
 }
 
+Projectile* BeeProjectile::Clone() const
+{
+	return new BeeProjectile(mHive);
+}
+
 void BeeProjectile::OnUpdate()
 {
-	if (mTarget)
+	switch (mPose)
 	{
-		float_t range = mHive->GetRange();
-		if (Vector2(mTarget->GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm() >= range * range)
-		{
-			mTarget = nullptr;
-		}
-		return;
-	}
-
-	float_t range = mHive->GetRange() * GRID_SQUARE_SIZE;
-	range *= range;
-	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
-	{
-		Enemy* enemy = *it;
-
-		float_t norm = Vector2(enemy->GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm();
-		if (norm < range)
-		{
-			mTarget = enemy;
+		case BEE_POSE_IDLE:
+			HandleIdleFloating();
+			FindTarget();
 			break;
-		}
+
+		case BEE_POSE_BACK_TO_HIVE:
+			if (CheckAtHive())
+				mPose = BEE_POSE_IDLE;
+			FindTarget();
+			break;
+
+		case BEE_POSE_GOING_TO_TARGET:
+			if (mTarget->toDelete)
+			{
+				// Target is dead, go back to hive
+				SetGoingBackToHive();
+				break;
+			}
+
+			// Set velocity to go to the target fairly fast
+			mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
+			HandleGoingToTarget();
+			break;
+
+		case BEE_POSE_ON_TARGET:
+			if (mTarget->toDelete)
+			{
+				// Target is dead, go back to hive
+				SetGoingBackToHive();
+				break;
+			}
+
+			HandleEnemyCollision();
 	}
 
-	if (mTarget && !mTarget->toDelete)
-	{
-		mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
-	}
-	else if (!mGoingBackToHive)
-	{
-		mIdleVelocityTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
-		if (mIdleVelocityTimer < 0)
-		{
-			mIdleVelocityTimer = RANDOM_FLOAT(3.f);
-
-			mVelocity = Vector2(10.f - RANDOM_FLOAT(20.f), 10.f - RANDOM_FLOAT(20.f));
-		}
-	}
-	else
-	{
-		if (Vector2(GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm() >= 20.f * 20.f)
-			mGoingBackToHive = false;
-	}
-
-	HandleEnemyCollision();
-
-	// Update its position
+	// Update position
 	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
+	// Always stay in hive range
+
+	if (!CheckInHiveRange())
+		SetGoingBackToHive();
 }
 
 void BeeProjectile::OnRender()
@@ -83,49 +82,112 @@ void BeeProjectile::OnRender()
 
 void BeeProjectile::HandleEnemyCollision()
 {
-	if (!mTarget)
-		return;
-
-	if (!mOnTarget)
-	{
-		float_t norm = Vector2(mTarget->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm();
-		if (norm < 10.f * 10.f)
-			mOnTarget = true;
-		return;
-	}
-	else
-	{
-		SetPixelPosition(mTarget->GetPixelPosition());
-	}
-
-	if (mTarget->toDelete)
-	{
-		mTarget = nullptr;
-		mVelocity = Vector2(GetPixelPosition(), mHive->GetPixelPosition()).Normalize() * 10;
-		mGoingBackToHive = true;
-		return;
-	}
+	// Stick to target
+	SetPixelPosition(mTarget->GetPixelPosition());
 	
+	// Update timer
 	mHookedTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
 
 	if (mHookedTimer < 0.f)
 	{
+		// Set random timer for next damage ([.8;1.3] s)
 		mHookedTimer = .8f + RANDOM_FLOAT(.5f);
+
+		// Deal damage and update tower
 		uint32_t damageDealt;
 		if (mTarget->DealDamage(mDamage, damageDealt))
 		{
 			mHive->IncreaseKillCount(1);
 			mOwner->IncreaseMoneyGenerated(mTarget->GetMoneyDrop());
 
-			mTarget = nullptr;
-			mVelocity = Vector2(GetPixelPosition(), mHive->GetPixelPosition()).Normalize() * 10;
-			mGoingBackToHive = true;
+			// Go back to hive
+			SetGoingBackToHive();
 		}
 		mHive->IncreaseDamageDealt(damageDealt);
 	}
 }
 
-Projectile* BeeProjectile::Clone() const
+bool BeeProjectile::CheckInHiveRange()
 {
-	return new BeeProjectile(mHive);
+	// Get pixel range of the hive
+	float_t range = mHive->GetRange() * GRID_SQUARE_SIZE;
+
+	// Check bee still in range
+	return Vector2(GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm() < range * range;
+}
+
+bool BeeProjectile::CheckAtHive()
+{
+	Point2 dst = mHive->GetPixelPosition();
+
+	// Get center position
+	dst.x += mHive->GetWidth() / 2.f * GRID_SQUARE_SIZE;
+	dst.y += mHive->GetHeight() / 2.f * GRID_SQUARE_SIZE;
+
+	// TODO use hive hitbox instead of hardcoded 20 pixels
+	return Vector2(GetPixelPosition(), dst).GetSquaredNorm() < 20.f * 20.f;
+}
+
+
+void BeeProjectile::FindTarget()
+{
+	// Get pixel range of the hive
+	float_t range = mHive->GetRange() * GRID_SQUARE_SIZE;
+
+	// Square range for optimisation (avoid sqrt call)
+	range *= range;
+
+	// Loop the enemies
+	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
+	{
+		Enemy* enemy = *it;
+
+		// Get squared distance
+		float_t norm = Vector2(enemy->GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm();
+		if (norm < range)
+		{
+			// Found enemy in range, set target
+			mTarget = enemy;
+			mPose = BEE_POSE_GOING_TO_TARGET;
+			break;
+		}
+	}
+}
+
+void BeeProjectile::HandleIdleFloating()
+{
+	// Check timer
+	mIdleVelocityTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
+	if (mIdleVelocityTimer < 0)
+	{
+		// Set random timer to change direction
+		mIdleVelocityTimer = RANDOM_FLOAT(3.f);
+
+		// Set random velocity ([-10;+10] px/s in any direction)
+		mVelocity = Vector2(10.f - RANDOM_FLOAT(20.f), 10.f - RANDOM_FLOAT(20.f));
+	}
+}
+
+void BeeProjectile::SetGoingBackToHive()
+{
+	// Set no target
+	mTarget = nullptr;
+
+	Point2 dst = mHive->GetPixelPosition();
+
+	// Get center position
+	dst.x += mHive->GetWidth() / 2.f * GRID_SQUARE_SIZE;
+	dst.y += mHive->GetHeight() / 2.f * GRID_SQUARE_SIZE;
+
+	// Set velocity to slowly go back to hive
+	mVelocity = Vector2(GetPixelPosition(), dst).Normalize() * 20;
+
+	mPose = BEE_POSE_BACK_TO_HIVE;
+}
+
+void BeeProjectile::HandleGoingToTarget()
+{
+	float_t norm = Vector2(mTarget->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm();
+	if (norm < 10.f * 10.f)
+		mPose = BEE_POSE_ON_TARGET;
 }
