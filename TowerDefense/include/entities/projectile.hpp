@@ -37,10 +37,10 @@ protected:
 	Tower* mOwner = nullptr;
 
 	virtual void HandleEnemyCollision();
-
-private:
 	Vector2 mVelocity;
 	
 	float_t mSpeed;
+
+private:
 	float_t mLifetime;
 };

@@ -19,5 +19,9 @@ private:
 	BeehiveTower* mHive;
 
 	float_t mHookedTimer;
+	float_t mIdleVelocityTimer;
+
+	bool mOnTarget;
+	bool mGoingBackToHive;
 };
 

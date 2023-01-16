@@ -77,11 +77,13 @@ protected:
 
 	uint8_t mWidth = 1, mHeight = 1;
 
+	double_t mTimeSinceLastAttack = DBL_MAX;
+
+	void HandleSelection();
+
 private:
 	uint32_t mMoneyInvested;
 	float_t mSellingFactor = 0.7f;
-
-	double_t mTimeSinceLastAttack = DBL_MAX;
 
 	uint16_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
 	uint8_t mCustomUpgradeLevel = 0;
@@ -111,7 +113,6 @@ private:
 	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
 	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };
 
-	void HandleSelection();
 	void HandleShoot();
 	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
 	// Returns whether the button was clicked
