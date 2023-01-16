@@ -141,6 +141,9 @@
     <ClCompile Include="src\entities\towers\test_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\projectiles\cannon_ball_projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\maths\Point2.h">
@@ -234,6 +237,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\entities\towers\test_tower.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entities\projectiles\cannon_ball_projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

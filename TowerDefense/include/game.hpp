@@ -19,8 +19,8 @@ public:
 
     std::vector<Enemy*> enemies;
     std::vector<Projectile*> projectiles;
-    uint32_t currentWave;
-    uint32_t maxWave;
+    uint32_t currentWave = 1;
+    uint32_t maxWave = 20;
     std::vector<RoundInfo> roundInfo;
 
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
@@ -32,16 +32,16 @@ public:
     void Restart();
 
 private:
-    PlayField* mPlayField;
-    Player* mPlayer;
+    PlayField* mPlayField = nullptr;
+    Player* mPlayer = nullptr;
 
-    bool mEnded;
+    bool mEnded = false;
 
-    std::string mRpcDetailsText;
+    std::string mRpcDetailsText = "Details text";
 
-    double_t mDeltaTime;
-    double_t mPlayingSpeedDeltaTime;
-    int32_t mPlayingSpeed;
+    double_t mDeltaTime = 0.0;
+    double_t mPlayingSpeedDeltaTime = 0.0;
+    int32_t mPlayingSpeed = 1;
 
     void DrawHud();
     void CheckEndRound();

@@ -30,11 +30,12 @@ class Tower : public Entity
 	};
 
 public:
-	Tower(const Tower& other);
 	Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
 	//virtual ~Tower() { delete mProjectileTemplate; };
 
-	virtual void Shoot(Projectile* projTemplate);
+	virtual Tower* Clone() const;
+
+	virtual void Shoot();
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
@@ -64,6 +65,9 @@ protected:
 	float_t mStartAttackSpeed;
 	float_t mStartRange;
 
+	Projectile* mProjectileTemplate;
+	Enemy* mTarget = nullptr;
+
 	uint32_t mDamage;
 	// Number of attacks per second
 	float_t mAttackSpeed;
@@ -76,9 +80,6 @@ private:
 	float_t mSellingFactor = 0.7f;
 
 	double_t mTimeSinceLastAttack = DBL_MAX;
-
-	Projectile* mProjectileTemplate;
-	Enemy* mTarget = nullptr;
 
 	uint16_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
 	uint8_t mCustomUpgradeLevel = 0;

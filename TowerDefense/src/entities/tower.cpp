@@ -30,22 +30,6 @@ static const char* TOWER_PANEL_KILL_COUNT_TOOLTIP_TEXT = "Kill count";
 static const char* TOWER_PANEL_DAMAGE_DEALT_TOOLTIP_TEXT = "Damage dealt";
 static const char* TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT = "Money generated";
 
-Tower::Tower(const Tower& other)
-	: Entity(other),
-	mProjectileTemplate(other.mProjectileTemplate),
-	mWidth(other.mWidth),
-	mHeight(other.mHeight)
-{
-	InitStats(
-		other.mStartDamage,
-		other.mStartAttackSpeed,
-		other.mStartRange,
-		other.mName,
-		other.mCost,
-		other.mTexture
-	);
-}
-
 Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
 	: Entity(),
 	mProjectileTemplate(projectileTemplate)
@@ -60,8 +44,17 @@ Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range,
 	);
 }
 
-void Tower::Shoot(Projectile* projTemplate)
+Tower* Tower::Clone() const
 {
+	Tower* result = new Tower(mProjectileTemplate, mStartAttackSpeed, mStartRange, mName, mCost, mTexture);
+	result->mWidth = mWidth;
+	result->mHeight = mHeight;
+	return result;
+}
+
+void Tower::Shoot()
+{
+	Projectile* projTemplate = mProjectileTemplate->Clone();
 	projTemplate->SetDamage(mDamage);
 	//projTemplate->SetTarget(mTarget);
 	Point2 pixelPosition(GetPixelPosition().x + mWidth, GetPixelPosition().y + mHeight);
@@ -174,7 +167,7 @@ void Tower::HandleShoot()
 		if (mTarget)
 		{
 			mTimeSinceLastAttack = 0;
-			Shoot(new Projectile(*mProjectileTemplate));
+			Shoot();
 		}
 	}
 }

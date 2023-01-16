@@ -7,12 +7,14 @@
 class Tower;
 
 #define PROJECTILE_DEFAULT_POSITION Point2(NAN, NAN)
+#define PROJECTILE_COLLISION_RADIUS 20.f
 
 class Projectile : public Entity
 {
 public:
-	Projectile(const Projectile& other);
 	Projectile(float_t speed, uint32_t damage, uint16_t pierce, float_t lifetime);
+
+	virtual Projectile* Clone() const;
 
 	virtual void OnRender() override;
 	virtual void OnUpdate() override;
@@ -25,17 +27,21 @@ public:
 	Tower* GetOwner() const { return mOwner; }
 	void SetOwner(Tower* owner) { mOwner = owner; }
 
+protected:
+	std::vector<Enemy*> mHitEnemies;
+	
+	uint32_t mDamage;
+	uint16_t mPierce;
+
+	Tower* mOwner = nullptr;
+
+	virtual void HandleEnemyCollision();
+
 private:
 	Vector2 mVelocity;
 	
 	float_t mSpeed;
-	uint32_t mDamage;
-	uint16_t mPierce;
 	float_t mLifetime;
 
-	Enemy* mTarget;
-	Tower* mOwner;
-	std::vector<Enemy*> mHitEnemies;
-	
-	void HandleEnemyCollision();
+	Enemy* mTarget = nullptr;
 };

@@ -3,6 +3,9 @@
 #include "playfield.hpp"
 #include "hud.hpp"
 
+#include "test_tower.hpp"
+#include "cannon_tower.hpp"
+
 #define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 #define TOWER_BAR_UI_TOWER_HOVER_COLOR IM_COL32(0xC0, 0x90, 0x40, 0xA0)
@@ -17,10 +20,11 @@
 
 TowerBarUI::TowerBarUI()
 {
-	for (int i = 0; i < TOWER_COUNT; i++)
-		towerTextures[i] = Globals::gResources->GetTexture("towers\\unicorn");
+	towerTextures[0] = Globals::gResources->GetTexture("towers\\unicorn");
+	towerTextures[1] = Globals::gResources->GetTexture("towers\\cannon_icon");
 		
 	mTowerTemplates[0] = new TestTower(towerTextures[0]);
+	mTowerTemplates[1] = new CannonTower(towerTextures[1]);
 }
 
 TowerBarUI::~TowerBarUI()
@@ -36,8 +40,8 @@ void TowerBarUI::Draw()
 	Globals::gDrawList->AddRect(ImVec2(x, y), ImVec2(x + width, y + height), TOWER_BAR_UI_OUTLINE_COLOR);
 
 	for (int i = 0; i < TOWER_COUNT; i++)
-		Globals::gDrawList->AddImage(towerTextures[i]->id, ImVec2(x, y + TOWER_BAR_Y_OFFSET / 2),
-			ImVec2(x + TOWER_BAR_TOWER_SIZE, y + TOWER_BAR_Y_OFFSET / 2 + TOWER_BAR_TOWER_SIZE));
+		Globals::gDrawList->AddImage(towerTextures[i]->id, ImVec2(x + i * TOWER_BAR_TOWER_SIZE, y + TOWER_BAR_Y_OFFSET / 2),
+			ImVec2(x + i * TOWER_BAR_TOWER_SIZE + TOWER_BAR_TOWER_SIZE, y + TOWER_BAR_Y_OFFSET / 2 + TOWER_BAR_TOWER_SIZE));
 
 	HandleMouse();
 }
@@ -73,7 +77,7 @@ void TowerBarUI::HandleMouse()
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
 		if (!mSelectedTower)
-			mSelectedTower = new Tower(*mTowerTemplates[std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1)]);
+			mSelectedTower = mTowerTemplates[std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1)]->Clone();
 
 		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
 		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
