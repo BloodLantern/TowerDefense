@@ -33,9 +33,13 @@
 Tower::Tower(const Tower& other)
 	: Entity(other),
 	mName(other.mName),
-	mRange(other.mRange),
-	mAttackSpeed(other.mAttackSpeed),
 	mProjectileTemplate(other.mProjectileTemplate),
+	mStartDamage(other.mProjectileTemplate->GetDamage()),
+	mDamage(mStartDamage),
+	mStartAttackSpeed(other.mAttackSpeed),
+	mAttackSpeed(mStartAttackSpeed),
+	mStartRange(other.mRange),
+	mRange(mStartRange),
 	mWidth(other.mWidth),
 	mHeight(other.mHeight)
 {
