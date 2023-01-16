@@ -5,13 +5,15 @@
 /*
  * Level file format :
  * 
- * 0 | 2 | Grid width
- * 2 | 2 | Grid height
- * 4 | 1 | Tileset ID (TODO)
+ * 0 | 2  | Grid width
+ * 2 | 2  | Grid height
+ * 4 | 1  | Tileset ID (TODO)
  * 5 | 1X | Clipdata
  * X | 2X | Layer 0 tilemap
  * X | 2X | Layer 1 tilemap
  * X | 2X | Layer 2 tilemap
+ * X | 4  | Number of nodes
+ * X | 3X | Nodes
  * 
 */
 
@@ -126,6 +128,19 @@ bool RLE::CompressLevel(PlayField* pf, const char* dst)
 		fwrite(&value, sizeof(value), 1, f);
 	}
 
+	std::vector<PathNode>& nodes = pf->GetPathNodes();
+	uint32_t size = nodes.size();;
+
+	fwrite(&size, sizeof(size), 1, f);
+
+	for (uint32_t i = 0; i < size; i++)
+	{
+		PathNode node = nodes[i];
+		fwrite(&node.x, sizeof(node.x), 1, f);
+		fwrite(&node.y, sizeof(node.y), 1, f);
+		fwrite(&node.direction, sizeof(node.direction), 1, f);
+	}
+
 	fclose(f);
 	return true;
 }
@@ -211,6 +226,27 @@ bool RLE::DecompressLevel(PlayField* pf, const char* src)
 
 		while (size--)
 			_dst16[i++] = value;
+	}
+
+	uint32_t size;
+	fread(&size, sizeof(size), 1, f);
+
+	std::vector<PathNode>& nodes = pf->GetPathNodes();
+	nodes.clear();
+
+	while (size--)
+	{
+		uint8_t x;
+		uint8_t y;
+		PathNodeDir dir;
+
+		fread(&x, sizeof(x), 1, f);
+		fread(&y, sizeof(y), 1, f);
+		fread(&dir, sizeof(dir), 1, f);
+
+		PathNode node(x, y, dir);
+
+		nodes.push_back(node);
 	}
 
 	fclose(f);

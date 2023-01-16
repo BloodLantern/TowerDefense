@@ -196,17 +196,12 @@ void LevelEditor::HandleNodePlacement(uint8_t x, uint8_t y)
 	{
 		PathNode node(x, y, info->placingNodeDir);
 
-		int32_t i = 0;
-
 		std::vector<PathNode>& nodes = Globals::gGame->GetPlayField()->GetPathNodes();
-		for (; i < nodes.size(); i++)
-		{
-			if (nodes[i].x == x && nodes[i].y == y)
-				break;
-		}
 
-		if (i != nodes.size())
-			nodes[i].direction = info->placingNodeDir;
+		std::vector<PathNode>::iterator _f = std::find(nodes.begin(), nodes.end(), node);
+
+		if (_f != nodes.end())
+			_f->direction = info->placingNodeDir;
 		else
 			nodes.push_back(node);
 
@@ -223,10 +218,18 @@ void LevelEditor::DrawPath()
 		return;
 
 	Texture* tex = Globals::gResources->GetTexture("ui\\arrow");
+	PlayField* pf = Globals::gGame->GetPlayField();
 
-	std::vector<PathNode>& nodes = Globals::gGame->GetPlayField()->GetPathNodes();
+	std::vector<PathNode>& nodes = pf->GetPathNodes();
+	if (nodes.size() == 0)
+		return;
 
-	PathNode* prevNode = nullptr;
+	std::vector<PathNode> pathNodes;
+	pathNodes.push_back(nodes[0]);
+
+	bool brokenPath = false;
+	PathNode* pathEnd = nullptr;
+
 	for (std::vector<PathNode>::iterator _n = nodes.begin(); _n != nodes.end(); _n++)
 	{
 		PathNode* node = &*_n;
@@ -257,16 +260,38 @@ void LevelEditor::DrawPath()
 		ImVec2 scale(GRID_SQUARE_SIZE / (float_t)tex->width, GRID_SQUARE_SIZE / (float_t)tex->height);
 		ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *tex, pos, scale, rotation);
 
+		if (brokenPath)
+			continue;
+
+		PathNode nextNode = pf->GetNextPathNode(node->x, node->y, node->direction);
+		if (nextNode.x == UCHAR_MAX)
+		{
+			brokenPath = true;
+
+			if (pathEnd == nullptr)
+				pathEnd = node;
+			continue;
+		}
+
+		pathNodes.push_back(nextNode);
+	}
+
+	PathNode* prevNode = nullptr;
+	for (std::vector<PathNode>::iterator _n = pathNodes.begin(); _n != pathNodes.end(); _n++)
+	{
+		PathNode* node = &*_n;
+
 		if (prevNode)
 		{
-			ImVec2 start(Globals::gGridX + prevNode->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
-				Globals::gGridY + prevNode->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
-			ImVec2 end(Globals::gGridX + node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+			ImVec2 start(Globals::gGridX + node->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
 				Globals::gGridY + node->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+
+			ImVec2 end(Globals::gGridX + prevNode->x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+				Globals::gGridY + prevNode->y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
 
 			Globals::gDrawList->AddLine(start, end, IM_COL32(0xFF, 0, 0, 0xFF), 5.f);
 		}
-
+		
 		prevNode = node;
 	}
 }

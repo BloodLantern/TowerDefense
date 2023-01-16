@@ -342,6 +342,72 @@ std::vector<PathNode>& PlayField::GetPathNodes()
 	return mPathNodes;
 }
 
+PathNode PlayField::GetNextPathNode(uint8_t x, uint8_t y, PathNodeDir direction)
+{
+	PathNode node(x, y, PathNodeDir::DIR_LEFT);
+
+	switch (direction)
+	{
+		case PathNodeDir::DIR_RIGHT:
+			for (int32_t tstX = x + 1; tstX < gridWidth; tstX++)
+			{
+				node.x = tstX;
+
+				ImVec2 pos(Globals::gGridX + node.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+					Globals::gGridY + node.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+				Globals::gDrawList->AddCircle(pos, 3.f, IM_COL32(0xFF, 0, 0, 0xFF));
+				std::vector<PathNode>::iterator _f = std::find(mPathNodes.begin(), mPathNodes.end(), node);
+				if (_f != mPathNodes.end())
+					return *_f;
+			}
+			break;
+
+		case PathNodeDir::DIR_LEFT:
+			for (int32_t tstX = x - 1; tstX >= 0; tstX--)
+			{
+				node.x = tstX;
+
+				ImVec2 pos(Globals::gGridX + node.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+					Globals::gGridY + node.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+				Globals::gDrawList->AddCircle(pos, 3.f, IM_COL32(0, 0xFF, 0, 0xFF));
+				std::vector<PathNode>::iterator _f = std::find(mPathNodes.begin(), mPathNodes.end(), node);
+				if (_f != mPathNodes.end())
+					return *_f;
+			}
+			break;
+
+		case PathNodeDir::DIR_UP:
+			for (int32_t tstY = y - 1; tstY >= 0; tstY--)
+			{
+				node.y = tstY;
+
+				ImVec2 pos(Globals::gGridX + node.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+					Globals::gGridY + node.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+				Globals::gDrawList->AddCircle(pos, 3.f, IM_COL32(0, 0, 0xFF, 0xFF));
+				std::vector<PathNode>::iterator _f = std::find(mPathNodes.begin(), mPathNodes.end(), node);
+				if (_f != mPathNodes.end())
+					return *_f;
+			}
+			break;
+
+		case PathNodeDir::DIR_DOWN:
+			for (int32_t tstY = y + 1; tstY < gridHeight; tstY++)
+			{
+				node.y = tstY;
+
+				ImVec2 pos(Globals::gGridX + node.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
+					Globals::gGridY + node.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2);
+				Globals::gDrawList->AddCircle(pos, 3.f, IM_COL32(0x50, 0x50, 0x50, 0xFF));
+				std::vector<PathNode>::iterator _f = std::find(mPathNodes.begin(), mPathNodes.end(), node);
+				if (_f != mPathNodes.end())
+					return *_f;
+			}
+			break;
+	}
+
+	return PathNode(UCHAR_MAX, UCHAR_MAX, PathNodeDir::DIR_LEFT);
+}
+
 void PlayField::GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY)
 {
 	uint8_t x = pixelX / GRID_SQUARE_SIZE;

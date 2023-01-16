@@ -30,30 +30,55 @@ void Enemy::OnRender()
 
 void Enemy::StickToPath()
 {
-	if (AStar::recordPositions.size() <= 0)
-	{
-		PlayField* pf = Globals::gGame->GetPlayField();
-		// Failsafe
-		AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
-		return;
-	}
-
-	if (mCurrentPathIndex >= AStar::recordPositions.size())
-	{
-		// Ended path, keep previous velocity to "walk off screen"
-		if (!IsOnGrid())
-		{
-			// Deal damage
-			Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
-			// Flag for deletion
-			toDelete = true;
-		}
-		return;
-	}
+	ImVec2 dstPos;
+	Point2 pixelPos = GetPixelPosition();
 
 	// Get destination on the path
-	ImVec2 dstPos = AStar::recordPositions[mCurrentPathIndex];
-	Point2 pixelPos = GetPixelPosition();
+	if (0)
+	{
+		if (AStar::recordPositions.size() <= 0)
+		{
+			PlayField* pf = Globals::gGame->GetPlayField();
+			// Failsafe
+			AStar::FindBestPath(pf->gridWidth - 1, pf->gridHeight / 2, 0, pf->gridHeight / 2);
+			return;
+		}
+
+		if (mCurrentPathIndex >= AStar::recordPositions.size())
+		{
+			// Ended path, keep previous velocity to "walk off screen"
+			if (!IsOnGrid())
+			{
+				// Deal damage
+				Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
+				// Flag for deletion
+				toDelete = true;
+			}
+			return;
+		}
+		dstPos = AStar::recordPositions[mCurrentPathIndex];
+	}
+	else
+	{
+		PlayField* pf = Globals::gGame->GetPlayField();
+
+		if (mCurrentPathIndex >= pf->GetPathNodes().size())
+		{
+			// Ended path, keep previous velocity to "walk off screen"
+			if (!IsOnGrid())
+			{
+				// Deal damage
+				Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
+				// Flag for deletion
+				toDelete = true;
+			}
+			return;
+		}
+		PathNode& node = pf->GetPathNodes()[mCurrentPathIndex];
+
+		dstPos = ImVec2(node.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f,
+			node.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2.f);
+	}
 
 	// Check is on the destination tile
 	if (fabsf(pixelPos.x - dstPos.x) < 10.f && fabsf(pixelPos.y - dstPos.y) < 10.f)

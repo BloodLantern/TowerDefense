@@ -127,6 +127,7 @@ public:
 	uint16_t* GetTilemapPointer(uint8_t layer);
 
 	std::vector<PathNode>& GetPathNodes();
+	PathNode GetNextPathNode(uint8_t x, uint8_t y, PathNodeDir direction);
 
 	void GetGridPositionFromPixels(int32_t pixelX, int32_t pixelY, uint8_t& tileX, uint8_t& tileY);
 	void GetPixelPositionFromGrid(uint8_t tileX, uint8_t tileY, int32_t& pixelX, int32_t& pixelY);
