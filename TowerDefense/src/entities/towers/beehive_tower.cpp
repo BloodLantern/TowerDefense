@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 BeehiveTower::BeehiveTower(Texture* texture)
-	: Tower(new BeeProjectile(this), 0.33f, 7.f, "Beehive", 4, texture)
+	: Tower(new BeeProjectile(this), 0.33f, 7.f, "Beehive", 500, texture)
 {
 	mMaxAmountOfBees = 5;
 	mAmountOfBees = 0;
