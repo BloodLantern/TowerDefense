@@ -2,6 +2,7 @@
 #include "globals.hpp"
 
 #define CANNON_BALL_PROJECTILE_EXPLOSION_RADIUS 100.f
+#define CANNON_BALL_PROJECTILE_EXPLOSION_ANIMATION_TIME 10
 
 CannonBallProjectile::CannonBallProjectile()
     : Projectile(15, 2, 40, 0.5f)
@@ -40,22 +41,39 @@ void CannonBallProjectile::HandleEnemyCollision()
                     if (mOwner)
                         mOwner->IncreaseDamageDealt(damageDealt);
 
-                    // If all the pierce was used, destroy the projectile
+                    // If all the pierce was used, stop the loop
                     if (mPierce == 0)
-                    {
-                        toDelete = true;
-                        return;
-                    }
+                        break;
                     mPierce--;
                 }
             }
+
+            // The projectile exploded, show the animation and delete it
+            mExplodeAnimation = 1;
             break;
         }
 	}
 }
 
+void CannonBallProjectile::OnUpdate()
+{
+    if (mExplodeAnimation == 0)
+        Projectile::OnUpdate();
+}
+
 void CannonBallProjectile::OnRender()
 {
 	Point2 pixelPosition(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
-	Globals::gDrawList->AddCircleFilled(pixelPosition, 5, IM_COL32(0x0, 0x0, 0x0, 0xFF));
+
+    if (mExplodeAnimation == 0)
+    {
+	    Globals::gDrawList->AddCircleFilled(pixelPosition, 5, IM_COL32(0x0, 0x0, 0x0, 0xFF));
+    }
+    // Projectile exploded
+    else
+    {
+	    Globals::gDrawList->AddCircleFilled(pixelPosition, 10 + 3 * mExplodeAnimation, IM_COL32(0x80, 0x08, 0x0, 0x50));
+        if (mExplodeAnimation++ >= CANNON_BALL_PROJECTILE_EXPLOSION_ANIMATION_TIME)
+            toDelete = true;
+    }
 }
