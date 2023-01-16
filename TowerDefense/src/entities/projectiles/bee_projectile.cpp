@@ -2,10 +2,12 @@
 #include "globals.hpp"
 
 BeeProjectile::BeeProjectile(BeehiveTower* hive)
-	: Projectile(3.f, 1.f, 0, INFINITY)
+	: Projectile(5.f, 1.f, 0, INFINITY)
 {
 	mHive = hive;
 	mHookedTimer = 0;
+	SetTexture(Globals::gResources->GetTexture("towers\\bee"));
+	SetScale(.05f);
 }
 
 BeeProjectile::~BeeProjectile()
@@ -26,13 +28,14 @@ void BeeProjectile::OnUpdate()
 		return;
 	}
 
-	float_t range = mHive->GetRange();
+	float_t range = mHive->GetRange() * GRID_SQUARE_SIZE;
+	range *= range;
 	for (std::vector<Enemy*>::iterator it = Globals::gGame->enemies.begin(); it != Globals::gGame->enemies.end(); ++it)
 	{
 		Enemy* enemy = *it;
 
 		float_t norm = Vector2(enemy->GetPixelPosition(), mHive->GetPixelPosition()).GetSquaredNorm();
-		if (norm < range * range * GRID_SQUARE_SIZE)
+		if (norm < range)
 		{
 			mTarget = enemy;
 			break;
@@ -40,6 +43,13 @@ void BeeProjectile::OnUpdate()
 	}
 
 	Projectile::OnUpdate();
+}
+
+void BeeProjectile::OnRender()
+{
+	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
+
+	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation());
 }
 
 void BeeProjectile::HandleEnemyCollision()

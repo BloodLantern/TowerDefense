@@ -10,6 +10,7 @@ public:
 	~BeeProjectile();
 
 	void OnUpdate() override;
+	void OnRender() override;
 	void HandleEnemyCollision() override;
 
 	Projectile* Clone() const override;

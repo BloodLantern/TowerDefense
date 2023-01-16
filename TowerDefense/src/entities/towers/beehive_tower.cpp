@@ -7,6 +7,9 @@ BeehiveTower::BeehiveTower(Texture* texture)
 {
 	mMaxAmountOfBees = 5;
 	mAmountOfBees = 0;
+
+	mWidth = 2;
+	mHeight = 2;
 }
 
 Tower* BeehiveTower::Clone() const

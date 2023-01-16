@@ -23,7 +23,7 @@ TowerBarUI::TowerBarUI()
 	towerTextures[0] = Globals::gResources->GetTexture("towers\\unicorn");
 	towerTextures[1] = Globals::gResources->GetTexture("towers\\cannon_icon");
 	towerTextures[2] = Globals::gResources->GetTexture("towers\\beehive");
-		
+
 	mTowerTemplates[0] = new TestTower(towerTextures[0]);
 	mTowerTemplates[1] = new CannonTower(towerTextures[1]);
 	mTowerTemplates[2] = new BeehiveTower(towerTextures[2]);
