@@ -153,12 +153,16 @@ void Tower::HandleSelection()
 	if (Globals::gIO->MouseClicked[ImGuiMouseButton_Left] && !Globals::gIO->WantCaptureMouse)
 	{
 		ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+
 		// If the tower is being clicked
 		int32_t pixelX = mouseClickedPos.x, pixelY = mouseClickedPos.y;
 		uint8_t tileX, tileY;
+
 		Globals::gGame->GetPlayField()->GetGridPositionFromPixels(pixelX - Globals::gGridX, pixelY - Globals::gGridY, tileX, tileY);
 
-		mSelected = tileX == GetTilePosition().x && tileY == GetTilePosition().y && !mSelected;
+		Point2 tilePos = GetTilePosition();
+
+		mSelected = !mSelected && tilePos.x <= tileX && tilePos.y <= tileY && tilePos.x + mWidth > tileX && tilePos.y + mHeight > tileY;
 	}
 }
 
