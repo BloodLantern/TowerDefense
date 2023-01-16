@@ -50,8 +50,8 @@ void TowerBarUI::Draw()
 
 void TowerBarUI::HandleMouse()
 {
-	if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
-		return;
+	//if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
+	//	return;
 
 	const int32_t x = 0, y = TOWER_BAR_Y;
 	const int32_t height = TOWER_BAR_HEIGHT;
@@ -78,13 +78,14 @@ void TowerBarUI::HandleMouse()
 	mouseClickedPos.x -= Globals::gWindowX;
 	mouseClickedPos.y -= Globals::gWindowY;
 	// If the click started on the tower bar and the mouse is dragging outside
-	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < y
+	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT
+		&& mouseClickedPos.x > x && mousePos.y - Globals::gWindowY < y
 		// Optimization
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
 		// Create the tower if it doesn't already exist
 		if (!mSelectedTower)
-			mSelectedTower = mTowerTemplates[std::min(std::max((((int)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE) - 1, 0), TOWER_COUNT - 1)]->Clone();
+			mSelectedTower = mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->Clone();
 
 		const int32_t selectedTowerWidth = mSelectedTower->GetWidth() * GRID_SQUARE_SIZE;
 		const int32_t selectedTowerHeight = mSelectedTower->GetHeight() * GRID_SQUARE_SIZE;
