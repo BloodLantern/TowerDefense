@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "playfield.hpp"
 #include "imgui_utils.hpp"
-#include "path.h"
+#include "path.hpp"
 
 class LevelEditor
 {

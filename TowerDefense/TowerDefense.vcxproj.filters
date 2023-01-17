@@ -33,121 +33,118 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_glfw.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_tables.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="externals\include\maths\Point2.cpp">
       <Filter>Source Files\Maths</Filter>
     </ClCompile>
     <ClCompile Include="externals\include\maths\Vector2.cpp">
       <Filter>Source Files\Maths</Filter>
     </ClCompile>
-    <ClCompile Include="src\playfield.cpp">
+    <ClCompile Include="src\game\playfield.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\globals.cpp">
+    <ClCompile Include="src\game\globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity.cpp">
+    <ClCompile Include="src\game\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\a_star.cpp">
+    <ClCompile Include="src\pathfinding\a_star.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\level_editor.cpp">
+    <ClCompile Include="src\editor\level_editor.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\tower.cpp">
+    <ClCompile Include="src\game\entities\tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\projectile.cpp">
+    <ClCompile Include="src\game\entities\projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemy.cpp">
+    <ClCompile Include="src\game\entities\enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\tower_bar_ui.cpp">
+    <ClCompile Include="src\ui\tower_bar_ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui.cpp">
+    <ClCompile Include="src\ui\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game.cpp">
+    <ClCompile Include="src\game\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
+    <ClCompile Include="src\game\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\round.cpp">
+    <ClCompile Include="src\game\round.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources.cpp">
+    <ClCompile Include="src\game\resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\round_editor.cpp">
+    <ClCompile Include="src\editor\round_editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\path.cpp">
+    <ClCompile Include="src\ui\hud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\hud.cpp">
+    <ClCompile Include="src\game\entities\enemies\ant_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemies\ant_enemy.cpp">
+    <ClCompile Include="src\game\entities\enemies\gold_scarab_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemies\gold_scarab_enemy.cpp">
+    <ClCompile Include="src\game\entities\enemies\ladybug_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemies\ladybug_enemy.cpp">
+    <ClCompile Include="src\game\entities\enemies\mite_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemies\mite_enemy.cpp">
+    <ClCompile Include="src\game\entities\enemies\red_ant_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\enemies\red_ant_enemy.cpp">
+    <ClCompile Include="src\game\entities\towers\cannon_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\towers\cannon_tower.cpp">
+    <ClCompile Include="src\game\entities\towers\test_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\towers\test_tower.cpp">
+    <ClCompile Include="src\game\entities\projectiles\cannon_ball_projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\projectiles\cannon_ball_projectile.cpp">
+    <ClCompile Include="src\game\entities\towers\beehive_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\towers\beehive_tower.cpp">
+    <ClCompile Include="src\game\entities\projectiles\bee_projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\projectiles\bee_projectile.cpp">
+    <ClCompile Include="externals\include\ImGui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\include\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,40 +155,40 @@
     <ClInclude Include="externals\include\maths\Vector2.h">
       <Filter>Header Files\Maths</Filter>
     </ClInclude>
-    <ClInclude Include="include\playfield.hpp">
+    <ClInclude Include="include\game\playfield.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\globals.hpp">
+    <ClInclude Include="include\game\globals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entity.hpp">
+    <ClInclude Include="include\game\entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star.hpp">
+    <ClInclude Include="include\pathfinding\a_star.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\rle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\level_editor.hpp">
+    <ClInclude Include="include\editor\level_editor.hpp">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\projectile.hpp">
+    <ClInclude Include="include\game\entities\projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemy.hpp">
+    <ClInclude Include="include\game\entities\enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\tower.hpp">
+    <ClInclude Include="include\game\entities\tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\tower_bar_ui.hpp">
+    <ClInclude Include="include\ui\tower_bar_ui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui_utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gui.hpp">
+    <ClInclude Include="include\ui\gui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\stb_image.h">
@@ -203,52 +200,79 @@
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\game.hpp">
+    <ClInclude Include="include\game\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\player.hpp">
+    <ClInclude Include="include\game\player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\round.hpp">
+    <ClInclude Include="include\game\round.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\resources.hpp">
+    <ClInclude Include="include\game\resources.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\round_editor.hpp">
+    <ClInclude Include="include\editor\round_editor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\path.h">
+    <ClInclude Include="include\pathfinding\path.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\hud.hpp">
+    <ClInclude Include="include\ui\hud.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemies\ant_enemy.hpp">
+    <ClInclude Include="include\game\entities\enemies\ant_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemies\gold_scarab_enemy.hpp">
+    <ClInclude Include="include\game\entities\enemies\gold_scarab_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemies\ladybug_enemy.hpp">
+    <ClInclude Include="include\game\entities\enemies\ladybug_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemies\mite_enemy.hpp">
+    <ClInclude Include="include\game\entities\enemies\mite_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\enemies\red_ant_enemy.hpp">
+    <ClInclude Include="include\game\entities\enemies\red_ant_enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\towers\cannon_tower.hpp">
+    <ClInclude Include="include\game\entities\towers\cannon_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\towers\test_tower.hpp">
+    <ClInclude Include="include\game\entities\towers\test_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\projectiles\cannon_ball_projectile.hpp">
+    <ClInclude Include="include\game\entities\projectiles\cannon_ball_projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\entities\projectiles\bee_projectile.hpp">
+    <ClInclude Include="include\game\entities\projectiles\bee_projectile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imgui_impl_glfw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imgui_impl_opengl3_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

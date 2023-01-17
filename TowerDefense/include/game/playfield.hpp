@@ -3,7 +3,7 @@
 #include "entity.hpp"
 #include "tower_bar_ui.hpp"
 #include "imgui_utils.hpp"
-#include "path.h"
+#include "path.hpp"
 #include <stdint.h>
 
 #define GRID_OFFSET_X 0

@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>externals\include\ImGui;externals\include;include;include\entities\projectiles;include\entities\towers;include\entities\enemies;include\entities;externals\include\maths;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>externals\include\ImGui;externals\include;include;include\game\entities\projectiles;include\game\entities\towers;include\game\entities\enemies;include\game\entities;include\ui;include\editor;include\pathfinding;include\game;externals\include\maths;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4098</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -148,39 +148,38 @@
     <ClCompile Include="externals\include\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="src\entities\projectiles\bee_projectile.cpp" />
-    <ClCompile Include="src\entities\enemies\ant_enemy.cpp" />
-    <ClCompile Include="src\entities\enemies\gold_scarab_enemy.cpp" />
-    <ClCompile Include="src\entities\enemies\ladybug_enemy.cpp" />
-    <ClCompile Include="src\entities\enemies\mite_enemy.cpp" />
-    <ClCompile Include="src\entities\enemies\red_ant_enemy.cpp" />
-    <ClCompile Include="src\entities\projectiles\cannon_ball_projectile.cpp" />
-    <ClCompile Include="src\entities\towers\beehive_tower.cpp" />
-    <ClCompile Include="src\entities\towers\cannon_tower.cpp" />
-    <ClCompile Include="src\entities\towers\test_tower.cpp" />
-    <ClCompile Include="src\hud.cpp" />
-    <ClCompile Include="src\path.cpp" />
-    <ClCompile Include="src\resources.cpp" />
-    <ClCompile Include="src\round.cpp" />
-    <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\gui.cpp" />
-    <ClCompile Include="src\entities\enemy.cpp" />
-    <ClCompile Include="src\entities\projectile.cpp" />
-    <ClCompile Include="src\a_star.cpp" />
-    <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\game\entities\projectiles\bee_projectile.cpp" />
+    <ClCompile Include="src\game\entities\enemies\ant_enemy.cpp" />
+    <ClCompile Include="src\game\entities\enemies\gold_scarab_enemy.cpp" />
+    <ClCompile Include="src\game\entities\enemies\ladybug_enemy.cpp" />
+    <ClCompile Include="src\game\entities\enemies\mite_enemy.cpp" />
+    <ClCompile Include="src\game\entities\enemies\red_ant_enemy.cpp" />
+    <ClCompile Include="src\game\entities\projectiles\cannon_ball_projectile.cpp" />
+    <ClCompile Include="src\game\entities\towers\beehive_tower.cpp" />
+    <ClCompile Include="src\game\entities\towers\cannon_tower.cpp" />
+    <ClCompile Include="src\game\entities\towers\test_tower.cpp" />
+    <ClCompile Include="src\ui\hud.cpp" />
+    <ClCompile Include="src\game\resources.cpp" />
+    <ClCompile Include="src\game\round.cpp" />
+    <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\ui\gui.cpp" />
+    <ClCompile Include="src\game\entities\enemy.cpp" />
+    <ClCompile Include="src\game\entities\projectile.cpp" />
+    <ClCompile Include="src\pathfinding\a_star.cpp" />
+    <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\imgui_utils.cpp" />
-    <ClCompile Include="src\level_editor.cpp" />
+    <ClCompile Include="src\editor\level_editor.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="externals\include\maths\Point2.cpp" />
     <ClCompile Include="externals\include\maths\Vector2.cpp" />
-    <ClCompile Include="src\player.cpp" />
-    <ClCompile Include="src\playfield.cpp" />
-    <ClCompile Include="src\globals.cpp" />
+    <ClCompile Include="src\game\player.cpp" />
+    <ClCompile Include="src\game\playfield.cpp" />
+    <ClCompile Include="src\game\globals.cpp" />
     <ClCompile Include="src\rle.cpp" />
-    <ClCompile Include="src\entities\tower.cpp" />
+    <ClCompile Include="src\game\entities\tower.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
-    <ClCompile Include="src\tower_bar_ui.cpp" />
-    <ClCompile Include="src\round_editor.cpp" />
+    <ClCompile Include="src\ui\tower_bar_ui.cpp" />
+    <ClCompile Include="src\editor\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\ImGui\imconfig.h" />
@@ -192,39 +191,39 @@
     <ClInclude Include="externals\include\ImGui\imstb_rectpack.h" />
     <ClInclude Include="externals\include\ImGui\imstb_textedit.h" />
     <ClInclude Include="externals\include\ImGui\imstb_truetype.h" />
-    <ClInclude Include="include\entities\projectiles\bee_projectile.hpp" />
-    <ClInclude Include="include\entities\enemies\ant_enemy.hpp" />
-    <ClInclude Include="include\entities\enemies\gold_scarab_enemy.hpp" />
-    <ClInclude Include="include\entities\enemies\ladybug_enemy.hpp" />
-    <ClInclude Include="include\entities\enemies\mite_enemy.hpp" />
-    <ClInclude Include="include\entities\enemies\red_ant_enemy.hpp" />
-    <ClInclude Include="include\entities\projectiles\cannon_ball_projectile.hpp" />
-    <ClInclude Include="include\entities\towers\cannon_tower.hpp" />
-    <ClInclude Include="include\entities\towers\test_tower.hpp" />
-    <ClInclude Include="include\hud.hpp" />
+    <ClInclude Include="include\game\entities\projectiles\bee_projectile.hpp" />
+    <ClInclude Include="include\game\entities\enemies\ant_enemy.hpp" />
+    <ClInclude Include="include\game\entities\enemies\gold_scarab_enemy.hpp" />
+    <ClInclude Include="include\game\entities\enemies\ladybug_enemy.hpp" />
+    <ClInclude Include="include\game\entities\enemies\mite_enemy.hpp" />
+    <ClInclude Include="include\game\entities\enemies\red_ant_enemy.hpp" />
+    <ClInclude Include="include\game\entities\projectiles\cannon_ball_projectile.hpp" />
+    <ClInclude Include="include\game\entities\towers\cannon_tower.hpp" />
+    <ClInclude Include="include\game\entities\towers\test_tower.hpp" />
+    <ClInclude Include="include\ui\hud.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h" />
     <ClInclude Include="externals\include\stb_image.h" />
-    <ClInclude Include="include\game.hpp" />
-    <ClInclude Include="include\gui.hpp" />
-    <ClInclude Include="include\a_star.hpp" />
-    <ClInclude Include="include\entities\enemy.hpp" />
-    <ClInclude Include="include\entities\tower.hpp" />
-    <ClInclude Include="include\entity.hpp" />
+    <ClInclude Include="include\game\game.hpp" />
+    <ClInclude Include="include\ui\gui.hpp" />
+    <ClInclude Include="include\pathfinding\a_star.hpp" />
+    <ClInclude Include="include\game\entities\enemy.hpp" />
+    <ClInclude Include="include\game\entities\tower.hpp" />
+    <ClInclude Include="include\game\entity.hpp" />
     <ClInclude Include="include\imgui_utils.hpp" />
-    <ClInclude Include="include\level_editor.hpp" />
+    <ClInclude Include="include\editor\level_editor.hpp" />
     <ClInclude Include="externals\include\maths\Point2.h" />
     <ClInclude Include="externals\include\maths\Vector2.h" />
-    <ClInclude Include="include\player.hpp" />
-    <ClInclude Include="include\playfield.hpp" />
-    <ClInclude Include="include\globals.hpp" />
-    <ClInclude Include="include\resources.hpp" />
+    <ClInclude Include="include\game\player.hpp" />
+    <ClInclude Include="include\game\playfield.hpp" />
+    <ClInclude Include="include\game\globals.hpp" />
+    <ClInclude Include="include\game\resources.hpp" />
     <ClInclude Include="include\rle.hpp" />
-    <ClInclude Include="include\entities\projectile.hpp" />
-    <ClInclude Include="include\tower_bar_ui.hpp" />
-    <ClInclude Include="include\round.hpp" />
-    <ClInclude Include="include\round_editor.hpp" />
-    <ClInclude Include="include\path.h" />
+    <ClInclude Include="include\game\entities\projectile.hpp" />
+    <ClInclude Include="include\ui\tower_bar_ui.hpp" />
+    <ClInclude Include="include\game\round.hpp" />
+    <ClInclude Include="include\editor\round_editor.hpp" />
+    <ClInclude Include="include\pathfinding\path.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
