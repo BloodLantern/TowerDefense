@@ -14,3 +14,8 @@ Tower* CannonTower::Clone() const
 	result->mHeight = mHeight;
 	return result;
 }
+
+void CannonTower::Draw(const ImVec2 &topLeft, const ImVec2 &bottomRight) const
+{
+	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
+}

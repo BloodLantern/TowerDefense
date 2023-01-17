@@ -124,4 +124,6 @@ private:
 	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
 	void AddTooltip(const char* text);
 	void InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
+
+	virtual void Draw(const ImVec2& topLeft, const ImVec2& bottomRight) const;
 };

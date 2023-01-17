@@ -441,7 +441,7 @@ void Tower::OnRender()
     // Draw tower texture
 	const ImVec2 topLeft(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
 	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
-	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
+	Draw(topLeft, bottomRight);
 
 	// Draw upgrade/stats panel if selected
 	if (mSelected)
@@ -452,4 +452,9 @@ void Tower::OnRender()
 
 		HandlePanel(topLeft, bottomRight);
 	}
+}
+
+void Tower::Draw(const ImVec2& topLeft, const ImVec2& bottomRight) const
+{
+	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
 }
