@@ -38,6 +38,8 @@ public:
 
 	float Determinant(Vector2 o) const;
 
+	Vector2 Rotate(float angle) const;
+
 	Vector2 operator+(const Vector2 o);
 
 	Vector2 operator+=(const Vector2 o);

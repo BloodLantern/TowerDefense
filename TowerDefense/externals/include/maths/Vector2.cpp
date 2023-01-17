@@ -79,6 +79,14 @@ float Vector2::Determinant(Vector2 o) const
 	return (x * o.y) - (o.x * y);
 }
 
+Vector2 Vector2::Rotate(float angle) const
+{
+	float c = cos(angle);
+	float s = sin(angle);
+
+	return Point2(x * c - y * s, y * c + x * s);
+}
+
 Vector2 Vector2::operator+(const Vector2 o)
 {
 	return Vector2(this->x + o.x, this->y + o.y);

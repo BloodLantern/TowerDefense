@@ -191,3 +191,5 @@ void BeeProjectile::HandleGoingToTarget()
 	if (norm < 10.f * 10.f)
 		mPose = BEE_POSE_ON_TARGET;
 }
+
+#undef RANDOM_FLOAT

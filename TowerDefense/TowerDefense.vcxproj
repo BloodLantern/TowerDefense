@@ -148,6 +148,7 @@
     <ClCompile Include="externals\include\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="src\game\particle_emitter.cpp" />
     <ClCompile Include="src\game\entities\projectiles\bee_projectile.cpp" />
     <ClCompile Include="src\game\entities\enemies\ant_enemy.cpp" />
     <ClCompile Include="src\game\entities\enemies\gold_scarab_enemy.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="include\game\round.hpp" />
     <ClInclude Include="include\editor\round_editor.hpp" />
     <ClInclude Include="include\pathfinding\path.hpp" />
+    <ClInclude Include="include\game\particle_emitter.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
