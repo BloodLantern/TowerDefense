@@ -97,13 +97,17 @@ void TowerBarUI::ShowCost(const ImVec2 &mousePos, const float_t y)
 	ImVec2 pos(mousePos.x, Globals::gWindowY + y);
 	pos.x = (((int32_t)pos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE) * (float_t) TOWER_BAR_TOWER_SIZE + Globals::gWindowX;
 	
-	const std::string text = std::to_string(cost);
+	const std::string text = "$" + std::to_string(cost);
 	ImGui::PushFont(Globals::gFontMedium);
 	ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
 	
 	Globals::gDrawList->AddRectFilled(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_BACKGROUND_COLOR);
 	Globals::gDrawList->AddRect(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_OUTLINE_COLOR);
-	Globals::gDrawList->AddText(pos, TOWER_BAR_UI_TOWER_COST_COLOR, text.c_str());
+	// If the tower is affordable
+	if (cost <= Globals::gGame->GetPlayer()->GetMoney())
+		Globals::gDrawList->AddText(pos, TOWER_BAR_UI_TOWER_COST_COLOR, text.c_str());
+	else
+		Globals::gDrawList->AddText(pos, IM_COL32(0xFF, 0x40, 0x40, 0xFF), text.c_str());
 	ImGui::PopFont();
 }
 
