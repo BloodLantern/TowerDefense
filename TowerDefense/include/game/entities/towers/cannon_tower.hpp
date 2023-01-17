@@ -7,6 +7,8 @@ class CannonTower : public Tower
 public:
     CannonTower(Texture* texture);
 
+    void OnCustomUpgrade() override;
+
     Tower* Clone() const override;
 
 private:

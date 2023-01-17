@@ -35,6 +35,11 @@ void BeehiveTower::OnUpdate()
 	mTimeSinceLastAttack += Globals::gGame->GetPlayingSpeedDeltaTime();
 }
 
+void BeehiveTower::OnCustomUpgrade()
+{
+	std::cout << "Beehive custom upgrade" << std::endl;
+}
+
 void BeehiveTower::Shoot()
 {
 	mTimeSinceLastAttack = 0;

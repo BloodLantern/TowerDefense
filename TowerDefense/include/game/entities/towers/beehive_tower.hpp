@@ -10,6 +10,8 @@ public:
 	Tower* Clone() const override;
 	void Shoot() override;
 	void OnUpdate() override;
+
+	void OnCustomUpgrade() override;
 	
 	void RemoveBee();
 

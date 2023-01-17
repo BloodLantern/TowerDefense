@@ -52,14 +52,6 @@ Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range,
 	);
 }
 
-Tower* Tower::Clone() const
-{
-	Tower* result = new Tower(mProjectileTemplate, mStartAttackSpeed, mStartRange, mName, mCost, mTexture);
-	result->mWidth = mWidth;
-	result->mHeight = mHeight;
-	return result;
-}
-
 void Tower::Shoot()
 {
 	Projectile* projTemplate = mProjectileTemplate->Clone();

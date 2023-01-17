@@ -10,6 +10,11 @@ CannonTower::CannonTower(Texture* texture)
 	mScale = 0.07f;
 }
 
+void CannonTower::OnCustomUpgrade()
+{
+	std::cout << "Cannon custom upgrade" << std::endl;
+}
+
 Tower* CannonTower::Clone() const
 {
 	CannonTower* result = new CannonTower(mTexture);

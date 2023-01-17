@@ -33,7 +33,7 @@ public:
 	Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
 	//virtual ~Tower() { delete mProjectileTemplate; };
 
-	virtual Tower* Clone() const;
+	virtual Tower* Clone() const = 0;
 
 	virtual void Shoot();
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
@@ -41,6 +41,8 @@ public:
 	virtual void OnRender() override;
 	void DrawTowerBarTexture();
 	virtual void OnUpdate() override;
+
+	virtual void OnCustomUpgrade() = 0;
 
 	static void InitUITextures();
 
@@ -60,6 +62,11 @@ public:
 	void SetTimeSinceLastAttack(double_t newTimeSinceLastAttack) { mTimeSinceLastAttack = newTimeSinceLastAttack; }
 
 protected:
+	struct CustomUpgrade
+	{
+		uint8_t level;
+	};
+
 	std::string mName;
 
 	uint32_t mCost;
@@ -81,6 +88,8 @@ protected:
 	double_t mTimeSinceLastAttack = DBL_MAX;
 
 	bool mRotateTowardsEnemies = true;
+	
+	uint8_t mCustomUpgradeLevel = 0;
 
 	void HandleSelection();
 
@@ -89,7 +98,6 @@ private:
 	float_t mSellingFactor = 0.7f;
 
 	uint16_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
-	uint8_t mCustomUpgradeLevel = 0;
 
 
 	uint32_t mDamageDealt = 0;

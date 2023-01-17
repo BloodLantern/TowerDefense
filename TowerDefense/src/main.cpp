@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 	// Set icon
 	glfwMakeContextCurrent(window);
 	GLFWimage windowIcon;
-	windowIcon.pixels = stbi_load("assets/ant.png", &windowIcon.width, &windowIcon.height, 0, 4);
+	windowIcon.pixels = stbi_load("assets/logo.png", &windowIcon.width, &windowIcon.height, 0, 4);
 
 	glfwSetWindowIcon(window, 1, &windowIcon);
 	glfwSwapInterval(1); // Enable vsync

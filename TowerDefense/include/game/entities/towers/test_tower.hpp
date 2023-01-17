@@ -13,4 +13,7 @@ class TestTower : public Tower
 {
 public:
 	TestTower(Texture* texture);
+
+	Tower* Clone() const override;
+	void OnCustomUpgrade() override;
 };
