@@ -39,6 +39,7 @@ public:
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
+	void DrawTowerBarTexture();
 	virtual void OnUpdate() override;
 
 	static void InitUITextures();
@@ -79,6 +80,8 @@ protected:
 
 	double_t mTimeSinceLastAttack = DBL_MAX;
 
+	bool mRotateTowardsEnemies = true;
+
 	void HandleSelection();
 
 private:
@@ -114,6 +117,7 @@ private:
 	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };
 
 	void HandleShoot();
+	void RotateTowardsTarget();
 	void HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight);
 	// Returns whether the button was clicked
 	bool DrawSellingButton();

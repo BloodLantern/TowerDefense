@@ -64,7 +64,7 @@ public:
 
 	bool operator>(float s);
 	
-	operator ImVec2() { return ImVec2(x, y); }
+	operator ImVec2() const { return ImVec2(x, y); }
 
 	friend Point2 operator+(Point2 l, Vector2 r);
 	friend Point2 operator-(Point2 l, Vector2 r);

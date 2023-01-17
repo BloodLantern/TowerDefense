@@ -190,9 +190,18 @@ void Tower::HandleShoot()
 		if (mTarget)
 		{
 			mTimeSinceLastAttack = 0;
+			if (mRotateTowardsEnemies)
+				RotateTowardsTarget();
 			Shoot();
 		}
 	}
+}
+
+void Tower::RotateTowardsTarget()
+{
+	Vector2 direction(GetPixelPosition(), mTarget->GetPixelPosition());
+
+	mRotation = atan2(direction.y, direction.x);
 }
 
 void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
@@ -454,7 +463,14 @@ void Tower::OnRender()
 	}
 }
 
+void Tower::DrawTowerBarTexture()
+{
+	const ImVec2 topLeft(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
+	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
+	Globals::gDrawList->AddImage(mTexture->id, topLeft, bottomRight);
+}
+
 void Tower::Draw(const ImVec2& topLeft, const ImVec2& bottomRight) const
 {
-	Globals::gDrawList->AddImage(GetTexture()->id, topLeft, bottomRight);
+	Globals::gDrawList->AddImage(mTexture->id, topLeft, bottomRight);
 }

@@ -180,7 +180,7 @@ void TowerBarUI::HandleDrag(const bool& isOnGrid, const bool& available)
 
 	// Tower rendering
 	mSelectedTower->DrawRange(available ? TOWER_RANGE_COLOR_AVAILABLE : TOWER_BAR_TOWER_RANGE_COLOR_OCCUPIED);
-	mSelectedTower->OnRender();
+	mSelectedTower->DrawTowerBarTexture();
 }
 
 void TowerBarUI::HandleDrop(const bool& available, const Point2& tilePosition)

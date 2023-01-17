@@ -10,6 +10,8 @@ BeehiveTower::BeehiveTower(Texture* texture)
 
 	mWidth = 2;
 	mHeight = 2;
+
+	mRotateTowardsEnemies = false;
 }
 
 Tower* BeehiveTower::Clone() const
