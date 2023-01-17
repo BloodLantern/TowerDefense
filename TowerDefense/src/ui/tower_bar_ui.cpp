@@ -114,8 +114,14 @@ void TowerBarUI::ShowCost(const ImVec2 &mousePos, const float_t y)
 void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, const float_t y)
 {
 	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+
+	// Don't allow dragging if the player doesn't have enough money
+	if (mTowerTemplates[((int32_t)mouseClickedPos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayer()->GetMoney())
+		return;
+
 	mouseClickedPos.x -= Globals::gWindowX;
 	mouseClickedPos.y -= Globals::gWindowY;
+
 	// If the click started on the tower bar and the mouse is dragging outside
 	if (mouseClickedPos.y > y && mouseClickedPos.x < x + TOWER_BAR_TOWER_SIZE * TOWER_COUNT
 		&& mouseClickedPos.x > x && mousePos.y - Globals::gWindowY < y
