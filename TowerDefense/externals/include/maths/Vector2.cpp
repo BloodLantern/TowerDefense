@@ -10,6 +10,11 @@ Vector2::Vector2()
 {
 }
 
+Vector2::Vector2(float xy)
+    : x(xy), y(xy)
+{
+}
+
 Vector2::Vector2(float x, float y)
 	: x(x), y(y)
 {
@@ -79,9 +84,23 @@ Vector2 Vector2::operator+(const Vector2 o)
 	return Vector2(this->x + o.x, this->y + o.y);
 }
 
+Vector2 Vector2::operator+=(const Vector2 o)
+{
+	x += o.x;
+    y += o.y;
+    return *this;
+}
+
 Vector2 Vector2::operator-(const Vector2 o)
 {
 	return Vector2(this->x - o.x, this->y - o.y);
+}
+
+Vector2 Vector2::operator-=(const Vector2 o)
+{
+	x -= o.x;
+    y -= o.y;
+    return *this;
 }
 
 Vector2 Vector2::operator-()

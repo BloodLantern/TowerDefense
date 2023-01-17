@@ -14,6 +14,8 @@ public:
 
 	Vector2();
 
+	Vector2(float xy);
+
 	Vector2(float x, float y);
 
 	Vector2(Point2 p);
@@ -38,7 +40,11 @@ public:
 
 	Vector2 operator+(const Vector2 o);
 
+	Vector2 operator+=(const Vector2 o);
+
 	Vector2 operator-(const Vector2 o);
+
+	Vector2 operator-=(const Vector2 o);
 
 	Vector2 operator-();
 
@@ -57,6 +63,8 @@ public:
 	bool operator>(const Vector2 o);
 
 	bool operator>(float s);
+	
+	operator ImVec2() { return ImVec2(x, y); }
 
 	friend Point2 operator+(Point2 l, Vector2 r);
 	friend Point2 operator-(Point2 l, Vector2 r);

@@ -40,7 +40,5 @@ protected:
 	Vector2 mVelocity;
 	
 	float_t mSpeed;
-
-private:
 	float_t mLifetime;
 };

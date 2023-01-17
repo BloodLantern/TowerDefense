@@ -12,6 +12,8 @@ public:
     void OnUpdate() override;
     void OnRender() override;
 
+    void Explode();
+
 private:
     uint8_t mExplodeAnimation = 0;
 

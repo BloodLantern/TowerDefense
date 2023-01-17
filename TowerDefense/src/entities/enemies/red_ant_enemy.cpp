@@ -18,7 +18,7 @@ void RedAntEnemy::OnRender()
 {
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 
-	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, ImVec2(GetScale(), GetScale()), GetRotation(), IM_COL32(0xFF, 0x0, 0x0, 0xD0));
+	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, mScale, mRotation, IM_COL32(0xFF, 0x0, 0x0, 0xD0));
 
 	Enemy::DrawHealthBar(pos);
 }

@@ -7,7 +7,7 @@ bool Hud::canInteract;
 
 void Hud::DrawHealth(ImVec2 position)
 {
-    Texture* tex = Globals::gResources->GetTexture("ui\\heart");
+    Texture* tex = Globals::gResources->GetTexture("ui\\heart_icon");
 
     ImVec2 posMin(position);
     ImVec2 posMax(posMin.x + 40, posMin.y + 40);

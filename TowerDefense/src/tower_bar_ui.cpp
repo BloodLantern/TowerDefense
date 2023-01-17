@@ -50,8 +50,8 @@ void TowerBarUI::Draw()
 
 void TowerBarUI::HandleMouse()
 {
-	//if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
-	//	return;
+	if (Globals::gIO->WantCaptureMouse || !Hud::canInteract)
+		return;
 
 	const int32_t x = 0, y = TOWER_BAR_Y;
 	const int32_t height = TOWER_BAR_HEIGHT;

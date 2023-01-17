@@ -2,7 +2,7 @@
 
 #include "imgui_utils.hpp"
 
-#include <Point2.h>
+#include <Vector2.h>
 #include <stdint.h>
 
 class Entity
@@ -13,23 +13,25 @@ public:
 	Entity(Point2 pixelPosition);
 	Entity(float_t pixelPositionX, float_t pixelPositionY);
 	Entity(int32_t tilePositionX, int32_t tilePositionY);
-	virtual ~Entity() {};
+	virtual ~Entity() {}
 
 	virtual void OnUpdate() = 0;
 	virtual void OnRender() = 0;
 
 	bool IsOnGrid() const;
-	inline void SnapToGrid() { SetTilePosition(GetTilePosition()); };
+	inline void SnapToGrid() { SetTilePosition(GetTilePosition()); }
 
-	Point2 GetPixelPosition() const { return mPixelPosition; };
+	Point2 GetPixelPosition() const { return mPixelPosition; }
 	void SetPixelPosition(Point2 newPixelPosition);
 
-	Point2 GetTilePosition() const { return mTilePosition; };
+	Point2 GetTilePosition() const { return mTilePosition; }
 	void SetTilePosition(Point2 newTilePosition);
 
-	float_t GetScale() const { return mScale; };
+	Vector2 GetScale() const { return mScale; }
+	void SetScale(Vector2 newScale) { mScale = newScale; }
 	void SetScale(float_t newScale) { mScale = newScale; }
-	void AddScale(float_t scale) { mScale += scale; };
+	void AddScale(Vector2 scale) { mScale += scale; }
+	void AddScale(float_t scale) { mScale += scale; }
 
 	float_t GetRotation() const { return mRotation; }
 	void SetRotation(float_t newRotation) { mRotation = newRotation; }
@@ -42,12 +44,11 @@ public:
 
 protected:
 	Texture* mTexture = nullptr;
+	Vector2 mScale = 1;
+	float_t mRotation = 0;
 
 private:
 	Point2 mPixelPosition;
 	Point2 mTilePosition;
-	float_t mScale = 1;
-	float_t mRotation = 0;
-
 };
 
