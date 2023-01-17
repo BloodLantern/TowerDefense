@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 CannonTower::CannonTower(Texture* texture)
-    : Tower(new CannonBallProjectile(), 0.4f, 5.5f, "Cannon", 25, texture),
+    : Tower(new CannonBallProjectile(), 0.4f, 5.5f, "Cannon", 250, texture),
 	mHandleTexture(Globals::gResources->GetTexture("towers\\cannon_handle")),
 	mCannonTexture(Globals::gResources->GetTexture("towers\\cannon"))
 {

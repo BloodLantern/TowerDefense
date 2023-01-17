@@ -28,7 +28,7 @@ void Hud::DrawMoney(ImVec2 position)
 
     ImVec2 posMin(position);
     ImVec2 posMax(posMin.x + 40, posMin.y + 40);
-    Globals::gDrawList->AddImage(tex->id, posMin, posMax, ImVec2(0, 0), ImVec2(1, 1), IM_COL32(0xD3, 0xC5, 0x3B, 0xFF));
+    Globals::gDrawList->AddImage(tex->id, posMin, posMax);
 
     ImVec2 pos(posMax.x + 10, posMin.y + 5);
 

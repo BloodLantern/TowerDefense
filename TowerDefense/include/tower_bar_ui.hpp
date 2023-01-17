@@ -30,6 +30,7 @@ private:
 	void DrawTowers(const float_t x, const float_t y);
 	void HandleMouse();
 	void DrawOverlay(const ImVec2& mousePos, const float_t y);
+	void ShowCost(const ImVec2& mousePos, const float_t y);
 	void HandleDragAndDrop(const ImVec2& mousePos, const float_t x, const float_t y);
 	void ComputeTowerPosition(const bool& isOnGrid, const uint8_t& selectedTowerWidthTiles, const uint8_t& selectedTowerHeightTiles, const uint32_t& selectedTowerWidthPixels, const uint32_t& selectedTowerHeightPixels);
 	bool CheckTileAvailability(const uint8_t& selectedTowerWidthTiles, const uint8_t& selectedTowerHeightTiles, const Point2& tilePosition);

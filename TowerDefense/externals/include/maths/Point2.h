@@ -17,6 +17,10 @@ public:
 
 	Point2();
 
+	Point2(ImVec2 pos);
+
+	Point2(float xy);
+
 	Point2(float x, float y);
 
 	float Dist(Point2 o) const;

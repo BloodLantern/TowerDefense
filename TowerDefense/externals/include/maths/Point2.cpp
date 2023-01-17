@@ -7,6 +7,16 @@ Point2::Point2()
 {
 }
 
+Point2::Point2(ImVec2 pos)
+    : x(pos.x), y(pos.y)
+{
+}
+
+Point2::Point2(float xy)
+    : x(xy), y(xy)
+{
+}
+
 Point2::Point2(float x, float y)
 	: x(x), y(y)
 {

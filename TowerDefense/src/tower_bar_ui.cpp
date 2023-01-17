@@ -10,6 +10,7 @@
 #define TOWER_BAR_UI_OUTLINE_COLOR IM_COL32(0x0, 0x0, 0x0, 0x80)
 #define TOWER_BAR_UI_BACKGROUND_COLOR IM_COL32(0x80, 0x80, 0x80, 0xFF)
 #define TOWER_BAR_UI_TOWER_HOVER_COLOR IM_COL32(0xC0, 0x90, 0x40, 0xA0)
+#define TOWER_BAR_UI_TOWER_COST_COLOR IM_COL32(0xD3, 0xC5, 0x3B, 0xFF)
 
 #define TOWER_BAR_TOWER_OFFSET_X 8
 
@@ -71,7 +72,10 @@ void TowerBarUI::HandleMouse()
 	// If on the tower bar
 	if (mousePos.x > Globals::gWindowX && mousePos.y > Globals::gWindowY + y
 		&& mousePos.x < Globals::gWindowX + TOWER_BAR_TOWER_SIZE * TOWER_COUNT && mousePos.y < Globals::gWindowY + y + height)
+	{
 		DrawOverlay(mousePos, y);
+		ShowCost(mousePos, y);
+	}
 
 	HandleDragAndDrop(mousePos, x, y);
 }
@@ -81,9 +85,26 @@ void TowerBarUI::DrawOverlay(const ImVec2& mousePos, const float_t y)
 	// Draw an overlay on the tower
 	ImVec2 topLeft(mousePos.x - Globals::gWindowX, Globals::gWindowY + y + TOWER_BAR_Y_OFFSET / 2);
 	topLeft.x = (float_t)(((int32_t)topLeft.x) / TOWER_BAR_TOWER_SIZE) * TOWER_BAR_TOWER_SIZE + Globals::gWindowX;
-	ImVec2 bottomRight(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
+	const ImVec2 bottomRight(topLeft.x + TOWER_BAR_TOWER_SIZE, topLeft.y + TOWER_BAR_TOWER_SIZE);
 
-	Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR);
+	Globals::gDrawList->AddRectFilled(topLeft, bottomRight, TOWER_BAR_UI_TOWER_HOVER_COLOR, 0.5f);
+}
+
+void TowerBarUI::ShowCost(const ImVec2 &mousePos, const float_t y)
+{
+	uint32_t cost = mTowerTemplates[((int32_t)mousePos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE]->GetCost();
+
+	ImVec2 pos(mousePos.x, Globals::gWindowY + y);
+	pos.x = (((int32_t)pos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE) * (float_t) TOWER_BAR_TOWER_SIZE + Globals::gWindowX;
+	
+	const std::string text = std::to_string(cost);
+	ImGui::PushFont(Globals::gFontMedium);
+	ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
+	
+	Globals::gDrawList->AddRectFilled(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_BACKGROUND_COLOR);
+	Globals::gDrawList->AddRect(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_OUTLINE_COLOR);
+	Globals::gDrawList->AddText(pos, TOWER_BAR_UI_TOWER_COST_COLOR, text.c_str());
+	ImGui::PopFont();
 }
 
 void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, const float_t y)
