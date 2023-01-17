@@ -62,10 +62,6 @@ public:
 	void SetTimeSinceLastAttack(double_t newTimeSinceLastAttack) { mTimeSinceLastAttack = newTimeSinceLastAttack; }
 
 protected:
-	struct CustomUpgrade
-	{
-		uint8_t level;
-	};
 
 	std::string mName;
 
@@ -90,6 +86,8 @@ protected:
 	bool mRotateTowardsEnemies = true;
 	
 	uint8_t mCustomUpgradeLevel = 0;
+	uint8_t mCustomUpgradeLevelMax = 0;
+	uint32_t mCustomUpgradeCost = 1;
 
 	void HandleSelection();
 
@@ -116,10 +114,12 @@ private:
 	static Texture* mGenericUpgradeAtackSpeedIconTexture;
 	static Texture* mGenericUpgradeRangeIconTexture;
 
+	virtual const char* GetCustomUpgradeTooltip(uint8_t level) const = 0;
+
 	void UpdateGeneric(GenericUpgradeType upgrade);
-	void UpdateDamage();
-	void UpdateAttackSpeed();
-	void UpdateRange();
+	virtual void UpdateDamage();
+	virtual void UpdateAttackSpeed();
+	virtual void UpdateRange();
 
 	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
 	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };
@@ -133,7 +133,8 @@ private:
 	// Returns whether the button was clicked
 	bool DrawUpgradeButton(GenericUpgradeType upgrade);
 	void DrawStats();
-	void DisplayTowerUpgrade(GenericUpgradeType upgrade);
+	void DisplayGenericUpgrade(GenericUpgradeType upgrade);
+	void DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl);
 	void AddTooltip(const char* text);
 	void InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
 

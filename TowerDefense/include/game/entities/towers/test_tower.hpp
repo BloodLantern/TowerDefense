@@ -15,5 +15,7 @@ public:
 	TestTower(Texture* texture);
 
 	Tower* Clone() const override;
-	void OnCustomUpgrade() override;
+
+    void OnCustomUpgrade() override {}
+    const char* GetCustomUpgradeTooltip(uint8_t level) const override { return nullptr; }
 };

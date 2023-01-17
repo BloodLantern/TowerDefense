@@ -115,10 +115,6 @@ void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, cons
 {
 	ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
 
-	// Don't allow dragging if the player doesn't have enough money
-	if (mTowerTemplates[((int32_t)mouseClickedPos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayer()->GetMoney())
-		return;
-
 	mouseClickedPos.x -= Globals::gWindowX;
 	mouseClickedPos.y -= Globals::gWindowY;
 
@@ -128,6 +124,10 @@ void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, cons
 		// Optimization
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
+		// Don't allow dragging if the player doesn't have enough money
+		if (mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayer()->GetMoney())
+			return;
+
 		// Create the tower if it doesn't already exist
 		if (!mSelectedTower)
 			mSelectedTower = mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->Clone();

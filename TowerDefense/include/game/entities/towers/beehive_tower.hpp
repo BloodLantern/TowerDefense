@@ -11,7 +11,8 @@ public:
 	void Shoot() override;
 	void OnUpdate() override;
 
-	void OnCustomUpgrade() override;
+    void OnCustomUpgrade() override;
+    const char* GetCustomUpgradeTooltip(uint8_t level) const override { return nullptr; }
 	
 	void RemoveBee();
 

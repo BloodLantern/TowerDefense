@@ -13,8 +13,3 @@ Tower *TestTower::Clone() const
 	result->mHeight = mHeight;
 	return result;
 }
-
-void TestTower::OnCustomUpgrade()
-{
-	std::cout << "Test custom upgrade" << std::endl;
-}

@@ -8,6 +8,7 @@ public:
     CannonTower(Texture* texture);
 
     void OnCustomUpgrade() override;
+    const char* GetCustomUpgradeTooltip(uint8_t level) const override;
 
     Tower* Clone() const override;
 

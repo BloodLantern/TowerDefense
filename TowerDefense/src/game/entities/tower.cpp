@@ -271,31 +271,15 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	ImVec2 cursorPos = ImGui::GetCursorPos();
 	cursorPos.x += panelPosition.x;
 	cursorPos.y += panelPosition.y - 2; // -2 for offset
-	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 3), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
+	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 2), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
 
-	DisplayTowerUpgrade(GenericUpgradeType::DAMAGE);
-	DisplayTowerUpgrade(GenericUpgradeType::ATTACK_SPEED);
-	DisplayTowerUpgrade(GenericUpgradeType::RANGE);
+	//DisplayGenericUpgrade(GenericUpgradeType::DAMAGE);
+	DisplayGenericUpgrade(GenericUpgradeType::ATTACK_SPEED);
+	DisplayGenericUpgrade(GenericUpgradeType::RANGE);
 
-	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
-	cursorPos = ImGui::GetCursorPos();
-	cursorPos.x += panelPosition.x;
-	cursorPos.y += panelPosition.y - 2; // -2 for offset
-	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 1), IM_COL32(0xFF, 0xB0, 0x0, 0xD0), 4);
-
-	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
-	ImGui::BeginDisabled();
-	if (ImGui::ImageButton("upgradeCustomButton", mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
-	{
-		std::cout << "Custom upgrade" << std::endl;
-	}
-	ImGui::EndDisabled();
-	ImGui::PopStyleVar();
-	AddTooltip("Not yet implemented");
-	ImGui::SameLine();
-	ImGui::Text("Custom");
-	AddTooltip("Not yet implemented");
+	// Only display if you can upgrade
+	if (mCustomUpgradeLevel < mCustomUpgradeLevelMax)
+		DisplayCustomUpgrade(panelPosition, dl);
 }
 
 bool Tower::DrawUpgradeButton(GenericUpgradeType upgrade)
@@ -349,7 +333,7 @@ void Tower::DrawStats()
 	AddTooltip(TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT);
 }
 
-void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
+void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 {
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 	IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
@@ -425,6 +409,56 @@ void Tower::DisplayTowerUpgrade(GenericUpgradeType upgrade)
 		IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 	}
 
+}
+
+void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
+{
+	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
+	ImVec2 cursorPos = ImGui::GetCursorPos();
+	cursorPos.x += panelPosition.x;
+	cursorPos.y += panelPosition.y - 2; // -2 for offset
+	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 1), IM_COL32(0xFF, 0xB0, 0x0, 0xD0), 4);
+
+	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH + TOWER_PANEL_TEXT_SIZE_MEDIUM * mCustomUpgradeLevelMax);
+	IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
+	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0xFF / 255.f, 0xFF / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	ImVec4(0xCF / 255.f, 0xCF / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0xB0 / 255.f, 0xB0 / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
+
+	bool canUpgrade = mOwner->GetMoney() >= mCustomUpgradeCost;
+	if (!canUpgrade)
+		ImGui::BeginDisabled();
+
+	if (ImGui::ImageButton("upgradeCustomButton", mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+	{
+		mOwner->DecreaseMoney(mCustomUpgradeCost);
+		mMoneyInvested += mCustomUpgradeCost;
+
+		OnCustomUpgrade();
+	}
+
+	if (!canUpgrade)
+	{
+		ImGui::EndDisabled();
+
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0xFF / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xFF / 255.f), "$%d", mCustomUpgradeCost);
+	}
+	else
+	{
+		ImGui::SameLine();
+		ImGui::Text("$%d", mCustomUpgradeCost);
+	}
+	
+	ImGui::PopStyleColor(3);
+	ImGui::PopStyleVar();
+	const char* tooltip = GetCustomUpgradeTooltip(mCustomUpgradeLevel);
+	AddTooltip(tooltip);
+	ImGui::SameLine();
+	ImGui::Text("Custom");
+	AddTooltip(tooltip);
 }
 
 void Tower::AddTooltip(const char* text)
