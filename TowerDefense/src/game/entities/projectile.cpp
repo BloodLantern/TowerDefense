@@ -50,7 +50,7 @@ void Projectile::HandleEnemyCollision()
 		{
 			uint32_t damageDealt;
 			// If the enemy died, update tower kill stat
-			if (enemy->DealDamage(mDamage, damageDealt))
+			if (!inRangeEnemy->toDelete && enemy->DealDamage(mDamage, damageDealt))
 			{
 				if (mOwner)
 				{

@@ -26,6 +26,8 @@ public:
 	void SetDamage(uint32_t damage) { mDamage = damage; }
 	Tower* GetOwner() const { return mOwner; }
 	void SetOwner(Tower* owner) { mOwner = owner; }
+	void SetSpeed(float_t speed) { mSpeed = speed; }
+	float_t GetLifetime() const { return mLifetime; }
 
 protected:
 	std::vector<Enemy*> mHitEnemies;

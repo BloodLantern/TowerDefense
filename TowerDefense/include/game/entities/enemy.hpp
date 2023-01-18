@@ -21,6 +21,7 @@ public:
 	void SlowDown();
 
 	uint32_t GetMoneyDrop() const { return mMoneyDrop; }
+	uint32_t GetHealth() const { return mHealth; }
 
 protected:
 	float mSpeed;

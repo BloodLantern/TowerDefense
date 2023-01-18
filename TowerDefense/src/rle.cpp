@@ -129,7 +129,7 @@ bool RLE::CompressLevel(PlayField* pf, const char* dst)
 	}
 
 	std::vector<PathNode>& nodes = pf->GetPathNodes();
-	uint32_t size = nodes.size();;
+	uint32_t size = (uint32_t)nodes.size();;
 
 	fwrite(&size, sizeof(size), 1, f);
 

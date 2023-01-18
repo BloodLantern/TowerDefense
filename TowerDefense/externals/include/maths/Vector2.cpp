@@ -1,9 +1,9 @@
 #include "Vector2.h"
 #include "Point2.h"
 
-const Vector2 Zero = Vector2(0.f, 0.f);
-const Vector2 UnitY = Vector2(0.f, 1.f);
-const Vector2 UnitX = Vector2(1.f, 0.f);
+const Vector2 Vector2::Zero(0.f, 0.f);
+const Vector2 Vector2::UnitY(0.f, 1.f);
+const Vector2 Vector2::UnitX(1.f, 0.f);
 
 Vector2::Vector2()
 	: x(0), y(0)

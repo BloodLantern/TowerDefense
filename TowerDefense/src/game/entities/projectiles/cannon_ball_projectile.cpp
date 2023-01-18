@@ -5,15 +5,25 @@
 #define CANNON_BALL_PROJECTILE_EXPLOSION_ANIMATION_TIME 20
 
 CannonBallProjectile::CannonBallProjectile()
-    : Projectile(15, 2, 40, 0.5f)
+    : CannonBallProjectile(15, 2, 0.5f, 0.05f, Vector2::Zero)
 {
-    mScale = 0.05f;
+    mCollidesWithEnemies = true;
+}
+
+CannonBallProjectile::CannonBallProjectile(float_t speed, uint32_t damage, float_t lifetime, float_t scale, Vector2 velocity)
+    : Projectile(speed, damage, 40, lifetime), mCollidesWithEnemies(false)
+{
+    mScale = scale;
+    mVelocity = velocity;
     mTexture = Globals::gResources->GetTexture("projectiles\\cannon_ball");
 }
 
 Projectile* CannonBallProjectile::Clone() const
 {
-    return new CannonBallProjectile();
+    CannonBallProjectile* clone = new CannonBallProjectile();
+    clone->mSpeed = mSpeed;
+    clone->mCollidesWithEnemies = mCollidesWithEnemies;
+    return clone;
 }
 
 void CannonBallProjectile::HandleEnemyCollision()
@@ -47,7 +57,8 @@ void CannonBallProjectile::OnUpdate()
             mVelocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Normalize() * 60;
 
         // If the projectile hits an enemy, deal its damage and reduce its pierce
-        HandleEnemyCollision();
+        if (mCollidesWithEnemies)
+            HandleEnemyCollision();
 
         // Update its position
         SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
@@ -84,9 +95,9 @@ void CannonBallProjectile::Explode()
         Enemy* inRangeEnemy = *it2;
         if (Vector2(inRangeEnemy->GetPixelPosition(), GetPixelPosition()).GetSquaredNorm() < CANNON_BALL_PROJECTILE_EXPLOSION_RADIUS * CANNON_BALL_PROJECTILE_EXPLOSION_RADIUS)
         {
-            uint32_t damageDealt;
+            uint32_t damageDealt = 0;
             // If the enemy died, update tower kill stat
-            if (inRangeEnemy->DealDamage(mDamage, damageDealt))
+            if (!inRangeEnemy->toDelete && inRangeEnemy->DealDamage(mDamage, damageDealt))
             {
                 if (mOwner)
                 {

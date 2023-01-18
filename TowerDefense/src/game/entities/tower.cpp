@@ -105,9 +105,11 @@ void Tower::UpdateGeneric(GenericUpgradeType upgrade)
 {
 	switch (upgrade)
 	{
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 		case GenericUpgradeType::DAMAGE:
 		    UpdateDamage();
             break;
+#endif
 			
         case GenericUpgradeType::ATTACK_SPEED:
             UpdateAttackSpeed();
@@ -119,10 +121,12 @@ void Tower::UpdateGeneric(GenericUpgradeType upgrade)
 	}
 }
 
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 void Tower::UpdateDamage()
 {
 	mDamage = mStartDamage + mGenericUpgradeLevels[GenericUpgradeType::DAMAGE] * TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER;
 }
+#endif
 
 void Tower::UpdateAttackSpeed()
 {
@@ -276,7 +280,9 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	cursorPos.y += panelPosition.y - 2; // -2 for offset
 	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 2), IM_COL32(0xFF, 0xFF, 0x0, 0xB0), 4);
 
-	//DisplayGenericUpgrade(GenericUpgradeType::DAMAGE);
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
+	DisplayGenericUpgrade(GenericUpgradeType::DAMAGE);
+#endif
 	DisplayGenericUpgrade(GenericUpgradeType::ATTACK_SPEED);
 	DisplayGenericUpgrade(GenericUpgradeType::RANGE);
 
@@ -342,6 +348,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 
 	switch (upgrade)
 	{
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 		case GenericUpgradeType::DAMAGE:
 			ImGui::Image(Tower::mGenericUpgradeAttackDamageIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
@@ -351,6 +358,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 			ImGui::Text("%-d", mDamage);
 			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 			break;
+#endif
 
 		case GenericUpgradeType::ATTACK_SPEED:
 		{

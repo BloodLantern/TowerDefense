@@ -13,18 +13,24 @@ class Player;
 #define TOWER_PANEL_TEXT_SIZE_BIG 40
 #define TOWER_PANEL_TEXT_SIZE_MEDIUM 20
 
-#define TOWER_UPGRADE_GENERIC_LEVEL_MAX 10
+//#define TOWER_UPGRADE_GENERIC_DAMAGE
+
+#define TOWER_UPGRADE_GENERIC_LEVEL_MAX 5
 #define TOWER_UPGRADE_GENERIC_COST_BASE 40
-#define TOWER_UPGRADE_GENERIC_COST_MULTIPLIER 1.3f
+#define TOWER_UPGRADE_GENERIC_COST_MULTIPLIER 1.6f
 #define TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER 0.2f
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 #define TOWER_UPGRADE_GENERIC_DAMAGE_MULTIPLIER 1.1f
+#endif
 #define TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER 0.15f
 
 class Tower : public Entity
 {
 	enum GenericUpgradeType : uint8_t
 	{
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 		DAMAGE = 0,
+#endif
 		ATTACK_SPEED = 1,
 		RANGE = 2
 	};
@@ -118,7 +124,9 @@ private:
 	virtual const char* const GetCustomUpgradeTooltip(uint8_t level) const = 0;
 
 	void UpdateGeneric(GenericUpgradeType upgrade);
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 	virtual void UpdateDamage();
+#endif
 	virtual void UpdateAttackSpeed();
 	virtual void UpdateRange();
 
