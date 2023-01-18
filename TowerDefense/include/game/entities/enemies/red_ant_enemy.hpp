@@ -6,7 +6,6 @@ class RedAntEnemy : public Enemy
 {
 public:
 	RedAntEnemy(Point2 pos);
-	~RedAntEnemy();
     
 	void OnRender() override;
 };

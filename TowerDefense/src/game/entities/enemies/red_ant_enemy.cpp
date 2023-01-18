@@ -2,16 +2,11 @@
 #include "globals.hpp"
 
 RedAntEnemy::RedAntEnemy(Point2 pos)
-	: Enemy(pos, 5, 1, 20)
+	: Enemy(pos, 50, 1, 20)
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\ant_alpha");
 	SetScale(.1f);
 	mSpeed = 3.5f;
-}
-
-RedAntEnemy::~RedAntEnemy()
-{
-
 }
 
 void RedAntEnemy::OnRender()

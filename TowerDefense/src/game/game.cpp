@@ -207,6 +207,9 @@ void Game::UpdateEnemies()
         e->OnRender();
         _e++;
     }
+
+    enemies.insert(enemies.end(), enemiesQueue.begin(), enemiesQueue.end());
+    enemiesQueue.clear();
 }
 
 void Game::UpdateProjectiles()
@@ -298,7 +301,7 @@ void Game::Scene_LevelSelection()
         const ImVec2 buttonSize(320, 160);
         ImVec2 cursor(Globals::gWindowWidth / 4.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
 
-        for (uint32_t i = 1; i < mAmountOfLevels + 1; i++)
+        for (int32_t i = 1; i < mAmountOfLevels + 1; i++)
         {
             std::string id = std::to_string(i);
             std::string previewFile = std::string("previews\\LevelPreview").append(id);

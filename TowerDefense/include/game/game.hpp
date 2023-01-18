@@ -19,6 +19,7 @@ public:
     Player* GetPlayer() const { return mPlayer; }
 
     std::vector<Enemy*> enemies;
+    std::vector<Enemy*> enemiesQueue;
     std::vector<Projectile*> projectiles;
     std::vector<Projectile*> projectilesQueue;
     uint32_t currentWave = 1;

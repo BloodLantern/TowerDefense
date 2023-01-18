@@ -57,6 +57,6 @@ void Player::IncreaseMoney(uint32_t amount)
 
 void Player::Reset()
 {
-	mLife = 10;
-	mMoney = 200;
+	mLife = PLAYER_DEFAULT_HEALTH;
+	mMoney = PLAYER_DEFAULT_MONEY;
 }

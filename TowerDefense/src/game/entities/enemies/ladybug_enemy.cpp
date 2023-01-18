@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 LadybugEnemy::LadybugEnemy(Point2 pos)
-	: Enemy(pos, 15, 3, 40)
+	: Enemy(pos, 150, 3, 40)
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\ladybug");
 	SetScale(.1f);

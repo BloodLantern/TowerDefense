@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <vector>
 
+#define PLAYER_DEFAULT_MONEY 20000
+#define PLAYER_DEFAULT_HEALTH 1000
+
 class Player {
 public:
     Player();
@@ -27,8 +30,8 @@ public:
     void Reset();
 
 private:
-    uint32_t mMoney = 200;
-    uint16_t mLife = 10;
+    uint32_t mMoney = PLAYER_DEFAULT_MONEY;
+    uint16_t mLife = PLAYER_DEFAULT_HEALTH;
 
     std::vector<Tower*> mTowers;
 };

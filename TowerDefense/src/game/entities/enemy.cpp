@@ -2,7 +2,7 @@
 #include "a_star.hpp"
 #include "globals.hpp"
 
-Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint32_t moneyDrop)
+Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint16_t damage, uint32_t moneyDrop)
 	: Entity(pixelPosition), mHealth(health), mSpawnHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 	mCurrentPathIndex = 0;
@@ -30,7 +30,8 @@ void Enemy::OnUpdate()
 
 	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * deltaTime * speedModifier);
 
-	SetRotation(mVelocity.Angle());
+	if (mRotateForward)
+		SetRotation(mVelocity.Angle());
 }
 
 void Enemy::OnRender()
