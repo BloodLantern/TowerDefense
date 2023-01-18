@@ -17,9 +17,9 @@ PlayField::PlayField()
 	LoadTileset("forest.png");
 	
 	// Try to load the default level
-	if (!RLE::DecompressLevel(this, MAPS_PATH "Level1.bin"))
+	//if (!RLE::DecompressLevel(this, MAPS_PATH "Level1.bin"))
 	{
-		std::cout << "Failed to open file" << std::endl;
+		//std::cout << "Failed to open file" << std::endl;
 
 		// Failsafe, reset everything
 		for (int32_t x = 0; x < gridWidth; x++)

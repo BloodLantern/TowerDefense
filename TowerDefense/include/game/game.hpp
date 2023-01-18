@@ -39,6 +39,7 @@ private:
 
     bool mEnded = false;
 
+
     std::string mRpcDetailsText = "Details text";
 
     double_t mDeltaTime = 0.0;
@@ -47,12 +48,16 @@ private:
 
     Scene mCurrentScene;
     uint8_t mCurrentLevel;
+    uint8_t mAmountOfLevels;
 
     void Scene_MainMenu();
     void Scene_LevelSelection();
     void Scene_FreeSelection();
     void Scene_InGame();
     void Scene_Options();
+
+    void CountLevels();
+    void StartLevel(uint8_t level);
 
     void DrawHud();
     void CheckEndRound();
