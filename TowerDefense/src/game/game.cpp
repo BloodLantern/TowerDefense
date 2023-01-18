@@ -11,7 +11,7 @@ Game::Game()
     // Temp
     maxWave = 20;
 
-    mCurrentScene = Scene::IN_GAME;
+    mCurrentScene = Scene::MAIN_MENU;
     mCurrentLevel = 0;
     mAmountOfLevels = 0;
 
@@ -32,7 +32,6 @@ void Game::Init()
     currentWave = 1;
     mDeltaTime = 0;
     mPlayingSpeedDeltaTime = 0;
-    StartLevel(1);
 }
 
 void Game::EndGame(bool lost)
