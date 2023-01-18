@@ -56,6 +56,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_SAMPLES, 8);
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
 
 	GLFWwindow* window;
@@ -110,6 +111,9 @@ int main(int argc, char** argv)
 	DiscordEventHandlers discordEvents = { 0 };
 	Discord_Initialize(DISCORD_APP_ID, &discordEvents, true, nullptr);
 	SetupDiscordRPC(&Globals::gDiscordRpc);
+
+	// Show window
+	glfwShowWindow(window);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
