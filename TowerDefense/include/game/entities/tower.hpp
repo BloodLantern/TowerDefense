@@ -115,7 +115,7 @@ private:
 	static Texture* mGenericUpgradeRangeIconTexture;
 	static Texture* mCustomUpgradeStarIcon;
 
-	virtual const char* GetCustomUpgradeTooltip(uint8_t level) const = 0;
+	virtual const char* const GetCustomUpgradeTooltip(uint8_t level) const = 0;
 
 	void UpdateGeneric(GenericUpgradeType upgrade);
 	virtual void UpdateDamage();

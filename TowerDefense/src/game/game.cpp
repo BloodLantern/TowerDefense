@@ -2,7 +2,6 @@
 #include "globals.hpp"
 #include "round_editor.hpp"
 #include "hud.hpp"
-#include "cannon_cluster_projectile.hpp"
 
 Game::Game()
 {

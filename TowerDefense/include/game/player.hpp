@@ -27,7 +27,7 @@ public:
     void Reset();
 
 private:
-    uint32_t mMoney = 200;
+    uint32_t mMoney = 2000;
     uint16_t mLife = 10;
 
     std::vector<Tower*> mTowers;

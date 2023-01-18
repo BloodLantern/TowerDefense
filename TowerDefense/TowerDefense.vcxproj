@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\entities\projectiles\bee_projectile_dart.cpp" />
     <ClCompile Include="src\network\network_interface.cpp" />
     <ClCompile Include="src\network\chat_console.cpp" />
     <ClCompile Include="src\network\server_interface.cpp" />
@@ -199,6 +200,8 @@
     <ClCompile Include="src\editor\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\game\entities\projectiles\bee_projectile_dart.hpp" />
+    <ClInclude Include="include\game\entities\towers\beehive_tower.hpp" />
     <ClInclude Include="include\network\chat_console.hpp" />
     <ClInclude Include="include\network\client_interface.hpp" />
     <ClInclude Include="externals\include\ImGui\imconfig.h" />

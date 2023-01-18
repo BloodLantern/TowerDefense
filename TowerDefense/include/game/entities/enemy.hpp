@@ -18,6 +18,8 @@ public:
 	// Returns whether the enemy died
 	bool DealDamage(uint32_t damage, uint32_t& damageDealt);
 
+	void SlowDown();
+
 	uint32_t GetMoneyDrop() const { return mMoneyDrop; }
 
 protected:
@@ -33,7 +35,9 @@ private:
 	uint8_t mDamage;
 
 	uint32_t mMoneyDrop;
+	
 	bool mSlowed;
+	float_t mSlowedTimer;
 
 	uint16_t mCurrentPathIndex;
 };

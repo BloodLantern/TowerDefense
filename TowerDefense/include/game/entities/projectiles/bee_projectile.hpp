@@ -1,7 +1,8 @@
 #pragma once
 
 #include "projectile.hpp"
-#include "beehive_tower.hpp"
+
+class BeehiveTower;
 
 class BeeProjectile : public Projectile
 {
@@ -9,16 +10,22 @@ public:
 	BeeProjectile(BeehiveTower* hive);
 	~BeeProjectile();
 
+	void UpdateForDarts();
+
 	void OnUpdate() override;
 	void OnRender() override;
 	void HandleEnemyCollision() override;
 
 	Projectile* Clone() const override;
 
+	bool slowEnemies;
+
 private:
 	bool CheckInHiveRange();
 	bool CheckAtHive();
 	void FindTarget();
+
+	void MakeFaceDirection();
 
 	void HandleIdleFloating();
 	void SetGoingBackToHive();
@@ -36,6 +43,7 @@ private:
 
 	float_t mHookedTimer;
 	float_t mIdleVelocityTimer;
+	float_t mDartTimer;
 
 	BeePose mPose;
 };

@@ -12,7 +12,23 @@ Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint8_t damage, uint32_t mon
 void Enemy::OnUpdate()
 {
 	StickToPath();
-	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
+
+	float_t deltaTime = Globals::gGame->GetPlayingSpeedDeltaTime();
+
+
+	float_t speedModifier = 1.f;
+	if (mSlowed)
+	{
+		speedModifier = 0.5f;
+		mSlowedTimer -= deltaTime;
+		if (mSlowedTimer < 0)
+		{
+			float_t speedModifier = 1.f;
+			mSlowed = false;
+		}
+	}
+
+	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * deltaTime * speedModifier);
 
 	SetRotation(mVelocity.Angle());
 }
@@ -105,6 +121,12 @@ bool Enemy::DealDamage(uint32_t damage, uint32_t& damageDealt)
 	mHealth -= damage;
 	damageDealt = damage;
 	return false;
+}
+
+void Enemy::SlowDown()
+{
+	mSlowed = true;
+	mSlowedTimer = 2.5f;
 }
 
 void Enemy::DrawHealthBar(ImVec2& pos)

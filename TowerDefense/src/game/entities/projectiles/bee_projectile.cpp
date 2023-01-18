@@ -1,5 +1,10 @@
 #include "bee_projectile.hpp"
 #include "globals.hpp"
+#include "beehive_tower.hpp"
+#include "bee_projectile_dart.hpp"
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 // Not the best place
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
@@ -9,7 +14,9 @@ BeeProjectile::BeeProjectile(BeehiveTower* hive)
 {
 	mHive = hive;
 	mHookedTimer = 0;
-	SetTexture(Globals::gResources->GetTexture("towers\\bee"));
+	mDartTimer = 1.f;
+	slowEnemies = false;
+	SetTexture(Globals::gResources->GetTexture("towers\\bee_right"));
 	SetScale(.05f);
 
 	mIdleVelocityTimer = 0.f;
@@ -18,7 +25,8 @@ BeeProjectile::BeeProjectile(BeehiveTower* hive)
 
 BeeProjectile::~BeeProjectile()
 {
-	mHive->RemoveBee();
+	if (!toDelete)
+		mHive->RemoveBee(this);
 }
 
 Projectile* BeeProjectile::Clone() const
@@ -26,8 +34,29 @@ Projectile* BeeProjectile::Clone() const
 	return new BeeProjectile(mHive);
 }
 
+void BeeProjectile::UpdateForDarts()
+{
+	if (!mTarget)
+		return;
+	
+	mDartTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
+	if (mDartTimer < 0)
+	{
+		mDartTimer = 1.f;
+
+		Vector2 velocity = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()) * 60;
+
+		// Don't use the projectile queue because we aren't in the projectile update loop
+		Globals::gGame->projectiles.push_back(new BeeProjectileDart(GetPixelPosition(), velocity));
+	}
+}
+
 void BeeProjectile::OnUpdate()
 {
+	// Safety net, if the beehive was destroyed earlier in the frame
+	if (toDelete)
+		return;
+
 	switch (mPose)
 	{
 		case BEE_POSE_IDLE:
@@ -65,6 +94,8 @@ void BeeProjectile::OnUpdate()
 			HandleEnemyCollision();
 	}
 
+	MakeFaceDirection();
+
 	// Update position
 	SetPixelPosition(GetPixelPosition() + mVelocity * mSpeed * Globals::gGame->GetPlayingSpeedDeltaTime());
 	// Always stay in hive range
@@ -78,6 +109,14 @@ void BeeProjectile::OnRender()
 	ImVec2 pos(GetPixelPosition().x + Globals::gGridX, GetPixelPosition().y + Globals::gGridY);
 
 	ImGuiUtils::DrawTextureEx(*Globals::gDrawList, *GetTexture(), pos, mScale, mRotation);
+}
+
+void BeeProjectile::MakeFaceDirection()
+{
+	if (mVelocity.x < 0)
+		mTexture = Globals::gResources->GetTexture("towers\\bee_left");
+	else
+		mTexture = Globals::gResources->GetTexture("towers\\bee_right");
 }
 
 void BeeProjectile::HandleEnemyCollision()
@@ -95,6 +134,10 @@ void BeeProjectile::HandleEnemyCollision()
 
 		// Deal damage and update tower
 		uint32_t damageDealt;
+
+		if (slowEnemies)
+			mTarget->SlowDown();
+
 		if (mTarget->DealDamage(mDamage, damageDealt))
 		{
 			mHive->IncreaseKillCount(1);

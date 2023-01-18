@@ -37,7 +37,7 @@ void CannonTower::OnCustomUpgrade()
 	}
 }
 
-const char* CannonTower::GetCustomUpgradeTooltip(uint8_t level) const
+const char* const CannonTower::GetCustomUpgradeTooltip(uint8_t level) const
 {
     return sCustomUpgradeTooltips[level];
 }

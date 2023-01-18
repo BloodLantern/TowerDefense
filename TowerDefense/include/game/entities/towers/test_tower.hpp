@@ -17,5 +17,5 @@ public:
 	Tower* Clone() const override;
 
     void OnCustomUpgrade() override {}
-    const char* GetCustomUpgradeTooltip(uint8_t level) const override { return nullptr; }
+    const char* const GetCustomUpgradeTooltip(uint8_t level) const override { return nullptr; }
 };
