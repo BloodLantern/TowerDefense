@@ -12,7 +12,14 @@ void ChatConsole::Draw()
 	{
 		if (ImGui::InputText("##message", mMessageBuffer, sizeof(mMessageBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
+			// Send to network
 			Globals::gNetwork.client->SendChatMessage(mMessageBuffer);
+			
+			// Add message to self without sending it to the network
+			AddMessage(std::string(mMessageBuffer));
+			
+			// Clear message
+			memset(mMessageBuffer, 0, sizeof(mMessageBuffer));
 		}
 		for (size_t i = 0; i < mMessages.size(); i++)
 			ImGui::Text("%s", mMessages[i].c_str());
