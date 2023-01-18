@@ -60,38 +60,46 @@ void Round::OnUpdate()
 	switch (command)
 	{
 		case ROUND_COMMAND_SPAWN_ENEMY:
+		{
 			int32_t screenX;
 			int32_t screenY;
-			Globals::gGame->GetPlayField()->GetPixelPositionFromGrid(0, 7, screenX, screenY);
+			Point2 position;
+
+			PlayField* pf = Globals::gGame->GetPlayField();
+			uint8_t tileX = pf->GetPathNodes()[0].x;
+			uint8_t tileY = pf->GetPathNodes()[0].y;
+
+			pf->GetPixelPositionFromGrid(tileX, tileY, screenX, screenY);
 
 			// TODO enum
 			Enemy* e;
 			switch (mRoundInfo[mCurrentCommand].data.dataInt)
 			{
-				case 0:
-					e = new AntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
-					break;
+			case 0:
+				e = new AntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+				break;
 
-				case 1:
-					e = new MiteEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
-					break;
+			case 1:
+				e = new MiteEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+				break;
 
-				case 2:
-					e = new GoldScarabEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
-					break;
+			case 2:
+				e = new GoldScarabEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+				break;
 
-				case 3:
-					e = new LadybugEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
-					break;
-					
-				case 4:
-					e = new RedAntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
-					break;
+			case 3:
+				e = new LadybugEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+				break;
+
+			case 4:
+				e = new RedAntEnemy(Point2(screenX, screenY + GRID_SQUARE_SIZE / 2));
+				break;
 			}
 
 			Globals::gGame->enemies.push_back(e);
 			AdvanceRound();
 			break;
+		}
 
 		case ROUND_COMMAND_COOLDOWN:
 			if (mTimer == FLT_MAX)
