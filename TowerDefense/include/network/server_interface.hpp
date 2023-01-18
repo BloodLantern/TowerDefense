@@ -10,6 +10,8 @@ public:
 		: ServerInterface<NetworkCommands>(port)
 	{ }
 
+	bool OnClientConnect(std::shared_ptr<net::Connection<NetworkCommands>> client) override { return true; }
+
 	void OnMessage(std::shared_ptr<net::Connection<NetworkCommands>> client, net::Message<NetworkCommands>& msg) override;
 
 private:

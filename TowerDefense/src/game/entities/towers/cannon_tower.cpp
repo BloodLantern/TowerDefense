@@ -2,9 +2,13 @@
 #include "cannon_ball_projectile.hpp"
 #include "globals.hpp"
 
-static const char* const sCustomUpgradeTooltips[2] = {
-	"1",
-	"2"
+#define CUSTOM_UPGRADE_LEVEL_MAX 4
+
+static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
+	"Shoots faster bombs: never miss again!",
+	"Increases damage: now it is also useful in the mid-game.",
+	"Cluster bombs: on explosion, the bomb now unleashes 8 other bombs around!",
+	"Recursive cluster: cluster bombs now also release more cluster bombs!"
 };
 
 CannonTower::CannonTower(Texture* texture)
@@ -14,26 +18,33 @@ CannonTower::CannonTower(Texture* texture)
 {
 	mScale = 0.07f;
 
-	mCustomUpgradeCost = 1;
-	mCustomUpgradeLevelMax = 1;
+	mCustomUpgradeCost = 5;
+	mCustomUpgradeLevelMax = CUSTOM_UPGRADE_LEVEL_MAX;
 }
 
 void CannonTower::OnCustomUpgrade()
 {
-	std::cout << "Cannon custom upgrade" << std::endl;
+	switch (mCustomUpgradeLevel)
+	{
+		case 1:
+            break;
+		case 2:
+            break;
+		case 3:
+            break;
+		case 4:
+            break;
+	}
 }
 
-const char *CannonTower::GetCustomUpgradeTooltip(uint8_t level) const
+const char* CannonTower::GetCustomUpgradeTooltip(uint8_t level) const
 {
     return sCustomUpgradeTooltips[level];
 }
 
 Tower* CannonTower::Clone() const
 {
-	CannonTower* result = new CannonTower(mTexture);
-	result->mWidth = mWidth;
-	result->mHeight = mHeight;
-	return result;
+	return new CannonTower(mTexture);
 }
 
 void CannonTower::Draw(const ImVec2 &topLeft, const ImVec2 &bottomRight) const

@@ -18,6 +18,7 @@
 #define IMGUI_IMAGE_BUTTON_OFFSET_X 8
 #define IMGUI_IMAGE_BUTTON_OFFSET_Y 6
 
+#define TOWER_PANEL_UPGRADE_BAR_OFFSET_Y 2
 #define TOWER_PANEL_UPGRADE_TAB_WIDTH 12
 #define IMGUI_LINE_SPACING_HEIGHT 10
 #define TOWER_PANEL_IMAGE_SIZE_BIG ImVec2(TOWER_PANEL_TEXT_SIZE_BIG, TOWER_PANEL_TEXT_SIZE_BIG)
@@ -37,6 +38,7 @@ Texture* Tower::mMoneyIconTexture = nullptr;
 Texture* Tower::mGenericUpgradeAttackDamageIconTexture = nullptr;
 Texture* Tower::mGenericUpgradeAtackSpeedIconTexture = nullptr;
 Texture* Tower::mGenericUpgradeRangeIconTexture = nullptr;
+Texture* Tower::mCustomUpgradeStarIcon = nullptr;
 
 Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
 	: Entity(),
@@ -96,6 +98,7 @@ void Tower::InitUITextures()
 	Tower::mGenericUpgradeAttackDamageIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_attack_damage_icon");
 	Tower::mGenericUpgradeAtackSpeedIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_attack_speed_icon");
 	Tower::mGenericUpgradeRangeIconTexture = Globals::gResources->GetTexture("ui\\generic_upgrade_range_icon");
+	Tower::mCustomUpgradeStarIcon = Globals::gResources->GetTexture("ui\\star");
 }
 
 void Tower::UpdateGeneric(GenericUpgradeType upgrade)
@@ -253,9 +256,9 @@ bool Tower::DrawSellingButton()
 	sprintf_s(buffer, "Sell for $%d", GetSellingPrice());
 	ImGui::SetCursorPosX(TOWER_PANEL_WIDTH - ImGui::CalcTextSize(buffer).x);
 	
-	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0xE3 / 255.f, 0x14 / 255.f, 0x02 / 255.f, 0xDD / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	ImVec4(0xBC / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xE0 / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0x93 / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xE0 / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_Button,			IM_COL32(0xE3, 0x14, 0x02, 0xDD));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	IM_COL32(0xBC, 0x00, 0x00, 0xE0));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	IM_COL32(0x93, 0x00, 0x00, 0xE0));
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
 	
 	bool clicked = ImGui::Button(buffer);
@@ -277,16 +280,15 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 	DisplayGenericUpgrade(GenericUpgradeType::ATTACK_SPEED);
 	DisplayGenericUpgrade(GenericUpgradeType::RANGE);
 
-	// Only display if you can upgrade
-	if (mCustomUpgradeLevel < mCustomUpgradeLevelMax)
+	if (mCustomUpgradeLevelMax > 0)
 		DisplayCustomUpgrade(panelPosition, dl);
 }
 
 bool Tower::DrawUpgradeButton(GenericUpgradeType upgrade)
 {
-	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0x1E / 255.f, 0xFF / 255.f, 0x3E / 255.f, 0xC0 / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	ImVec4(0x1A / 255.f, 0xCF / 255.f, 0x33 / 255.f, 0xC0 / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0x16 / 255.f, 0xB0 / 255.f, 0x2B / 255.f, 0xC0 / 255.f));
+	ImGui::PushStyleColor(ImGuiCol_Button,			IM_COL32(0x1E, 0xFF, 0x3E, 0xC0));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	IM_COL32(0x1A, 0xCF, 0x33, 0xC0));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	IM_COL32(0x16, 0xB0, 0x2B, 0xC0));
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
 
 	bool clicked = ImGui::ImageButton(("upgrade" + std::to_string(upgrade) + "Button").c_str(), mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
@@ -341,7 +343,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 	switch (upgrade)
 	{
 		case GenericUpgradeType::DAMAGE:
-			ImGui::Image(mGenericUpgradeAttackDamageIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(Tower::mGenericUpgradeAttackDamageIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_DAMAGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
@@ -352,7 +354,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 
 		case GenericUpgradeType::ATTACK_SPEED:
 		{
-			ImGui::Image(mGenericUpgradeAtackSpeedIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(Tower::mGenericUpgradeAtackSpeedIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
@@ -366,7 +368,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 		}
 
 		case GenericUpgradeType::RANGE:
-			ImGui::Image(mGenericUpgradeRangeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
+			ImGui::Image(Tower::mGenericUpgradeRangeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 
 			ImGui::SameLine();
@@ -396,7 +398,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 			ImGui::EndDisabled();
 
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0xFF / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xFF / 255.f), "$%d", GetGenericUpgradeCost(upgrade));
+			ImGui::TextColored(ImColor(0xFF, 0x00, 0x00, 0xFF), "$%d", GetGenericUpgradeCost(upgrade));
 		}
 		else
         {
@@ -416,49 +418,67 @@ void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
 	ImGui::Dummy(ImVec2(1, TOWER_PANEL_TEXT_SIZE_MEDIUM));
 	ImVec2 cursorPos = ImGui::GetCursorPos();
 	cursorPos.x += panelPosition.x;
-	cursorPos.y += panelPosition.y - 2; // -2 for offset
+	cursorPos.y += panelPosition.y - TOWER_PANEL_UPGRADE_BAR_OFFSET_Y; // -2 for offset
 	dl->AddLine(cursorPos, ImVec2(cursorPos.x, cursorPos.y + (TOWER_PANEL_TEXT_SIZE_MEDIUM + IMGUI_LINE_SPACING_HEIGHT) * 1), IM_COL32(0xFF, 0xB0, 0x0, 0xD0), 4);
 
-	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH + TOWER_PANEL_TEXT_SIZE_MEDIUM * mCustomUpgradeLevelMax);
-	IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
+	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
+	IMGUI_SET_CURSOR_POS_Y(TOWER_PANEL_UPGRADE_BAR_OFFSET_Y);
 
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
-	ImGui::PushStyleColor(ImGuiCol_Button,			ImVec4(0xFF / 255.f, 0xFF / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	ImVec4(0xCF / 255.f, 0xCF / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive,	ImVec4(0xB0 / 255.f, 0xB0 / 255.f, 0x30 / 255.f, 0xC0 / 255.f));
-
-	bool canUpgrade = mOwner->GetMoney() >= mCustomUpgradeCost;
-	if (!canUpgrade)
-		ImGui::BeginDisabled();
-
-	if (ImGui::ImageButton("upgradeCustomButton", mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+	for (uint8_t i = 0; i < mCustomUpgradeLevelMax; i++)
 	{
-		mOwner->DecreaseMoney(mCustomUpgradeCost);
-		mMoneyInvested += mCustomUpgradeCost;
-
-		OnCustomUpgrade();
+		if (mCustomUpgradeLevel > i)
+			ImGui::Image(Tower::mCustomUpgradeStarIcon->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM,
+				ImVec2(0, 0), ImVec2(1, 1), ImColor(0xFF, 0xFF, 0x0, 0xFF));
+		else
+			ImGui::Image(Tower::mCustomUpgradeStarIcon->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM,
+				ImVec2(0, 0), ImVec2(1, 1), ImColor(0xBB, 0x50, 0x0, 0xFF));
+		AddTooltip(GetCustomUpgradeTooltip(i));
+		ImGui::SameLine();
 	}
 
-	if (!canUpgrade)
+	// Only display if you can upgrade
+	if (mCustomUpgradeLevel < mCustomUpgradeLevelMax)
 	{
-		ImGui::EndDisabled();
+		IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0xFF / 255.f, 0x00 / 255.f, 0x00 / 255.f, 0xFF / 255.f), "$%d", mCustomUpgradeCost);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
+		ImGui::PushStyleColor(ImGuiCol_Button,			IM_COL32(0xFF, 0xFF, 0x30, 0xC0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	IM_COL32(0xCF, 0xCF, 0x30, 0xC0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive,	IM_COL32(0xB0, 0xB0, 0x30, 0xC0));
+
+		bool canUpgrade = mOwner->GetMoney() >= mCustomUpgradeCost;
+		if (!canUpgrade)
+			ImGui::BeginDisabled();
+
+		if (ImGui::ImageButton("upgradeCustomButton", mUpgradeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM))
+		{
+			mOwner->DecreaseMoney(mCustomUpgradeCost);
+			mMoneyInvested += mCustomUpgradeCost;
+			mCustomUpgradeLevel++;
+
+			OnCustomUpgrade();
+		}
+
+		if (!canUpgrade)
+		{
+			ImGui::EndDisabled();
+
+			ImGui::SameLine();
+			ImGui::TextColored(ImColor(0xFF, 0x00, 0x00, 0xFF), "$%d", mCustomUpgradeCost);
+		}
+		else
+		{
+			ImGui::SameLine();
+			ImGui::Text("$%d", mCustomUpgradeCost);
+		}
+		
+		ImGui::PopStyleColor(3);
+		ImGui::PopStyleVar();
 	}
 	else
 	{
-		ImGui::SameLine();
-		ImGui::Text("$%d", mCustomUpgradeCost);
+		ImGui::Dummy(ImVec2(1, IMGUI_IMAGE_BUTTON_OFFSET_Y * 3.9f));
 	}
-	
-	ImGui::PopStyleColor(3);
-	ImGui::PopStyleVar();
-	const char* tooltip = GetCustomUpgradeTooltip(mCustomUpgradeLevel);
-	AddTooltip(tooltip);
-	ImGui::SameLine();
-	ImGui::Text("Custom");
-	AddTooltip(tooltip);
 }
 
 void Tower::AddTooltip(const char* text)

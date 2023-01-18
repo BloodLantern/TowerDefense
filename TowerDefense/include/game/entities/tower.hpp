@@ -113,6 +113,7 @@ private:
 	static Texture* mGenericUpgradeAttackDamageIconTexture;
 	static Texture* mGenericUpgradeAtackSpeedIconTexture;
 	static Texture* mGenericUpgradeRangeIconTexture;
+	static Texture* mCustomUpgradeStarIcon;
 
 	virtual const char* GetCustomUpgradeTooltip(uint8_t level) const = 0;
 
