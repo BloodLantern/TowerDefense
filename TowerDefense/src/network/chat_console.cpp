@@ -15,9 +15,6 @@ void ChatConsole::Draw()
 			// Send to network
 			Globals::gNetwork.client->SendChatMessage(mMessageBuffer);
 			
-			// Add message to self without sending it to the network
-			AddMessage(std::string(mMessageBuffer));
-			
 			// Clear message
 			memset(mMessageBuffer, 0, sizeof(mMessageBuffer));
 		}

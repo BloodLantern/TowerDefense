@@ -16,6 +16,6 @@ void NetworkServer::OnMessage(std::shared_ptr<net::Connection<NetworkCommands>> 
 
 void NetworkServer::ShareChatMessage(std::shared_ptr<net::Connection<NetworkCommands>> client, net::Message<NetworkCommands>& msg)
 {
-	// Send chat message to everyone except the sender
-	MessageAllClient(msg, client);
+	// Send chat message to everyone
+	MessageAllClient(msg);
 }
