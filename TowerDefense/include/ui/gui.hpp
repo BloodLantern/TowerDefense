@@ -13,6 +13,7 @@ class Gui
 private:
 
 	static void HandleMenuBar();
+	static void HandleNetworkMenuBar();
 
 public:
 	static bool openedWindows[GUI_WINDOW_ID_COUNT];

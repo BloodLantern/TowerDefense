@@ -1,6 +1,9 @@
 #include "gui.hpp"
 #include "level_editor.hpp"
 #include "round_editor.hpp"
+#include "network/chat_console.hpp"
+#include "network/network_interface.hpp"
+#include "globals.hpp"
 
 #include <imgui.h>
 
@@ -25,7 +28,41 @@ void Gui::HandleMenuBar()
 		ImGui::EndMenu();
 	}
 
+	Gui::HandleNetworkMenuBar();
+
 	ImGui::EndMainMenuBar();
+}
+
+void Gui::HandleNetworkMenuBar()
+{
+	if (!ImGui::BeginMenu("Network"))
+		return;
+	
+	if (Globals::gNetwork.IsServerStarted())
+	{
+		if (ImGui::MenuItem("Stop server"))
+			Globals::gNetwork.StopServer();
+	}
+	else
+	{
+		if (ImGui::MenuItem("Start server"))
+			Globals::gNetwork.StartServer();
+	}
+
+	ImGui::Separator();
+
+	if (Globals::gNetwork.client->IsConnected())
+	{
+		if (ImGui::MenuItem("Disconnect"))
+			Globals::gNetwork.StopClient();
+	}
+	else
+	{
+		if (ImGui::MenuItem("Connect to server"))
+			Globals::gNetwork.StartClient("ZOTAC-12");
+	}
+
+	ImGui::EndMenu();
 }
 
 void Gui::CreateGuiWindow(GuiWindowsid id)
@@ -58,5 +95,7 @@ void Gui::Update()
 				RoundEditor::Update();
 		}
 	}
+
+	ChatConsole::Draw();
 }
 

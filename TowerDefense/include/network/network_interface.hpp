@@ -17,7 +17,12 @@ public:
 
 	void Update();
 
+	bool IsServerStarted();
+
 	NetworkClient* client;
 	NetworkServer* server;
+
+private:
+	bool mServerStarted;
 };
 

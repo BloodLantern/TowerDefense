@@ -31,11 +31,13 @@ void NetworkInterface::StopClient()
 
 void NetworkInterface::StartServer()
 {
-	// Actually init the server here
-	server = new NetworkServer(60000);
+	// Actually init the server here if necessary
+	if (!server)
+		server = new NetworkServer(60000);
 
 	// Start it
 	server->Start();
+	mServerStarted = true;
 }
 
 void NetworkInterface::StopServer()
@@ -46,6 +48,12 @@ void NetworkInterface::StopServer()
 	// Fully delete it
 	delete server;
 	server = nullptr;
+	mServerStarted = false;
+}
+
+bool NetworkInterface::IsServerStarted()
+{
+	return mServerStarted;
 }
 
 void NetworkInterface::Update()

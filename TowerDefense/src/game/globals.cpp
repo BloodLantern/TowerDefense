@@ -40,9 +40,6 @@ void Globals::InitGlobals(Game* g)
 	gGame = g;
 	gResources = new Resources;
 
-	gNetwork.StartServer();
-	gNetwork.StartClient("ZOTAC-12");
-
 	Tower::InitUITextures();
 }
 
