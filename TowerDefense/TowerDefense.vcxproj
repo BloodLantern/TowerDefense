@@ -252,6 +252,7 @@
     <ClInclude Include="include\game\particle_emitter.hpp" />
     <ClInclude Include="include\network\server_interface.hpp" />
     <ClInclude Include="include\network\network_interface.hpp" />
+    <ClInclude Include="include\ui\scene.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

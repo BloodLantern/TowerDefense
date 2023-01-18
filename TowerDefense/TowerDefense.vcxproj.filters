@@ -165,6 +165,9 @@
     <ClCompile Include="src\game\entities\projectiles\bee_projectile_dart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\entities\projectiles\cannon_cluster_projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\maths\Point2.h">
@@ -315,6 +318,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\game\entities\towers\beehive_tower.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\projectiles\cannon_cluster_projectile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui\scene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

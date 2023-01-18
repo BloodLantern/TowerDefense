@@ -12,6 +12,9 @@ Game::Game()
     // Temp
     maxWave = 20;
 
+    mCurrentScene = Scene::MAIN_MENU;
+    mCurrentLevel = 0;
+
     Hud::canInteract = true;
 }
 
@@ -73,23 +76,29 @@ void Game::Update()
 {
     mDeltaTime = Globals::gIO->DeltaTime;
     mPlayingSpeedDeltaTime = mDeltaTime * mPlayingSpeed;
-    
-    mPlayField->Draw();
 
-    Round::OnUpdate();
+    switch (mCurrentScene)
+    {
+        case Scene::MAIN_MENU:
+            Scene_MainMenu();
+            break;
 
-    UpdateTowers();
-    UpdateEnemies();
-    UpdateProjectiles();
+        case Scene::LEVEL_SELECTION:
+            Scene_LevelSelection();
+            break;
 
-    mPlayer->OnUpdate();
+        case Scene::FREEPLAY_SELECTION:
+            Scene_FreeSelection();
+            break;
 
-    DrawHud();
+        case Scene::IN_GAME:
+            Scene_InGame();
+            break;
 
-    if (mEnded)
-        return;
-
-    CheckEndRound();
+        case Scene::OPTIONS:
+            Scene_Options();
+            break;
+    }
 }
 
 void Game::Shutdown()
@@ -223,3 +232,84 @@ void Game::UpdateProjectiles()
     projectiles.insert(projectiles.end(), projectilesQueue.begin(), projectilesQueue.end());
     projectilesQueue.clear();
 }
+
+
+
+void Game::Scene_MainMenu()
+{
+    ImGui::SetNextWindowPos(ImVec2(Globals::gGridX, Globals::gGridY));
+    ImGui::SetNextWindowSize(ImVec2(Globals::gWindowWidth, Globals::gWindowHeight - GRID_OFFSET_Y));
+
+    if (ImGui::Begin("##main", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize))
+    {
+        ImGui::PushFont(Globals::gFontBig);
+        ImGui::Dummy(ImVec2(1, 50));
+        ImGui::SetCursorPosX(Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Fourmi defense").x / 2);
+        ImGui::Text("Fourmi defense");
+        ImGui::PopFont();
+
+        ImGui::PushFont(Globals::gFontSemiBig);
+
+        const ImVec2 buttonSize(130, 50);
+        ImVec2 cursor(Globals::gWindowWidth / 2.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
+
+        ImGui::SetCursorPos(cursor);
+        if (ImGui::Button("Play", buttonSize))
+            mCurrentScene = Scene::LEVEL_SELECTION;
+
+        cursor.y += 100;
+        ImGui::SetCursorPos(cursor);
+        if (ImGui::Button("Freeplay", buttonSize))
+            mCurrentScene = Scene::FREEPLAY_SELECTION;
+
+        cursor.y += 100;
+        ImGui::SetCursorPos(cursor);
+        if (ImGui::Button("Options", buttonSize))
+            mCurrentScene = Scene::OPTIONS;
+
+        /*cursor.y += 100;
+        ImGui::SetCursorPos(cursor);
+        if (ImGui::Button("Bestiary", buttonSize))
+            mCurrentScene = Scene::BESTIARY;*/
+
+        ImGui::PopFont();
+    }
+
+    ImGui::End();
+}
+
+void Game::Scene_LevelSelection()
+{
+
+}
+
+void Game::Scene_FreeSelection()
+{
+
+}
+
+void Game::Scene_InGame()
+{
+    mPlayField->Draw();
+
+    Round::OnUpdate();
+
+    UpdateTowers();
+    UpdateEnemies();
+    UpdateProjectiles();
+
+    mPlayer->OnUpdate();
+
+    DrawHud();
+
+    if (mEnded)
+        return;
+
+    CheckEndRound();
+}
+
+void Game::Scene_Options()
+{
+
+}
+

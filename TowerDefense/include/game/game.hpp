@@ -4,6 +4,7 @@
 #include "player.hpp"
 #include "enemy.hpp"
 #include "round.hpp"
+#include "scene.hpp"
 
 class Game {
 public:
@@ -43,6 +44,15 @@ private:
     double_t mDeltaTime = 0.0;
     double_t mPlayingSpeedDeltaTime = 0.0;
     int32_t mPlayingSpeed = 1;
+
+    Scene mCurrentScene;
+    uint8_t mCurrentLevel;
+
+    void Scene_MainMenu();
+    void Scene_LevelSelection();
+    void Scene_FreeSelection();
+    void Scene_InGame();
+    void Scene_Options();
 
     void DrawHud();
     void CheckEndRound();
