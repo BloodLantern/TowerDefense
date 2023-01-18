@@ -19,6 +19,7 @@ public:
 
     std::vector<Enemy*> enemies;
     std::vector<Projectile*> projectiles;
+    std::vector<Projectile*> projectilesQueue;
     uint32_t currentWave = 1;
     uint32_t maxWave = 20;
     std::vector<RoundInfo> roundInfo;

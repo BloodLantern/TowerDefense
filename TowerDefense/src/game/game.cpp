@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "round_editor.hpp"
 #include "hud.hpp"
+#include "cannon_cluster_projectile.hpp"
 
 Game::Game()
 {
@@ -207,6 +208,7 @@ void Game::UpdateProjectiles()
         Projectile* p = *_p;
 
         p->OnUpdate();
+
         if (p->toDelete)
         {
             // Kill projectile
@@ -218,4 +220,7 @@ void Game::UpdateProjectiles()
         p->OnRender();
         _p++;
     }
+
+    projectiles.insert(projectiles.end(), projectilesQueue.begin(), projectilesQueue.end());
+    projectilesQueue.clear();
 }
