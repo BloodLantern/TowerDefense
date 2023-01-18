@@ -4,11 +4,11 @@
 #include <imgui.h>
 #include <stdint.h>
 #include "discordRPC/discord_rpc.h"
-#include "network/client_interface.hpp"
-#include "network/server_interface.hpp"
 
 #include "game.hpp"
 #include "resources.hpp"
+
+class NetworkInterface;
 
 class Globals
 {
@@ -24,8 +24,7 @@ public:
 	static Resources* gResources;
 	static DiscordRichPresence gDiscordRpc;
 
-	static NetworkClient gClient;
-	static NetworkServer* gServer;
+	static NetworkInterface gNetwork;
 
 	static int32_t gWindowX;
 	static int32_t gWindowY;

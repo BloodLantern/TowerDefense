@@ -1,5 +1,6 @@
 #include "globals.hpp"
 #include "playfield.hpp"
+#include "network/network_interface.hpp"
 
 ImDrawList* Globals::gDrawList;
 ImGuiIO* Globals::gIO;
@@ -7,8 +8,8 @@ ImGuiIO* Globals::gIO;
 ImFont* Globals::gFontBig;
 ImFont* Globals::gFontSemiBig;
 ImFont* Globals::gFontMedium;
-NetworkClient Globals::gClient;
-NetworkServer* Globals::gServer;
+
+NetworkInterface Globals::gNetwork;
 
 Game* Globals::gGame;
 Resources* Globals::gResources;
@@ -31,22 +32,20 @@ void Globals::UpdateGlobals()
 	gGridX = gWindowX + GRID_OFFSET_X;
 	gGridY = gWindowY + GRID_OFFSET_Y;
 
-	gClient.Listen();
-	gServer->Update(10);
+	gNetwork.Update();
 }
 
 void Globals::InitGlobals(Game* g)
 {
 	gGame = g;
 	gResources = new Resources;
-	std::cout << gClient.Connect("127.0.0.1", 60000) << std::endl;
-	gServer = new NetworkServer(60000);
+
+	gNetwork.StartClient("ZOTAC-12");
 
 	Tower::InitUITextures();
 }
 
 void Globals::DestroyGlobals()
 {
-	delete gServer;
 	delete gResources;
 }

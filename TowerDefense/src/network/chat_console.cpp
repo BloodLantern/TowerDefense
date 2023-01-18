@@ -1,4 +1,5 @@
 #include "network/chat_console.hpp"
+#include "network/network_interface.hpp"
 #include "imgui.h"
 #include "globals.hpp"
 
@@ -11,7 +12,7 @@ void ChatConsole::Draw()
 	{
 		if (ImGui::InputText("##message", mMessageBuffer, sizeof(mMessageBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			Globals::gClient.SendChatMessage(mMessageBuffer);
+			Globals::gNetwork.client->SendChatMessage(mMessageBuffer);
 		}
 		for (size_t i = 0; i < mMessages.size(); i++)
 			ImGui::Text("%s", mMessages[i].c_str());
