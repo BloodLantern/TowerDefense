@@ -10,6 +10,9 @@
 
 PlayField::PlayField()
 {
+	// Prevent heap buffer corruption when destructing playfield (how??)
+	Resize(42, 18);
+
 	// Load forest tileset
 	LoadTileset("forest.png");
 	
@@ -19,7 +22,6 @@ PlayField::PlayField()
 		std::cout << "Failed to open file" << std::endl;
 
 		// Failsafe, reset everything
-		Resize(42, 18);
 		for (int32_t x = 0; x < gridWidth; x++)
 		{
 			for (int32_t y = 0; y < gridHeight; y++)
