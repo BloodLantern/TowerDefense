@@ -17,10 +17,10 @@ void Gui::HandleMenuBar()
 	if (ImGui::BeginMenu("Editors"))
 	{
 		if (ImGui::MenuItem("Level editor"))
-			Gui::CreateWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
+			Gui::CreateGuiWindow(GUI_WINDOW_ID_LEVEL_EDITOR);
 
 		if (ImGui::MenuItem("Wave editor"))
-			Gui::CreateWindow(GUI_WINDOW_ID_WAVE_EDITOR);
+			Gui::CreateGuiWindow(GUI_WINDOW_ID_WAVE_EDITOR);
 
 		ImGui::EndMenu();
 	}
@@ -28,7 +28,7 @@ void Gui::HandleMenuBar()
 	ImGui::EndMainMenuBar();
 }
 
-void Gui::CreateWindow(GuiWindowsid id)
+void Gui::CreateGuiWindow(GuiWindowsid id)
 {
 	if (Gui::openedWindows[id])
 	{

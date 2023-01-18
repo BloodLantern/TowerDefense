@@ -7,6 +7,8 @@ ImGuiIO* Globals::gIO;
 ImFont* Globals::gFontBig;
 ImFont* Globals::gFontSemiBig;
 ImFont* Globals::gFontMedium;
+NetworkClient Globals::gClient;
+NetworkServer* Globals::gServer;
 
 Game* Globals::gGame;
 Resources* Globals::gResources;
@@ -28,17 +30,23 @@ void Globals::UpdateGlobals()
 	gIO = &ImGui::GetIO();
 	gGridX = gWindowX + GRID_OFFSET_X;
 	gGridY = gWindowY + GRID_OFFSET_Y;
+
+	gClient.Listen();
+	gServer->Update(10);
 }
 
 void Globals::InitGlobals(Game* g)
 {
 	gGame = g;
 	gResources = new Resources;
+	std::cout << gClient.Connect("127.0.0.1", 60000) << std::endl;
+	gServer = new NetworkServer(60000);
 
 	Tower::InitUITextures();
 }
 
 void Globals::DestroyGlobals()
 {
+	delete gServer;
 	delete gResources;
 }

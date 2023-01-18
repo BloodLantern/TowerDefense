@@ -17,6 +17,6 @@ private:
 public:
 	static bool openedWindows[GUI_WINDOW_ID_COUNT];
 
-	static void CreateWindow(GuiWindowsid id);
+	static void CreateGuiWindow(GuiWindowsid id);
 	static void Update();
 };

@@ -10,6 +10,7 @@
 #include "game.hpp"
 #include "level_editor.hpp"
 #include "gui.hpp"
+#include "network/chat_console.hpp"
 
 #include "discordRPC/discord_rpc.h"
 #include "stb_image.h"
@@ -126,6 +127,7 @@ int main(int argc, char** argv)
 		Globals::UpdateGlobals();
 		game.Update();
 		Gui::Update();
+		ChatConsole::Draw();
 
 		Discord_UpdatePresence(&Globals::gDiscordRpc);
 

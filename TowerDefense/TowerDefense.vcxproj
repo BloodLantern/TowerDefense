@@ -70,6 +70,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)..\..\SudoNetwork\SudoNetwork\include;$(ProjectDir)..\..\asio\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)..\..\SudoNetwork\SudoNetwork\include;$(ProjectDir)..\..\asio\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)..\..\SudoNetwork\SudoNetwork\include;$(ProjectDir)..\..\asio\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)..\..\SudoNetwork\SudoNetwork\include;$(ProjectDir)..\..\asio\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -141,6 +153,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\network\chat_console.cpp" />
+    <ClCompile Include="src\network\server_interface.cpp" />
+    <ClCompile Include="src\network\client_interface.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_demo.cpp" />
     <ClCompile Include="externals\include\ImGui\imgui_draw.cpp" />
@@ -183,6 +198,8 @@
     <ClCompile Include="src\editor\round_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\network\chat_console.hpp" />
+    <ClInclude Include="include\network\client_interface.hpp" />
     <ClInclude Include="externals\include\ImGui\imconfig.h" />
     <ClInclude Include="externals\include\ImGui\imgui.h" />
     <ClInclude Include="externals\include\ImGui\imgui_impl_glfw.h" />
@@ -201,6 +218,7 @@
     <ClInclude Include="include\game\entities\projectiles\cannon_ball_projectile.hpp" />
     <ClInclude Include="include\game\entities\towers\cannon_tower.hpp" />
     <ClInclude Include="include\game\entities\towers\test_tower.hpp" />
+    <ClInclude Include="include\network\commands.hpp" />
     <ClInclude Include="include\ui\hud.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />
     <ClInclude Include="externals\include\discordRPC\discord_rpc.h" />
@@ -226,6 +244,7 @@
     <ClInclude Include="include\editor\round_editor.hpp" />
     <ClInclude Include="include\pathfinding\path.hpp" />
     <ClInclude Include="include\game\particle_emitter.hpp" />
+    <ClInclude Include="include\network\server_interface.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
