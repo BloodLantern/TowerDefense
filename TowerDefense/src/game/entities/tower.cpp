@@ -243,7 +243,7 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 		{
 			for (int32_t y = 0; y < mHeight; y++)
 			{
-				pf->SetClipdataTile(pos.x + x, pos.y + y, CLIPDATA_TYPE_EMPTY);
+				pf->ResetClipdataTile(pos.x + x, pos.y + y);
 			}
 		}
 

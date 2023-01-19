@@ -2,7 +2,7 @@
 #include "globals.hpp"
 #include "round_editor.hpp"
 #include "hud.hpp"
-
+#include "gui.hpp"
 
 #include <filesystem>
 
@@ -51,6 +51,7 @@ void Game::Restart()
     Round::StartRound(roundInfo.data());
     SetPlayingSpeed(1);
     mPlayer->Reset();
+    mPlayField->ResetEntireClipdata();
 
     Cleanup();
 }
@@ -88,7 +89,7 @@ void Game::Update()
         break;
 
     case Scene::FREEPLAY_SELECTION:
-        Scene_FreeSelection();
+        Scene_FreeplaySelection();
         break;
 
     case Scene::IN_GAME:
@@ -240,128 +241,17 @@ void Game::UpdateProjectiles()
 
 void Game::Scene_MainMenu()
 {
-    ImGui::SetNextWindowPos(ImVec2(Globals::gGridX, Globals::gGridY));
-    ImGui::SetNextWindowSize(ImVec2(Globals::gWindowWidth, Globals::gWindowHeight - GRID_OFFSET_Y));
-
-    if (ImGui::Begin("##main", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize))
-    {
-        ImGui::PushFont(Globals::gFontBig);
-        ImGui::Dummy(ImVec2(1, 50));
-        ImGui::SetCursorPosX(Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Fourmi defense").x / 2);
-        ImGui::Text("Fourmi defense");
-        ImGui::PopFont();
-
-        ImGui::PushFont(Globals::gFontSemiBig);
-
-        const ImVec2 buttonSize(130, 50);
-        ImVec2 cursor(Globals::gWindowWidth / 2.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
-
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Play", buttonSize))
-            mCurrentScene = Scene::LEVEL_SELECTION;
-
-        cursor.y += 100;
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Freeplay", buttonSize))
-            mCurrentScene = Scene::FREEPLAY_SELECTION;
-
-        cursor.y += 100;
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Options", buttonSize))
-            mCurrentScene = Scene::OPTIONS;
-
-        /*cursor.y += 100;
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Bestiary", buttonSize))
-            mCurrentScene = Scene::BESTIARY;*/
-
-        ImGui::PopFont();
-    }
-
-    ImGui::End();
+    mCurrentScene = Gui::UpdateMainMenu();
 }
 
 void Game::Scene_LevelSelection()
 {
-    CountLevels();
-
-    ImGui::SetNextWindowPos(ImVec2(Globals::gGridX, Globals::gGridY));
-    ImGui::SetNextWindowSize(ImVec2(Globals::gWindowWidth, Globals::gWindowHeight - GRID_OFFSET_Y));
-
-    if (ImGui::Begin("##levelsel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize))
-    {
-        ImGui::PushFont(Globals::gFontBig);
-        ImGui::Dummy(ImVec2(1, 50));
-        ImGui::SetCursorPosX(Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Levels").x / 2);
-        ImGui::Text("Levels");
-        ImGui::PopFont();
-
-        ImGui::PushFont(Globals::gFontSemiBig);
-
-        const ImVec2 buttonSize(320, 160);
-        ImVec2 cursor(Globals::gWindowWidth / 4.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
-
-        for (int32_t i = 1; i < mAmountOfLevels + 1; i++)
-        {
-            std::string id = std::to_string(i);
-            std::string previewFile = std::string("previews\\LevelPreview").append(id);
-            Texture* tex = Globals::gResources->GetTexture(previewFile);
-
-            ImGui::SetCursorPos(cursor);
-
-            cursor.x += 350;
-
-            if (ImGui::ImageButton(tex->id, buttonSize))
-            {
-                StartLevel(i);
-                mCurrentScene = Scene::IN_GAME;
-                break;
-            }
-
-            if ((i % 3) == 0)
-            {
-                cursor.x -= 350 * 3;
-                cursor.y += 220;
-            }
-        }
-
-        if (ImGui::Button("Back", ImVec2(130, 50)))
-            mCurrentScene = Scene::MAIN_MENU;
-
-        ImGui::PopFont();
-    }
-
-    ImGui::End();
+    mCurrentScene = Gui::UpdateLevelSelection();
 }
 
-void Game::Scene_FreeSelection()
+void Game::Scene_FreeplaySelection()
 {
-    ImGui::SetNextWindowPos(ImVec2(Globals::gGridX, Globals::gGridY));
-    ImGui::SetNextWindowSize(ImVec2(Globals::gWindowWidth, Globals::gWindowHeight - GRID_OFFSET_Y));
-
-    if (ImGui::Begin("##freeplay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize))
-    {
-        ImGui::PushFont(Globals::gFontBig);
-        ImGui::Dummy(ImVec2(1, 50));
-        ImGui::SetCursorPosX(Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Freeplay").x / 2);
-        ImGui::Text("Freeplay");
-        ImGui::PopFont();
-
-        ImGui::PushFont(Globals::gFontSemiBig);
-
-        const ImVec2 buttonSize(130, 50);
-        ImVec2 cursor(Globals::gWindowWidth / 2.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
-
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Back", buttonSize))
-            mCurrentScene = Scene::MAIN_MENU;
-
-        // TODO freeplay info, records, stats...
-
-        ImGui::PopFont();
-    }
-
-    ImGui::End();
+    mCurrentScene = Gui::UpdateFreeplaySelection();
 }
 
 void Game::Scene_InGame()
@@ -386,38 +276,13 @@ void Game::Scene_InGame()
 
 void Game::Scene_Options()
 {
-    ImGui::SetNextWindowPos(ImVec2(Globals::gGridX, Globals::gGridY));
-    ImGui::SetNextWindowSize(ImVec2(Globals::gWindowWidth, Globals::gWindowHeight - GRID_OFFSET_Y));
-
-    if (ImGui::Begin("##options", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize))
-    {
-        ImGui::PushFont(Globals::gFontBig);
-        ImGui::Dummy(ImVec2(1, 50));
-        ImGui::SetCursorPosX(Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Options").x / 2);
-        ImGui::Text("Options");
-        ImGui::PopFont();
-
-        ImGui::PushFont(Globals::gFontSemiBig);
-
-        const ImVec2 buttonSize(130, 50);
-        ImVec2 cursor(Globals::gWindowWidth / 2.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
-
-        ImGui::SetCursorPos(cursor);
-        if (ImGui::Button("Back", buttonSize))
-            mCurrentScene = Scene::MAIN_MENU;
-
-        // TODO fullscreen, network stuff probably
-
-        ImGui::PopFont();
-    }
-
-    ImGui::End();
+    mCurrentScene = Gui::UpdateOptions();
 }
 
-void Game::CountLevels()
+uint8_t Game::CountLevels()
 {
     if (mAmountOfLevels != 0)
-        return;
+        return mAmountOfLevels;
 
     std::filesystem::path path = std::filesystem::current_path().append("data/maps/");
     std::filesystem::directory_iterator dirIter = std::filesystem::directory_iterator(path);
@@ -430,6 +295,7 @@ void Game::CountLevels()
     }
 
     mAmountOfLevels = fileCount;
+    return mAmountOfLevels;
 }
 
 void Game::StartLevel(uint8_t level)

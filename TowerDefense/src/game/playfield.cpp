@@ -28,6 +28,7 @@ PlayField::PlayField()
 			{
 				uint32_t i = y * gridWidth + x;
 				mClipdata[i] = CLIPDATA_TYPE_EMPTY;
+				mClipdataAtStart[i] = CLIPDATA_TYPE_EMPTY;
 				mLayer0Tilemap[i] = 0;
 				mLayer1Tilemap[i] = 0;
 				mLayer2Tilemap[i] = 0;
@@ -54,6 +55,7 @@ void PlayField::Resize(uint16_t width, uint16_t height)
 	// Resize every tilemap (ISSUE, data in linear in the vectors, causing issues when resizing)
 	size_t size = (size_t)(gridWidth * gridHeight);
 	mClipdata.resize(size);
+	mClipdataAtStart.resize(size);
 	mLayer0Tilemap.resize(size);
 	mLayer1Tilemap.resize(size);
 	mLayer2Tilemap.resize(size);
@@ -95,33 +97,33 @@ void PlayField::DrawClipdata()
 	{
 		for (int32_t x = 0; x < gridWidth; x++)
 		{
-			// Get colo
+			// Get color
 			ImU32 color;
 			switch (mClipdata[y * gridWidth + x])
 			{
-			case CLIPDATA_TYPE_EMPTY:
-				// WHITE
-				color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
-				break;
-			case CLIPDATA_TYPE_NOTHING:
-				// BLACK
-				color = IM_COL32(0x0, 0x0, 0x0, 0x40);
-				break;
-			case CLIPDATA_TYPE_ENEMY_ONLY:
-				// RED
-				color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
-				break;
-			case CLIPDATA_TYPE_OCCUPIED:
-				// BLUE
-				color = IM_COL32(0x0, 0x0, 0xFF, 0x40);
-				break;
-			case CLIPDATA_TYPE_PLAYER_ONLY:
-				// GREEN
-				color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
-				break;
-			default:
-				// Weird grey
-				color = IM_COL32(0x50, 0x50, 0x50, 0x50);
+				case CLIPDATA_TYPE_EMPTY:
+					// WHITE
+					color = IM_COL32(0xFF, 0xFF, 0xFF, 0x40);
+					break;
+				case CLIPDATA_TYPE_NOTHING:
+					// BLACK
+					color = IM_COL32(0x0, 0x0, 0x0, 0x40);
+					break;
+				case CLIPDATA_TYPE_ENEMY_ONLY:
+					// RED
+					color = IM_COL32(0xFF, 0x0, 0x0, 0x40);
+					break;
+				case CLIPDATA_TYPE_OCCUPIED:
+					// BLUE
+					color = IM_COL32(0x0, 0x0, 0xFF, 0x40);
+					break;
+				case CLIPDATA_TYPE_PLAYER_ONLY:
+					// GREEN
+					color = IM_COL32(0x0, 0xFF, 0x0, 0x40);
+					break;
+				default:
+					// Weird grey
+					color = IM_COL32(0x50, 0x50, 0x50, 0x50);
 			}
 
 			// Get positions
@@ -280,6 +282,9 @@ void PlayField::Load(std::string src)
 	std::string _src = MAPS_PATH;
 	_src += src;
 	RLE::DecompressLevel(this, _src.c_str());
+
+	// Copy to start clipdata
+	std::copy(mClipdata.begin(), mClipdata.end(), mClipdataAtStart.begin());
 }
 
 void PlayField::SetClipdataTile(uint8_t x, uint8_t y, ClipdataType type)
@@ -298,6 +303,16 @@ ClipdataType PlayField::GetClipdataTile(uint8_t x, uint8_t y)
 		return CLIPDATA_TYPE_NOTHING;
 
 	return mClipdata[y * gridWidth + x];
+}
+
+void PlayField::ResetClipdataTile(uint8_t x, uint8_t y)
+{
+	mClipdata[y * gridWidth + x] = mClipdataAtStart[y * gridWidth + x];
+}
+
+void PlayField::ResetEntireClipdata()
+{
+	std::copy(mClipdataAtStart.begin(), mClipdataAtStart.end(), mClipdata.begin());
 }
 
 
