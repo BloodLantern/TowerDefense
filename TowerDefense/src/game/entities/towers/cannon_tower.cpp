@@ -22,7 +22,7 @@ enum CannonCustomUpgrades
 
 CannonTower::CannonTower(Texture* texture)
 	: Tower(new CannonBallProjectile(), 0.4f, 5.5f, "Cannon", 350, texture),
-	mHandleTexture(Globals::gResources->GetTexture("towers\\cannon_handle")),
+	mHandleTexture(Globals::gResources->GetTexture("towers\\handle")),
 	mCannonTexture(Globals::gResources->GetTexture("towers\\cannon"))
 {
 	mScale = 0.07f;

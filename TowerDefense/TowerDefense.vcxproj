@@ -158,6 +158,7 @@
     <ClCompile Include="src\game\entities\enemies\ant_colony_enemy.cpp" />
     <ClCompile Include="src\game\entities\projectiles\bee_projectile_dart.cpp" />
     <ClCompile Include="src\game\entities\projectiles\cannon_cluster_projectile.cpp" />
+    <ClCompile Include="src\game\entities\towers\minigun_tower.cpp" />
     <ClCompile Include="src\network\network_interface.cpp" />
     <ClCompile Include="src\network\chat_console.cpp" />
     <ClCompile Include="src\network\server_interface.cpp" />
@@ -179,7 +180,6 @@
     <ClCompile Include="src\game\entities\projectiles\cannon_ball_projectile.cpp" />
     <ClCompile Include="src\game\entities\towers\beehive_tower.cpp" />
     <ClCompile Include="src\game\entities\towers\cannon_tower.cpp" />
-    <ClCompile Include="src\game\entities\towers\test_tower.cpp" />
     <ClCompile Include="src\ui\hud.cpp" />
     <ClCompile Include="src\game\resources.cpp" />
     <ClCompile Include="src\game\round.cpp" />
@@ -208,6 +208,7 @@
     <ClInclude Include="include\game\entities\projectiles\bee_projectile_dart.hpp" />
     <ClInclude Include="include\game\entities\towers\beehive_tower.hpp" />
     <ClInclude Include="include\game\entities\projectiles\cannon_cluster_projectile.hpp" />
+    <ClInclude Include="include\game\entities\towers\minigun_tower.hpp" />
     <ClInclude Include="include\network\chat_console.hpp" />
     <ClInclude Include="include\network\client_interface.hpp" />
     <ClInclude Include="externals\include\ImGui\imconfig.h" />
@@ -227,7 +228,6 @@
     <ClInclude Include="include\game\entities\enemies\red_ant_enemy.hpp" />
     <ClInclude Include="include\game\entities\projectiles\cannon_ball_projectile.hpp" />
     <ClInclude Include="include\game\entities\towers\cannon_tower.hpp" />
-    <ClInclude Include="include\game\entities\towers\test_tower.hpp" />
     <ClInclude Include="include\network\commands.hpp" />
     <ClInclude Include="include\ui\hud.hpp" />
     <ClInclude Include="externals\include\discordRPC\discord_register.h" />

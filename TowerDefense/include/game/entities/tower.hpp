@@ -45,7 +45,7 @@ public:
 	void DrawRange(ImU32 color = TOWER_RANGE_COLOR_AVAILABLE) const;
 
 	virtual void OnRender() override;
-	void DrawTowerBarTexture();
+	virtual void DrawTowerBarTexture();
 	virtual void OnUpdate() override;
 
 	virtual void OnCustomUpgrade() = 0;
@@ -96,6 +96,11 @@ protected:
 	uint32_t mCustomUpgradeCost = 1;
 
 	void HandleSelection();
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
+	virtual void UpdateDamage();
+#endif
+	virtual void UpdateAttackSpeed();
+	virtual void UpdateRange();
 
 private:
 	uint32_t mMoneyInvested;
@@ -124,11 +129,6 @@ private:
 	virtual const char* const GetCustomUpgradeTooltip(uint8_t level) const = 0;
 
 	void UpdateGeneric(GenericUpgradeType upgrade);
-#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
-	virtual void UpdateDamage();
-#endif
-	virtual void UpdateAttackSpeed();
-	virtual void UpdateRange();
 
 	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
 	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };

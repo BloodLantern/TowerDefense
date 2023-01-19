@@ -29,7 +29,9 @@ Resources::~Resources()
 
 Texture *Resources::GetTexture(std::string name)
 {
-    return mTextures[name + ".png"];
+    Texture* tex = mTextures[name + ".png"];
+    assert(tex != nullptr && ("A non-existing texture was requested: " + name).c_str());
+    return tex;
 }
 
 void Resources::Load(std::string name, bool nearestFilter)

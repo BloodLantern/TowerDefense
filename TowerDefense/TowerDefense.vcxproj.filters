@@ -114,9 +114,6 @@
     <ClCompile Include="src\game\entities\towers\cannon_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\entities\towers\test_tower.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\entities\projectiles\cannon_ball_projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -166,6 +163,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game\entities\projectiles\cannon_cluster_projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\enemies\ant_colony_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\towers\minigun_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,9 +263,6 @@
     <ClInclude Include="include\game\entities\towers\cannon_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\entities\towers\test_tower.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\game\entities\projectiles\cannon_ball_projectile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -324,6 +324,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ui\scene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\enemies\ant_colony_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\towers\minigun_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

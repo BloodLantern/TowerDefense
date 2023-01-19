@@ -3,7 +3,7 @@
 #include "playfield.hpp"
 #include "hud.hpp"
 
-#include "test_tower.hpp"
+#include "minigun_tower.hpp"
 #include "cannon_tower.hpp"
 #include "beehive_tower.hpp"
 #include "spray_tower.hpp"
@@ -23,12 +23,12 @@
 
 TowerBarUI::TowerBarUI()
 {
-	towerTextures[0] = Globals::gResources->GetTexture("towers\\unicorn");
+	towerTextures[0] = Globals::gResources->GetTexture("towers\\minigun_icon");
 	towerTextures[1] = Globals::gResources->GetTexture("towers\\cannon_icon");
 	towerTextures[2] = Globals::gResources->GetTexture("towers\\beehive");
 	towerTextures[3] = Globals::gResources->GetTexture("towers\\spray");
 
-	mTowerTemplates[0] = new TestTower(towerTextures[0]);
+	mTowerTemplates[0] = new MinigunTower(towerTextures[0]);
 	mTowerTemplates[1] = new CannonTower(towerTextures[1]);
 	mTowerTemplates[2] = new BeehiveTower(towerTextures[2]);
 	mTowerTemplates[3] = new SprayTower(towerTextures[3]);

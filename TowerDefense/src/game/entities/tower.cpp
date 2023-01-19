@@ -2,7 +2,8 @@
 
 #include "globals.hpp"
 
-#include <GLFW/glfw3.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #define TOWER_RANGE_OUTLINE_COLOR IM_COL32(0x20, 0x20, 0x20, 0xA0)
 #define TOWER_SELECTION_OVERLAY_COLOR IM_COL32(0x80, 0x80, 0x80, 0x80)
@@ -198,9 +199,17 @@ void Tower::HandleShoot()
 
 void Tower::RotateTowardsTarget()
 {
-	Vector2 direction(GetPixelPosition(), mTarget->GetPixelPosition());
+	mRotation = Vector2(GetPixelPosition(), mTarget->GetPixelPosition()).Angle();
 
-	mRotation = atan2(direction.y, direction.x);
+	if (mRotation > M_PI / 2 || mRotation < -M_PI / 2)
+	{
+	    mScale.x = -std::fabsf(mScale.x);
+		mRotation += M_PI;
+	}
+	else
+	{
+	    mScale.x = std::fabsf(mScale.x);
+	}
 }
 
 void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
@@ -503,7 +512,7 @@ void Tower::OnRender()
 
     // Draw tower texture
 	const ImVec2 topLeft(Globals::gGridX + GetPixelPosition().x, Globals::gGridY + GetPixelPosition().y);
-	const ImVec2 bottomRight = ImVec2(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
+	const ImVec2 bottomRight(topLeft.x + GetWidth() * GRID_SQUARE_SIZE, topLeft.y + GetHeight() * GRID_SQUARE_SIZE);
 	Draw(topLeft, bottomRight);
 
 	// Draw upgrade/stats panel if selected

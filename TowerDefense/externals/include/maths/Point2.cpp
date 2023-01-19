@@ -53,7 +53,7 @@ Point2 Point2::Rotate(Point2 o, float angle) const
 	float c = cos(angle);
 	float s = sin(angle);
 
-	return Point2(x + _x * c - _y * s, y + _y * c + _x * s);
+	return Point2(o.x + _x * c - _y * s, o.y + _y * c + _x * s);
 }
 
 Point2 Point2::Rotate(float c, float s) const
