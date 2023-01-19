@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
 
 	GLFWwindow* window;
-	if (Globals::fullscreen)
+	if (Globals::gFullscreen)
 	{
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 	glfwShowWindow(window);
 
 	// Main loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !Globals::gClosingGame)
 	{
 		glfwPollEvents();
 
@@ -127,9 +127,33 @@ int main(int argc, char** argv)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		bool _fullscreenPrev = Globals::gFullscreen;
+
 		Globals::UpdateGlobals();
 		game.Update();
 		Gui::Update();
+
+		if (Globals::gFullscreen != _fullscreenPrev)
+		{
+			GLFWmonitor* monitor;
+			int width;
+			int height;
+			if (Globals::gFullscreen)
+			{
+				monitor = glfwGetPrimaryMonitor();
+				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+				width = mode->width;
+				height = mode->height;
+			}
+			else
+			{
+				monitor = nullptr;
+				width = WINDOW_WIDTH;
+				height = WINDOW_HEIGHT;
+			}
+
+			glfwSetWindowMonitor(window, Globals::gFullscreen ? monitor : nullptr, 100, 100, width, height, GLFW_DONT_CARE);
+		}
 
 		Discord_UpdatePresence(&Globals::gDiscordRpc);
 

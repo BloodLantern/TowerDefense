@@ -23,7 +23,8 @@ int32_t Globals::gWindowHeight;
 int32_t Globals::gGridX;
 int32_t Globals::gGridY;
 
-bool Globals::fullscreen = false;
+bool Globals::gFullscreen = false;
+bool Globals::gClosingGame = false;
 
 void Globals::UpdateGlobals()
 {

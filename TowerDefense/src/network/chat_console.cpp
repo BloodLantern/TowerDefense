@@ -2,13 +2,14 @@
 #include "network/network_interface.hpp"
 #include "imgui.h"
 #include "globals.hpp"
+#include "gui.hpp"
 
 std::vector<std::string> ChatConsole::mMessages;
 char ChatConsole::mMessageBuffer[500];
 
 void ChatConsole::Draw()
 {
-	if (ImGui::Begin("Chat console"))
+	if (ImGui::Begin("Chat console", &Gui::openedWindows[GUI_WINDOW_ID_CHAT_CONSOLE]))
 	{
 		if (ImGui::InputText("##message", mMessageBuffer, sizeof(mMessageBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{

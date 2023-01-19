@@ -34,7 +34,8 @@ public:
 	static int32_t gGridX;
 	static int32_t gGridY;
 
-	static bool fullscreen;
+	static bool gFullscreen;
+	static bool gClosingGame;
 
 	static void UpdateGlobals();
 	static void InitGlobals(Game* g);

@@ -30,6 +30,9 @@ void Gui::HandleMenuBar()
 
 	Gui::HandleNetworkMenuBar();
 
+	if (ImGui::MenuItem("Quit"))
+		Globals::gClosingGame = true;
+
 	ImGui::EndMainMenuBar();
 }
 
@@ -62,6 +65,11 @@ void Gui::HandleNetworkMenuBar()
 			Globals::gNetwork.StartClient("ZOTAC-12");
 	}
 
+	ImGui::Separator();
+
+	if (ImGui::MenuItem("Open chat"))
+		Gui::CreateGuiWindow(GUI_WINDOW_ID_CHAT_CONSOLE);
+
 	ImGui::EndMenu();
 }
 
@@ -93,10 +101,12 @@ void Gui::Update()
 
 			case GUI_WINDOW_ID_WAVE_EDITOR:
 				RoundEditor::Update();
+				break;
+
+			case GUI_WINDOW_ID_CHAT_CONSOLE:
+				ChatConsole::Draw();
 		}
 	}
-
-	ChatConsole::Draw();
 }
 
 Scene Gui::UpdateMainMenu()
@@ -258,7 +268,8 @@ Scene Gui::UpdateOptions()
 		if (ImGui::Button("Back", buttonSize))
 			result = Scene::MAIN_MENU;
 
-		// TODO fullscreen, network stuff probably
+		ImGui::Checkbox("Fullscreen", &Globals::gFullscreen);
+		// TODO network stuff probably
 
 		ImGui::PopFont();
 	}
