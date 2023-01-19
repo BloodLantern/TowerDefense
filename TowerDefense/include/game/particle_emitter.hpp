@@ -71,6 +71,8 @@ public:
 
 	void Update();
 
+	void SpawnParticles(uint32_t count);
+
 	void SetTexture(Texture& texture) { mTexture = texture; }
 	void SetParticleLimit(uint16_t limit);
 	void SetPosition(Point2 pos) { mPosition = pos; }

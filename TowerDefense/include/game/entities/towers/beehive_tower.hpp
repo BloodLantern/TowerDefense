@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tower.hpp"
+#include "particle_emitter.hpp"
 
 class BeehiveTower : public Tower
 {
@@ -21,6 +22,8 @@ private:
 
 	float_t mCashGenerationTimer;
 	uint8_t mAmoutOfCashGenerated;
+
+	ParticleEmitter mParticles;
 	
 	void TryBuffBeenests();
 };

@@ -21,7 +21,8 @@ enum BeehiveCustomUpgrades
 
 
 BeehiveTower::BeehiveTower(Texture* texture)
-	: Tower(2.f, 8.f, "Beehive", 800, texture)
+	: Tower(2.f, 8.f, "Beehive", 800, texture),
+	mParticles(GetPixelPosition(), *Globals::gResources->GetTexture("particles\\money"))
 {
 	mCashBonus = 25;
 	mMaxCashGenerations = 8;
@@ -33,6 +34,8 @@ BeehiveTower::BeehiveTower(Texture* texture)
 
 	mWidth = 3;
 	mHeight = 3;
+
+	mParticles.ConfigureEmitter(9, 0.5f, 0.1f, 0, IM_COL32(0xFF, 0xFF, 0xFF, 0xC0), Vector2(0, -20), 200, 60, false);
 }
 
 void BeehiveTower::OnCustomUpgrade()
@@ -67,6 +70,8 @@ const char* const BeehiveTower::GetCustomUpgradeTooltip(uint8_t level) const
 
 void BeehiveTower::OnUpdate()
 {
+	mParticles.Update();
+
 	if (Globals::gGame->IsFirstFrameOfRound())
 	{
 		mAmoutOfCashGenerated = 0; // Reset cash counter
@@ -93,6 +98,14 @@ void BeehiveTower::OnUpdate()
 
 		player->IncreaseMoney(mCashBonus);
 		IncreaseMoneyGenerated(mCashBonus);
+
+		// Particles
+		Point2 particlePos = GetPixelPosition();
+		particlePos.x += mWidth * GRID_SQUARE_SIZE / 2;
+		particlePos.y += mHeight * GRID_SQUARE_SIZE / 2;
+		mParticles.SetPosition(particlePos);
+		mParticles.SpawnParticles(3);
+		mParticles.Update();
 
 		if (mCustomUpgradeLevel < HEALTHY_HONEY)
 			return;

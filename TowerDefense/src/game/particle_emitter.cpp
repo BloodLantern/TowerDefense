@@ -80,6 +80,14 @@ void ParticleEmitter::Update()
 	}
 }
 
+void ParticleEmitter::SpawnParticles(uint32_t count)
+{
+	assert(mConfigured && "ParticleEmitter must be configured to spawn particles.");
+
+	for (uint32_t i = 0; i < count; i++)
+		TrySpawnParticle();
+}
+
 /// <summary>
 /// Tries to spawn a new particle
 /// </summary>
