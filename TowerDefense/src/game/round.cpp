@@ -9,6 +9,7 @@
 #include "red_ant_enemy.hpp"
 #include "ant_colony_enemy.hpp"
 #include "trilobyte_enemy.hpp"
+#include "firefly_enemy.hpp"
 
 #include <assert.h>
 
@@ -104,6 +105,10 @@ void Round::OnUpdate()
 
 				case 6:
 					e = new TrilobiteEnemy(pos);
+					break;
+
+				case 7:
+					e = new FireflyEnemy(pos);
 					break;
 			}
 

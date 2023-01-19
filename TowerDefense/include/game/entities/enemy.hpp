@@ -15,8 +15,20 @@ public:
 
 	virtual void StickToPath();
 
-	// Returns whether the enemy died
+	/// <summary>
+	/// Deals damage to ane enemy
+	/// </summary>
+	/// <param name="damage">Damage to deal</param>
+	/// <param name="damageDealt">(Reference) The actual damage dealt</param>
+	/// <returns>Wheter the enemy died</returns>
 	bool DealDamage(uint32_t damage, uint32_t& damageDealt);
+
+	/// <summary>
+	/// Heals an enemy
+	/// </summary>
+	/// <param name="increment">Amout to heal</param>
+	/// <returns>Wheter the enemy was fully healed</returns>
+	bool Heal(uint32_t increment);
 
 	void SlowDown();
 

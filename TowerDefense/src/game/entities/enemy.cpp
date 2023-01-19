@@ -125,6 +125,19 @@ bool Enemy::DealDamage(uint32_t damage, uint32_t& damageDealt)
 	return false;
 }
 
+bool Enemy::Heal(uint32_t increment)
+{
+	int32_t rest = mSpawnHealth - mHealth;
+	if (increment >= rest)
+	{
+		mHealth = mSpawnHealth;
+		return true;
+	}
+
+	mHealth += increment;
+	return false;
+}
+
 void Enemy::SlowDown()
 {
 	mSlowed = true;
