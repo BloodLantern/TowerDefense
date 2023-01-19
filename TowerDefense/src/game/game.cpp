@@ -9,7 +9,7 @@
 Game::Game()
 {
     // Temp
-    maxWave = 5;
+    maxWave = 20;
 
     mCurrentScene = Scene::MAIN_MENU;
     mCurrentLevel = 0;
@@ -317,6 +317,7 @@ uint8_t Game::CountLevels()
 
 void Game::StartLevel(uint8_t level)
 {
+    Restart();
     mCurrentLevel = level;
 
     RoundEditor::Load(roundInfo, (WAVES_PATH "Wave1"));
