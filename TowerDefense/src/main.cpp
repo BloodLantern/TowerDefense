@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 	// Set icon
 	glfwMakeContextCurrent(window);
 	GLFWimage windowIcon;
-	windowIcon.pixels = stbi_load("assets/logo.png", &windowIcon.width, &windowIcon.height, 0, 4);
+	windowIcon.pixels = stbi_load("assets/logo.png", &windowIcon.width, &windowIcon.height, nullptr, 4);
 
 	glfwSetWindowIcon(window, 1, &windowIcon);
 	glfwSwapInterval(1); // Enable vsync
@@ -135,15 +135,17 @@ int main(int argc, char** argv)
 		game.Update();
 		Gui::Update();
 
+		//std::cout << 1 / game.GetDeltaTime() << std::endl;
+
 		if (Globals::gFullscreen != _fullscreenPrev)
 		{
 			GLFWmonitor* monitor;
 			int width;
 			int height;
+			monitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 			if (Globals::gFullscreen)
 			{
-				monitor = glfwGetPrimaryMonitor();
-				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 				width = mode->width;
 				height = mode->height;
 			}
@@ -154,7 +156,8 @@ int main(int argc, char** argv)
 				height = WINDOW_HEIGHT;
 			}
 
-			glfwSetWindowMonitor(window, Globals::gFullscreen ? monitor : nullptr, 100, 100, width, height, GLFW_DONT_CARE);
+			glfwSetWindowMonitor(window, Globals::gFullscreen ? monitor : nullptr, 100, 100, width, height, mode->refreshRate);
+			glfwSwapInterval(1); // Enable vsync
 		}
 
 		Discord_UpdatePresence(&Globals::gDiscordRpc);
