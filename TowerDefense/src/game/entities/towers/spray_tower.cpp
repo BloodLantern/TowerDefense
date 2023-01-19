@@ -22,7 +22,7 @@ enum CannonCustomUpgrades
 };
 
 SprayTower::SprayTower(Texture* texture)
-	: Tower(new SprayProjectile(), 0.5f, 6.f, "Anti ant spray", 400, texture)
+	: Tower(new SprayProjectile(), 0.5f, 6.f, "Ant spray", 400, texture)
 {
 	mScale = .1f;
 
