@@ -74,4 +74,6 @@ private:
     void UpdateProjectiles();
 
     void Cleanup();
+
+    void UpdateRichPresence();
 };

@@ -81,6 +81,31 @@ void Game::Cleanup()
     projectilesQueue.clear();
 }
 
+void Game::UpdateRichPresence()
+{
+    DiscordRichPresence& rpc = Globals::gDiscordRpc;
+    if (mCurrentScene == Scene::IN_GAME)
+    {
+        rpc.state = "Playing Solo";
+        std::string details = std::string("Wave ").append(std::to_string(currentWave));
+        if (currentWave <= maxWave)
+            details = details.append("/").append(std::to_string(maxWave));
+        rpc.details = details.c_str();
+
+        rpc.largeImageKey = "levelpreview" + mCurrentLevel;
+        // TODO: Map names in discord rpc
+        rpc.largeImageText = "Level " + mCurrentLevel;
+        rpc.smallImageKey = "logo";
+        rpc.smallImageText = "Fourmi Defense";
+    }
+    else
+    {
+        rpc.state = "Browsing menus";
+        rpc.largeImageKey = "logo";
+        rpc.largeImageText = "Fourmi Defense";
+    }
+}
+
 void Game::Update()
 {
     mDeltaTime = Globals::gIO->DeltaTime;
@@ -108,6 +133,8 @@ void Game::Update()
             Scene_Options();
             break;
     }
+
+    UpdateRichPresence();
 }
 
 void Game::Shutdown()
@@ -165,8 +192,6 @@ void Game::CheckEndRound()
         (*_t)->SetTimeSinceLastAttack(DBL_MAX);
 
     currentWave++;
-    mRpcDetailsText = std::string("Wave ").append(std::to_string(currentWave)).append("/").append(std::to_string(maxWave));
-    Globals::gDiscordRpc.details = mRpcDetailsText.c_str();
 
     std::string fileName(WAVES_PATH "Wave");
     fileName.append(std::to_string(currentWave));
