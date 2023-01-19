@@ -31,7 +31,7 @@ BeehiveTower::BeehiveTower(Texture* texture)
 
 	mRotateTowardsEnemies = false;
 
-	mCustomUpgradeCost = 1000;
+	mCustomUpgradeCost = 250;
 
 	mCustomUpgradeLevelMax = CUSTOM_UPGRADE_LEVEL_MAX;
 }
@@ -80,12 +80,15 @@ void BeehiveTower::OnCustomUpgrade()
 			break;
 
 		case DARTS:
-			mCustomUpgradeCost = 2000;
+			mCustomUpgradeCost = 1000;
+			break;
+
+		case STICKY_HONEY:
+			mCustomUpgradeCost = 1500;
 			break;
 
 		case ANGRY_BEES:
 			mDamage += 3;
-			mCustomUpgradeCost = 5000;
 			break;
 	}
 }

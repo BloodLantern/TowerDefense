@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <vector>
 
-#define PLAYER_DEFAULT_MONEY 200
+#define PLAYER_DEFAULT_MONEY 200000
 #define PLAYER_DEFAULT_HEALTH 10
 
 class Player {

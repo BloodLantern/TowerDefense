@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\entities\projectiles\spray_projectile.cpp" />
+    <ClCompile Include="src\game\entities\towers\spray_tower.cpp" />
     <ClCompile Include="src\game\entities\enemies\ant_colony_enemy.cpp" />
     <ClCompile Include="src\game\entities\projectiles\bee_projectile_dart.cpp" />
     <ClCompile Include="src\game\entities\projectiles\cannon_cluster_projectile.cpp" />
@@ -255,6 +257,8 @@
     <ClInclude Include="include\network\server_interface.hpp" />
     <ClInclude Include="include\network\network_interface.hpp" />
     <ClInclude Include="include\ui\scene.hpp" />
+    <ClInclude Include="include\game\entities\towers\spray_tower.hpp" />
+    <ClInclude Include="include\game\entities\projectiles\spray_projectile.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

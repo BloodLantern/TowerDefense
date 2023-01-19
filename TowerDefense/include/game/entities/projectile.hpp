@@ -30,12 +30,17 @@ public:
 	void SetOwner(Tower* owner) { mOwner = owner; }
 	void SetSpeed(float_t speed) { mSpeed = speed; }
 	float_t GetLifetime() const { return mLifetime; }
+	void SetHitboxRadius(float_t radius) { mHitboxRadius = radius; }
+	void SetSlowingEnemies() { mSlowEnemies = true; }
 
 protected:
 	std::vector<Enemy*> mHitEnemies;
 	
 	uint32_t mDamage;
 	uint16_t mPierce;
+	bool mSlowEnemies;
+
+	float_t mHitboxRadius = 20.f;
 
 	Enemy* mTarget = nullptr;
 	Tower* mOwner = nullptr;

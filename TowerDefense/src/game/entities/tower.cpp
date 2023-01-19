@@ -59,7 +59,7 @@ void Tower::Shoot()
 	Projectile* projTemplate = mProjectileTemplate->Clone();
 	projTemplate->SetDamage(mDamage);
 	//projTemplate->SetTarget(mTarget);
-	Point2 pixelPosition(GetPixelPosition().x + mWidth, GetPixelPosition().y + mHeight);
+	Point2 pixelPosition(GetPixelPosition().x + (mWidth * GRID_SQUARE_SIZE / 2.f), GetPixelPosition().y + (mHeight * GRID_SQUARE_SIZE / 2.f));
 	projTemplate->SetPixelPosition(pixelPosition);
 	projTemplate->SetVelocity(Vector2(pixelPosition, mTarget->GetPixelPosition()).Normalize() * 60);
 	projTemplate->SetOwner(this);
