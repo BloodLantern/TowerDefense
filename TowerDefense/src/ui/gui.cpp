@@ -265,10 +265,13 @@ Scene Gui::UpdateOptions()
 		ImVec2 cursor(Globals::gWindowWidth / 2.f - buttonSize.x / 2.f, ImGui::GetCursorPosY() + 150);
 
 		ImGui::SetCursorPos(cursor);
+		ImGui::Checkbox("Fullscreen", &Globals::gFullscreen);
+
+		cursor.y += 150;
+		ImGui::SetCursorPos(cursor);
 		if (ImGui::Button("Back", buttonSize))
 			result = Scene::MAIN_MENU;
 
-		ImGui::Checkbox("Fullscreen", &Globals::gFullscreen);
 		// TODO network stuff probably
 
 		ImGui::PopFont();
