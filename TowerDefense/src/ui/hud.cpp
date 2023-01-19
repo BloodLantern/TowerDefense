@@ -119,3 +119,45 @@ void Hud::DrawGameOver(ImVec2 position)
     ImGui::PopStyleVar();
     ImGui::PopStyleColor();
 }
+
+void Hud::DrawWinScreen(ImVec2 position)
+{
+    ImGui::SetNextWindowPos(position);
+    ImGui::SetNextWindowSize(ImVec2(500, 250));
+    
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.f);
+
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0x64 / 255.f, 0x6c / 255.f, 0x73 / 255.f, 0xFF / 255.f));
+
+    if (ImGui::Begin("You win", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove))
+    {
+        ImGui::PushFont(Globals::gFontBig);
+        ImGui::SetCursorPosX(250.f - ImGui::CalcTextSize("You win!").x / 2);
+        ImGui::Text("You win!");
+        ImGui::PopFont();
+
+        ImGui::SetCursorPos(ImVec2(250.f - 120.f / 2, 250.f / 2 - 40.f / 2));
+
+        ImGui::PushFont(Globals::gFontMedium);
+        if (ImGui::Button("Freeplay", ImVec2(120, 40)))
+            std::cout << "Freeplay" << std::endl;
+
+        ImGui::SetCursorPosX(250.f - 120.f / 2);
+        if (ImGui::Button("Retry", ImVec2(120, 40)))
+            Globals::gGame->Restart();
+
+        // FIXME: After going back to main menu, starting a new game will cause the first round to be skipped
+        /*ImGui::SetCursorPosX(250.f - 200.f / 2);
+        if (ImGui::Button("Back to main menu", ImVec2(200, 40)))
+        {
+            Globals::gGame->Reset();
+            Globals::gGame->SetScene(Scene::MAIN_MENU);
+        }*/
+        ImGui::PopFont();
+    }
+
+    ImGui::End();
+
+    ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
+}

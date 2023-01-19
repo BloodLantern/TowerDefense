@@ -34,6 +34,18 @@ void Game::Init()
     mPlayingSpeedDeltaTime = 0;
 }
 
+void Game::Reset()
+{
+    mEnded = false;
+    Hud::canInteract = true;
+    currentWave = 1;
+    SetPlayingSpeed(1);
+    mPlayer->Reset();
+    mPlayField->ResetEntireClipdata();
+
+    Cleanup();
+}
+
 void Game::EndGame(bool lost)
 {
     mEnded = true;
@@ -43,17 +55,9 @@ void Game::EndGame(bool lost)
 
 void Game::Restart()
 {
-    mEnded = false;
-    Hud::canInteract = true;
-
-    currentWave = 1;
+    Reset();
     RoundEditor::Load(roundInfo, (WAVES_PATH "Wave1"));
     Round::StartRound(roundInfo.data());
-    SetPlayingSpeed(1);
-    mPlayer->Reset();
-    mPlayField->ResetEntireClipdata();
-
-    Cleanup();
 }
 
 void Game::Cleanup()
@@ -126,7 +130,10 @@ void Game::DrawHud()
     if (mEnded)
     {
         position = ImVec2(Globals::gGridX + Globals::gWindowWidth / 2 - 250, Globals::gGridY + Globals::gWindowHeight / 2 - 125);
-        Hud::DrawGameOver(position);
+        if (mPlayer->GetLife() == 0)
+            Hud::DrawGameOver(position);
+        else
+            Hud::DrawWinScreen(position);
     }
 }
 

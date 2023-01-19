@@ -15,4 +15,5 @@ public:
 	static void DrawSpeed(ImVec2 position);
 
 	static void DrawGameOver(ImVec2 position);
+	static void DrawWinScreen(ImVec2 position);
 };

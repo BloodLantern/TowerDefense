@@ -30,7 +30,9 @@ public:
     double_t GetDeltaTime() const { return mDeltaTime; }
     int32_t GetPlayingSpeed() const { return mPlayingSpeed; }
     void SetPlayingSpeed(int32_t speed) { mPlayingSpeed = speed; }
+    void SetScene(Scene scene) { mCurrentScene = scene; }
 
+    void Reset();
     void EndGame(bool lost);
     void Restart();
 
