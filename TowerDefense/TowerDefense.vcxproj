@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\entities\enemies\firefly_enemy.cpp" />
     <ClCompile Include="src\game\entities\projectiles\spray_projectile.cpp" />
     <ClCompile Include="src\game\entities\towers\spray_tower.cpp" />
     <ClCompile Include="src\game\entities\enemies\ant_colony_enemy.cpp" />
@@ -202,8 +203,10 @@
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\ui\tower_bar_ui.cpp" />
     <ClCompile Include="src\editor\round_editor.cpp" />
+    <ClCompile Include="src\game\entities\enemies\trilobyte_enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\game\entities\enemies\firefly_enemy.hpp" />
     <ClInclude Include="include\game\entities\enemies\ant_colony_enemy.hpp" />
     <ClInclude Include="include\game\entities\projectiles\bee_projectile_dart.hpp" />
     <ClInclude Include="include\game\entities\towers\beehive_tower.hpp" />
@@ -259,6 +262,7 @@
     <ClInclude Include="include\ui\scene.hpp" />
     <ClInclude Include="include\game\entities\towers\spray_tower.hpp" />
     <ClInclude Include="include\game\entities\projectiles\spray_projectile.hpp" />
+    <ClInclude Include="include\game\entities\enemies\trilobyte_enemy.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

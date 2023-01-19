@@ -21,7 +21,8 @@ static const char* const sEnemyNames[] = {
     "Gold scarab",
     "Ladybug",
     "Red ant",
-    "Ant colony (Boss)"
+    "Ant colony (Boss)",
+    "Trilobite"
 };
 
 std::vector<RoundInfo> RoundEditor::mRoundInfo;
