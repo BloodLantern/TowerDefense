@@ -27,8 +27,7 @@
 void SetupDiscordRPC(DiscordRichPresence* rpc)
 {
 	memset(rpc, 0, sizeof(*rpc));
-	rpc->state = "Playing Solo";
-	rpc->details = "Wave 1/20";
+	rpc->state = "Browsing menus";
 	rpc->startTimestamp = std::time(nullptr);
 	rpc->largeImageKey = "logo";
 	rpc->largeImageText = "Fourmi defense";
