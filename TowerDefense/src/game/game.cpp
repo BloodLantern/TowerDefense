@@ -3,6 +3,7 @@
 #include "round_editor.hpp"
 #include "hud.hpp"
 #include "gui.hpp"
+#include "bestiary.hpp"
 
 #include <filesystem>
 
@@ -33,6 +34,8 @@ void Game::Init()
     currentWave = 1;
     mDeltaTime = 0;
     mPlayingSpeedDeltaTime = 0;
+
+    Bestiary::InitTextures();
 }
 
 void Game::Reset()
@@ -107,6 +110,9 @@ void Game::Update()
         case Scene::OPTIONS:
             Scene_Options();
             break;
+
+        case Scene::BESTIARY:
+            Scene_Bestiary();
     }
 }
 
@@ -294,6 +300,11 @@ void Game::Scene_InGame()
 void Game::Scene_Options()
 {
     mCurrentScene = Gui::UpdateOptions();
+}
+
+void Game::Scene_Bestiary()
+{
+    mCurrentScene = Bestiary::Update();
 }
 
 uint8_t Game::CountLevels()

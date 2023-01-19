@@ -1,8 +1,9 @@
 #include "mite_enemy.hpp"
+#include "enemies_data.hpp"
 #include "globals.hpp"
 
 MiteEnemy::MiteEnemy(Point2 pos)
-	: Enemy(pos, 150, 2, 20)
+	: Enemy(pos, sEnemyInfo[EnemyId::MITE].health, sEnemyInfo[EnemyId::MITE].damage, sEnemyInfo[EnemyId::MITE].moneyDrop)
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\mite");
 

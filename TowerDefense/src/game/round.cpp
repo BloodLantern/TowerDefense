@@ -11,6 +11,8 @@
 #include "trilobyte_enemy.hpp"
 #include "firefly_enemy.hpp"
 
+#include "enemies_data.hpp"
+
 #include <assert.h>
 
 
@@ -74,40 +76,39 @@ void Round::OnUpdate()
 
 			pf->GetPixelPositionFromGrid(tileX, tileY, screenX, screenY);
 
-			// TODO enum
 			Enemy* e;
 			Point2 pos(screenX, screenY + GRID_SQUARE_SIZE / 2);
 			switch (mRoundInfo[mCurrentCommand].data.dataInt)
 			{
-				case 0:
+				case EnemyId::ANT:
 					e = new AntEnemy(pos);
 					break;
 
-				case 1:
+				case EnemyId::MITE:
 					e = new MiteEnemy(pos);
 					break;
 
-				case 2:
+				case EnemyId::GOLD_SCARAB:
 					e = new GoldScarabEnemy(pos);
 					break;
 
-				case 3:
+				case EnemyId::LADYBUG:
 					e = new LadybugEnemy(pos);
 					break;
 					
-				case 4:
+				case EnemyId::RED_ANT:
 					e = new RedAntEnemy(pos);
 					break;
 					
-				case 5:
+				case EnemyId::ANT_COLONY:
 					e = new AntColonyEnemy(pos);
 					break;
 
-				case 6:
+				case EnemyId::TRILOBITE:
 					e = new TrilobiteEnemy(pos);
 					break;
 
-				case 7:
+				case EnemyId::FIREFLY:
 					e = new FireflyEnemy(pos);
 					break;
 			}

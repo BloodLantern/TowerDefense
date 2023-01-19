@@ -3,6 +3,7 @@
 #include "globals.hpp"
 #include "red_ant_enemy.hpp"
 #include "ant_enemy.hpp"
+#include "enemies_data.hpp"
 
 #define HEALTH_BAR_WIDTH 101.f
 #define HEALTH_BAR_HEIGHT 25.f
@@ -25,7 +26,7 @@
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
 
 AntColonyEnemy::AntColonyEnemy(Point2 pos)
-    : Enemy(pos, 50000, UINT16_MAX, 500),
+    : Enemy(pos, sEnemyInfo[EnemyId::ANT_COLONY].health, sEnemyInfo[EnemyId::ANT_COLONY].damage, sEnemyInfo[EnemyId::ANT_COLONY].moneyDrop),
     mHealthBar(Globals::gResources->GetTexture("ui\\boss_health_bar"))
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\ant_colony");

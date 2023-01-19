@@ -23,7 +23,7 @@ enum BeehiveCustomUpgrades
 
 
 BeehiveTower::BeehiveTower(Texture* texture)
-	: Tower(2.f, 8.f, "Beehive", 200, texture)
+	: Tower(2.f, 8.f, "Beehive", 1000, texture)
 {
 	mCashBonus = 20;
 	mAmoutOfCashGenerated = 0;

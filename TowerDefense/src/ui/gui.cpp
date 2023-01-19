@@ -151,13 +151,13 @@ Scene Gui::UpdateMainMenu()
 
 		cursor.y += 100;
 		ImGui::SetCursorPos(cursor);
+		if (ImGui::Button("Bestiary", buttonSize))
+			result = Scene::BESTIARY;
+
+		cursor.y += 100;
+		ImGui::SetCursorPos(cursor);
 		if (ImGui::Button("Options", buttonSize))
 			result = Scene::OPTIONS;
-
-		/*cursor.y += 100;
-		ImGui::SetCursorPos(cursor);
-		if (ImGui::Button("Bestiary", buttonSize))
-			result = Scene::BESTIARY;*/
 
 		ImGui::PopFont();
 	}

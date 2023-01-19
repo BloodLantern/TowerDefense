@@ -5,7 +5,7 @@
 class GoldScarabEnemy : public Enemy
 {
 public:
-	GoldScarabEnemy(Point2 pos);
+	GoldScarabEnemy(Point2 position);
 	~GoldScarabEnemy();
 };
 
