@@ -204,7 +204,7 @@ void Tower::RotateTowardsTarget()
 	if (mRotation > M_PI / 2 || mRotation < -M_PI / 2)
 	{
 	    mScale.x = -std::fabsf(mScale.x);
-		mRotation += M_PI;
+		mRotation += (float_t) M_PI;
 	}
 	else
 	{

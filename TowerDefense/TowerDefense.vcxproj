@@ -206,8 +206,8 @@
     <ClCompile Include="src\game\entities\enemies\trilobyte_enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\game\entities\enemies\firefly_enemy.hpp" />
     <ClInclude Include="include\game\entities\enemies\ant_colony_enemy.hpp" />
+    <ClInclude Include="include\game\entities\enemies\firefly_enemy.hpp" />
     <ClInclude Include="include\game\entities\projectiles\bee_projectile_dart.hpp" />
     <ClInclude Include="include\game\entities\towers\beehive_tower.hpp" />
     <ClInclude Include="include\game\entities\projectiles\cannon_cluster_projectile.hpp" />

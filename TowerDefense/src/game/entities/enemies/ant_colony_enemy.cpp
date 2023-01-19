@@ -25,7 +25,7 @@
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
 
 AntColonyEnemy::AntColonyEnemy(Point2 pos)
-    : Enemy(pos, 10000, UINT16_MAX, 500),
+    : Enemy(pos, 50000, UINT16_MAX, 500),
     mHealthBar(Globals::gResources->GetTexture("ui\\boss_health_bar"))
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\ant_colony");

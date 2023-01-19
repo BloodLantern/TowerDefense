@@ -128,7 +128,7 @@ bool Enemy::DealDamage(uint32_t damage, uint32_t& damageDealt)
 bool Enemy::Heal(uint32_t increment)
 {
 	int32_t rest = mSpawnHealth - mHealth;
-	if (increment >= rest)
+	if ((int32_t) increment >= rest)
 	{
 		mHealth = mSpawnHealth;
 		return true;
