@@ -1,10 +1,12 @@
 #include "firefly_enemy.hpp"
 #include "globals.hpp"
+#include "enemies_data.hpp"
 
 #define HEAL_RANGE 5.f
 
 FireflyEnemy::FireflyEnemy(Point2 position)
-	: Enemy(position, 250, 1, 75), mTarget(this)
+	: Enemy(position, sEnemyInfo[EnemyId::FIREFLY].health, sEnemyInfo[EnemyId::FIREFLY].damage, sEnemyInfo[EnemyId::FIREFLY].moneyDrop),
+	  mTarget(this)
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\firefly");
 	mScale = .1f;

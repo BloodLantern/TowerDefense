@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;include;include\entities;externals\include\maths;$(ProjectDir);$(ProjectDir)ImGui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +107,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;include;include\entities;externals\include\maths;$(ProjectDir);$(ProjectDir)ImGui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;externals\include\ImGui;include;include\game\entities\projectiles;include\game\entities\towers;include\game\entities\enemies;include\game\entities;include\ui;include\editor;include\pathfinding;include\game;externals\include\maths;../../sudonetwork/asio/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4098</DisableSpecificWarnings>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +144,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>externals\include;include;include\entities;externals\include\maths;$(ProjectDir);$(ProjectDir)ImGui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\entities\enemies\enemies_data.cpp" />
+    <ClCompile Include="src\ui\bestiary.cpp" />
     <ClCompile Include="src\game\entities\towers\beehive_tower.cpp" />
     <ClCompile Include="src\game\entities\enemies\firefly_enemy.cpp" />
     <ClCompile Include="src\game\entities\projectiles\spray_projectile.cpp" />
@@ -207,6 +212,8 @@
     <ClCompile Include="src\game\entities\enemies\trilobyte_enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\game\entities\enemies\enemies_data.hpp" />
+    <ClInclude Include="include\ui\bestiary.hpp" />
     <ClInclude Include="include\game\entities\towers\beehive_tower.hpp" />
     <ClInclude Include="include\game\entities\enemies\ant_colony_enemy.hpp" />
     <ClInclude Include="include\game\entities\enemies\firefly_enemy.hpp" />

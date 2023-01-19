@@ -1,8 +1,9 @@
 #include "trilobyte_enemy.hpp"
+#include "enemies_data.hpp"
 #include "globals.hpp"
 
 TrilobiteEnemy::TrilobiteEnemy(Point2 position)
-	: Enemy(position, 1000, 10, 100)
+	: Enemy(position, sEnemyInfo[EnemyId::TRILOBITE].health, sEnemyInfo[EnemyId::TRILOBITE].damage, sEnemyInfo[EnemyId::TRILOBITE].moneyDrop)
 {
 	mTexture = Globals::gResources->GetTexture("enemies\\trilobite");
 

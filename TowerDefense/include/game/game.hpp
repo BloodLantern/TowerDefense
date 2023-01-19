@@ -65,6 +65,7 @@ private:
     void Scene_FreeplaySelection();
     void Scene_InGame();
     void Scene_Options();
+    void Scene_Bestiary();
 
     void DrawHud();
     void CheckEndRound();
