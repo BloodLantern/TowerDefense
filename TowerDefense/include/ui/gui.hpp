@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scene.hpp"
+
 enum GuiWindowsid
 {
 	GUI_WINDOW_ID_LEVEL_EDITOR,
@@ -11,7 +13,6 @@ enum GuiWindowsid
 class Gui
 {
 private:
-
 	static void HandleMenuBar();
 	static void HandleNetworkMenuBar();
 
@@ -20,4 +21,9 @@ public:
 
 	static void CreateGuiWindow(GuiWindowsid id);
 	static void Update();
+
+	static Scene UpdateMainMenu();
+	static Scene UpdateLevelSelection();
+	static Scene UpdateFreeplaySelection();
+	static Scene UpdateOptions();
 };

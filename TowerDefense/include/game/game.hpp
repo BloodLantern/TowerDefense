@@ -34,6 +34,9 @@ public:
     void EndGame(bool lost);
     void Restart();
 
+    uint8_t CountLevels();
+    void StartLevel(uint8_t level);
+
 private:
     PlayField* mPlayField = nullptr;
     Player* mPlayer = nullptr;
@@ -53,12 +56,9 @@ private:
 
     void Scene_MainMenu();
     void Scene_LevelSelection();
-    void Scene_FreeSelection();
+    void Scene_FreeplaySelection();
     void Scene_InGame();
     void Scene_Options();
-
-    void CountLevels();
-    void StartLevel(uint8_t level);
 
     void DrawHud();
     void CheckEndRound();
