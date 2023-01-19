@@ -51,6 +51,7 @@ void Game::Restart()
     Round::StartRound(roundInfo.data());
     SetPlayingSpeed(1);
     mPlayer->Reset();
+    mPlayField->ResetEntireClipdata();
 
     Cleanup();
 }

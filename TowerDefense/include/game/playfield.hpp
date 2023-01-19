@@ -94,6 +94,7 @@ private:
 
 	// Collision
 	std::vector<ClipdataType> mClipdata;
+	std::vector<ClipdataType> mClipdataAtStart;
 	
 	// Layers tilemap, layer 2 is drawn first, then 1, then 0
 	std::vector<uint16_t> mLayer2Tilemap;
@@ -168,6 +169,18 @@ public:
 	/// <param name="y">Tile Y position</param>
 	/// <param name="type">Clipdata value</param>
 	void SetClipdataTile(uint8_t x, uint8_t y, ClipdataType type);
+
+	/// <summary>
+	/// Resets a clipdata tile to it's original state
+	/// </summary>
+	/// <param name="x">Tile X position</param>
+	/// <param name="y">Tile Y position</param>
+	void ResetClipdataTile(uint8_t x, uint8_t y);
+
+	/// <summary>
+	/// Resets the entire clipdata board
+	/// </summary>
+	void ResetEntireClipdata();
 
 	/// <summary>
 	/// Gets a clipdata tile

@@ -6,7 +6,7 @@
 #include <vector>
 
 #define PLAYER_DEFAULT_MONEY 20000
-#define PLAYER_DEFAULT_HEALTH 1000
+#define PLAYER_DEFAULT_HEALTH 10
 
 class Player {
 public:
