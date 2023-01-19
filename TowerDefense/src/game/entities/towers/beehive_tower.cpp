@@ -2,8 +2,6 @@
 #include "globals.hpp"
 #include "beenest_tower.hpp"
 
-#define MAX_AMOUNT_OF_CASH_GENERATION 10
-
 #define CUSTOM_UPGRADE_LEVEL_MAX 4
 
 static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
@@ -23,9 +21,10 @@ enum BeehiveCustomUpgrades
 
 
 BeehiveTower::BeehiveTower(Texture* texture)
-	: Tower(2.f, 8.f, "Beehive", 200, texture)
+	: Tower(2.f, 8.f, "Beehive", 800, texture)
 {
-	mCashBonus = 20;
+	mCashBonus = 25;
+	mMaxCashGenerations = 8;
 	mAmoutOfCashGenerated = 0;
 	mCashGenerationTimer = mAttackSpeed;
 
@@ -42,11 +41,13 @@ void BeehiveTower::OnCustomUpgrade()
 	{
 		case FASTER_PRODUCTION:
 			mStartAttackSpeed += .5f;
+			UpdateAttackSpeed();
 			mCustomUpgradeCost = 750;
 			break;
 
 		case HIGH_QUALITY_HONEY:
-			mCashBonus = 40;
+			mCashBonus = 50;
+			mMaxCashGenerations = 15;
 			mCustomUpgradeCost = 2000;
 			break;
 
@@ -78,7 +79,7 @@ void BeehiveTower::OnUpdate()
 
 	TryBuffBeenests();
 
-	if (mAmoutOfCashGenerated == MAX_AMOUNT_OF_CASH_GENERATION)
+	if (mAmoutOfCashGenerated == mMaxCashGenerations)
 		return;
 
 	

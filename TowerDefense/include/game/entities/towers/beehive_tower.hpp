@@ -17,6 +17,7 @@ public:
 
 private:
 	uint32_t mCashBonus;
+	uint8_t mMaxCashGenerations;
 
 	float_t mCashGenerationTimer;
 	uint8_t mAmoutOfCashGenerated;

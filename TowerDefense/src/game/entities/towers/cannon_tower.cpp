@@ -52,7 +52,7 @@ void CannonTower::OnCustomUpgrade()
 			mProjectileTemplate->SetPierce(80);
 			mAttackSpeed -= 0.1f;
 
-			mCustomUpgradeCost = 3000;
+			mCustomUpgradeCost = 5000;
             break;
 		case RECURSIVE_CLUSTER:
 			delete mProjectileTemplate;

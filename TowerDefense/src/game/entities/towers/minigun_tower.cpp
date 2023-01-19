@@ -78,7 +78,7 @@ void MinigunTower::OnCustomUpgrade()
 		case STRONGER_BULLETS:
 		    mDamage++;
 
-			mCustomUpgradeCost = 3000;
+			mCustomUpgradeCost = 1500;
             break;
 		case LUDICROUS_FIRING_RATE:
 			mStartAttackSpeed *= 3;
