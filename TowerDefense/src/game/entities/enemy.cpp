@@ -6,7 +6,8 @@ Enemy::Enemy(Point2 pixelPosition, uint32_t health, uint16_t damage, uint32_t mo
 	: Entity(pixelPosition), mHealth(health), mSpawnHealth(health), mDamage(damage), mMoneyDrop(moneyDrop), mSlowed(false)
 {
 	mCurrentPathIndex = 0;
-	mSpeed = 2.f;
+	mSpeed = 1.f;
+	mSlowedTimer = 0.f;
 }
 
 void Enemy::OnUpdate()
