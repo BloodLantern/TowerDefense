@@ -2,12 +2,12 @@
 
 #include "projectile.hpp"
 
-class BeehiveTower;
+class BeenestTower;
 
 class BeeProjectile : public Projectile
 {
 public:
-	BeeProjectile(BeehiveTower* hive);
+	BeeProjectile(BeenestTower* hive);
 	~BeeProjectile();
 
 	void UpdateForDarts();
@@ -39,7 +39,7 @@ private:
 		BEE_POSE_ON_TARGET,
 	};
 
-	BeehiveTower* mHive;
+	BeenestTower* mHive;
 
 	float_t mHookedTimer;
 	float_t mIdleVelocityTimer;

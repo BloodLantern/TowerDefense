@@ -84,25 +84,25 @@ void Game::Update()
 
     switch (mCurrentScene)
     {
-    case Scene::MAIN_MENU:
-        Scene_MainMenu();
-        break;
+        case Scene::MAIN_MENU:
+            Scene_MainMenu();
+            break;
 
-    case Scene::LEVEL_SELECTION:
-        Scene_LevelSelection();
-        break;
+        case Scene::LEVEL_SELECTION:
+            Scene_LevelSelection();
+            break;
 
-    case Scene::FREEPLAY_SELECTION:
-        Scene_FreeplaySelection();
-        break;
+        case Scene::FREEPLAY_SELECTION:
+            Scene_FreeplaySelection();
+            break;
 
-    case Scene::IN_GAME:
-        Scene_InGame();
-        break;
+        case Scene::IN_GAME:
+            Scene_InGame();
+            break;
 
-    case Scene::OPTIONS:
-        Scene_Options();
-        break;
+        case Scene::OPTIONS:
+            Scene_Options();
+            break;
     }
 }
 
@@ -142,6 +142,7 @@ void Game::CheckEndRound()
     if (!Round::HasEnded() || !enemies.empty())
         return;
 
+    mIsFirstFrameOfRound = true;
     Round::GrantEndRoundMoney();
 
     // Kill all projectiles
@@ -275,6 +276,8 @@ void Game::Scene_InGame()
 
     DrawHud();
 
+    mIsFirstFrameOfRound = false;
+
     if (mEnded)
         return;
 
@@ -316,4 +319,5 @@ void Game::StartLevel(uint8_t level)
     std::string id = std::to_string(level);
 
     mPlayField->Load(std::string("Level").append(id).append(".bin"));
+    mIsFirstFrameOfRound = true;
 }

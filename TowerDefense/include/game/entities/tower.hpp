@@ -37,6 +37,7 @@ class Tower : public Entity
 
 public:
 	Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
+	Tower(float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
 	//virtual ~Tower() { delete mProjectileTemplate; };
 
 	virtual Tower* Clone() const = 0;

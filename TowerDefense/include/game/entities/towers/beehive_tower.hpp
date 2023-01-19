@@ -1,26 +1,26 @@
 #pragma once
 
 #include "tower.hpp"
-#include "bee_projectile.hpp"
 
 class BeehiveTower : public Tower
 {
 public:
 	BeehiveTower(Texture* texture);
-	~BeehiveTower();
 
-	Tower* Clone() const override;
-	void Shoot() override;
-	void OnUpdate() override;
-
-    void OnCustomUpgrade() override;
+	void OnCustomUpgrade() override;
 	const char* const GetCustomUpgradeTooltip(uint8_t level) const override;
 	
-	void RemoveBee(BeeProjectile* bee);
+	void OnUpdate() override;
+	void Shoot() override;
+
+	Tower* Clone() const override;
 
 private:
-	uint8_t mAmountOfBees;
-	uint8_t mMaxAmountOfBees;
+	uint32_t mCashBonus;
 
-	std::vector<BeeProjectile*> mBees;
+	float_t mCashGenerationTimer;
+	uint8_t mAmoutOfCashGenerated;
+	
+	void TryBuffBeenests();
 };
+

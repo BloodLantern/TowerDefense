@@ -1,6 +1,6 @@
 #include "bee_projectile.hpp"
 #include "globals.hpp"
-#include "beehive_tower.hpp"
+#include "beenest_tower.hpp"
 #include "bee_projectile_dart.hpp"
 
 #define _USE_MATH_DEFINES
@@ -9,7 +9,7 @@
 // Not the best place
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
 
-BeeProjectile::BeeProjectile(BeehiveTower* hive)
+BeeProjectile::BeeProjectile(BeenestTower* hive)
 	: Projectile(5.f, 8.f, 0, INFINITY)
 {
 	mHive = hive;

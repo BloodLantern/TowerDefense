@@ -117,7 +117,7 @@
     <ClCompile Include="src\game\entities\projectiles\cannon_ball_projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\entities\towers\beehive_tower.cpp">
+    <ClCompile Include="src\game\entities\towers\beenest_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game\entities\projectiles\bee_projectile.cpp">
@@ -169,6 +169,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game\entities\towers\minigun_tower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\enemies\firefly_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\projectiles\spray_projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\towers\spray_tower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\enemies\trilobyte_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\towers\beehive_tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -317,7 +332,7 @@
     <ClInclude Include="include\game\entities\projectiles\bee_projectile_dart.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\entities\towers\beehive_tower.hpp">
+    <ClInclude Include="include\game\entities\towers\beenest_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\game\entities\projectiles\cannon_cluster_projectile.hpp">
@@ -330,6 +345,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\game\entities\towers\minigun_tower.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\enemies\firefly_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\towers\spray_tower.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\projectiles\spray_projectile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\enemies\trilobyte_enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\entities\towers\beehive_tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

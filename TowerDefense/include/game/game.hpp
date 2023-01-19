@@ -39,6 +39,8 @@ public:
     uint8_t CountLevels();
     void StartLevel(uint8_t level);
 
+    bool IsFirstFrameOfRound() { return mIsFirstFrameOfRound; }
+
 private:
     PlayField* mPlayField = nullptr;
     Player* mPlayer = nullptr;
@@ -55,6 +57,8 @@ private:
     Scene mCurrentScene;
     uint8_t mCurrentLevel;
     uint8_t mAmountOfLevels;
+
+    bool mIsFirstFrameOfRound;
 
     void Scene_MainMenu();
     void Scene_LevelSelection();

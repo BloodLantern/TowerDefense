@@ -5,7 +5,7 @@
 
 #include "tower.hpp"
 
-#define TOWER_COUNT 4
+#define TOWER_COUNT 5
 
 #define TOWER_BAR_TOWER_SIZE 64
 #define TOWER_BAR_Y_OFFSET 2

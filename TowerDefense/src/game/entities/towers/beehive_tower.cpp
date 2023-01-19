@@ -1,45 +1,105 @@
 #include "beehive_tower.hpp"
 #include "globals.hpp"
+#include "beenest_tower.hpp"
+
+#define MAX_AMOUNT_OF_CASH_GENERATION 10
 
 #define CUSTOM_UPGRADE_LEVEL_MAX 4
 
+static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
+	"Faster production: bees become even more productive.",
+	"High quality honey: produces high quality honey that sells for more.",
+	"Healthy honey: honey so healthy it regenerates life sometimes.",
+	"Friendly bees: boosts the beenests in the radius",
+};
+
 enum BeehiveCustomUpgrades
 {
-	MORE_BEES = 1,
-	DARTS = 2,
-	STICKY_HONEY = 3,
-	ANGRY_BEES = 4
+	FASTER_PRODUCTION = 1,
+	HIGH_QUALITY_HONEY = 2,
+	HEALTHY_HONEY = 3,
+	FRIENDLY_BEES = 4
 };
 
-static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
-	"More bees: Increases the amount of bees the hive can spawn up to 8",
-	"Darts: Bees will now shoot darts at their enemies",
-	"Sticky honey: Enemies attacked by the bees will be slowed by honey",
-	"Angry bees: Increases the damage dealt by bees"
-};
 
 BeehiveTower::BeehiveTower(Texture* texture)
-	: Tower(new BeeProjectile(this), 0.33f, 7.f, "Beehive", 500, texture)
+	: Tower(2.f, 8.f, "Beehive", 200, texture)
 {
-	mDamage = 5;
-
-	mMaxAmountOfBees = 5;
-	mAmountOfBees = 0;
-
-	mWidth = 2;
-	mHeight = 2;
-
-	mRotateTowardsEnemies = false;
-
-	mCustomUpgradeCost = 250;
+	mCashBonus = 20;
+	mAmoutOfCashGenerated = 0;
+	mCashGenerationTimer = mAttackSpeed;
 
 	mCustomUpgradeLevelMax = CUSTOM_UPGRADE_LEVEL_MAX;
+	mCustomUpgradeCost = 500;
+
+	mWidth = 3;
+	mHeight = 3;
 }
 
-BeehiveTower::~BeehiveTower()
+void BeehiveTower::OnCustomUpgrade()
 {
-	for (size_t i = 0; i < mBees.size(); i++)
-		mBees[i]->toDelete = true;
+	switch (mCustomUpgradeLevel)
+	{
+		case FASTER_PRODUCTION:
+			mStartAttackSpeed += .5f;
+			mCustomUpgradeCost = 750;
+			break;
+
+		case HIGH_QUALITY_HONEY:
+			mCashBonus = 40;
+			mCustomUpgradeCost = 2000;
+			break;
+
+		case HEALTHY_HONEY:
+			mCustomUpgradeCost = 1000;
+			break;
+
+		case FRIENDLY_BEES:
+			break;
+	}
+}
+
+const char* const BeehiveTower::GetCustomUpgradeTooltip(uint8_t level) const
+{
+	return sCustomUpgradeTooltips[level];
+}
+
+void BeehiveTower::OnUpdate()
+{
+	if (Globals::gGame->IsFirstFrameOfRound())
+		mAmoutOfCashGenerated = 0; // Reset cash counter
+
+	// Check for selection
+	HandleSelection();
+
+	if (mAmoutOfCashGenerated == MAX_AMOUNT_OF_CASH_GENERATION)
+		return;
+
+	TryBuffBeenests();
+	
+	mCashGenerationTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
+
+	if (mCashGenerationTimer < 0)
+	{
+		Player* player = Globals::gGame->GetPlayer();
+		mCashGenerationTimer = mAttackSpeed;
+		mAmoutOfCashGenerated++;
+
+		player->IncreaseMoney(mCashBonus);
+		IncreaseMoneyGenerated(mCashBonus);
+
+		if (mCustomUpgradeLevel < HEALTHY_HONEY)
+			return;
+
+		if ((rand() % 100) <= 10)
+			player->IncreaseLife(rand() % 3);
+	}
+}
+
+void BeehiveTower::Shoot()
+{
+	// Don't do anything
+	return;
 }
 
 Tower* BeehiveTower::Clone() const
@@ -50,86 +110,34 @@ Tower* BeehiveTower::Clone() const
 	return result;
 }
 
-void BeehiveTower::OnUpdate()
+void BeehiveTower::TryBuffBeenests()
 {
-	// Check for darts
-	if (mCustomUpgradeLevel >= DARTS)
-	{
-		for (size_t i = 0; i < mBees.size(); i++)
-			mBees[i]->UpdateForDarts();
-	}
-
-	// Check for selection
-	HandleSelection();
-
-	// Check whether the tower is able to shoot
-	if (mTimeSinceLastAttack > 1 / GetAttackSpeed())
-		Shoot();
-
-	// Update attack cooldown
-	mTimeSinceLastAttack += Globals::gGame->GetPlayingSpeedDeltaTime();
-}
-
-void BeehiveTower::OnCustomUpgrade()
-{
-	switch (mCustomUpgradeLevel)
-	{
-		case MORE_BEES:
-			mMaxAmountOfBees = 8;
-			mCustomUpgradeCost = 500;
-			break;
-
-		case DARTS:
-			mCustomUpgradeCost = 1000;
-			break;
-
-		case STICKY_HONEY:
-			mCustomUpgradeCost = 1500;
-			break;
-
-		case ANGRY_BEES:
-			mDamage += 3;
-			break;
-	}
-}
-
-const char* const BeehiveTower::GetCustomUpgradeTooltip(uint8_t level) const
-{
-	return sCustomUpgradeTooltips[level];
-}
-
-void BeehiveTower::Shoot()
-{
-	mTimeSinceLastAttack = 0;
-	if (mAmountOfBees == mMaxAmountOfBees)
+	if (mCustomUpgradeLevel < FRIENDLY_BEES)
 		return;
 
-	mAmountOfBees++;
+	std::vector<Tower*>* towers = Globals::gGame->GetPlayer()->GetTowers();
+	float_t range = mRange * GRID_SQUARE_SIZE;
+	range *= range;
 
-	Projectile* projTemplate = mProjectileTemplate->Clone();
-	projTemplate->SetDamage(mDamage);
+	for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
+	{
+		Tower* t = *_t;
 
-	Point2 pixelPosition(GetPixelPosition().x + (mWidth * GRID_SQUARE_SIZE) / 2.f,
-		GetPixelPosition().y + (mHeight * GRID_SQUARE_SIZE) / 2.f);
-	projTemplate->SetPixelPosition(pixelPosition);
+		// This violates the Liskow substitution principle (https://en.wikipedia.org/wiki/Liskov_substitution_principle)
+		// according to people on stack overflow (https://stackoverflow.com/questions/307765/how-do-i-check-if-an-objects-type-is-a-particular-subclass-in-c)
+		// don't really see another way to do that though and it shouldn't be an issue anyway, just though it was worth mentionning
+		
+		BeenestTower* nest = dynamic_cast<BeenestTower*>(t);
+		if (nest == nullptr) // Check is a beenest
+			continue;
 
-	projTemplate->SetVelocity(Vector2(0, 0));
-	projTemplate->SetOwner(this);
+		// Check isn't already buffed
+		if (nest->IsBuffed())
+			continue;
 
-	Globals::gGame->projectiles.push_back(projTemplate);
+		float_t dist = Vector2(GetPixelPosition(), nest->GetPixelPosition()).GetSquaredNorm();
 
-	BeeProjectile* bee = dynamic_cast<BeeProjectile*>(projTemplate);
-	
-	if (mCustomUpgradeLevel >= STICKY_HONEY)
-		bee->slowEnemies = true;
-
-	mBees.push_back(bee);
+		if (dist < range)
+			nest->ApplyBeehiveBuff();
+	}
 }
-
-void BeehiveTower::RemoveBee(BeeProjectile* bee)
-{
-	mAmountOfBees--;
-	mBees.erase(std::find(mBees.begin(), mBees.end(), bee));
-}
-
-#undef CUSTOM_UPGRADE_LEVEL_MAX

@@ -55,6 +55,21 @@ Tower::Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range,
 	);
 }
 
+Tower::Tower(float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture)
+	: Entity()
+{
+	mProjectileTemplate = nullptr;
+
+	InitStats(
+		0,
+		attackSpeed,
+		range,
+		name,
+		cost,
+		texture
+	);
+}
+
 void Tower::Shoot()
 {
 	Projectile* projTemplate = mProjectileTemplate->Clone();
