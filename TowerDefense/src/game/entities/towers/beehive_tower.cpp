@@ -67,15 +67,20 @@ const char* const BeehiveTower::GetCustomUpgradeTooltip(uint8_t level) const
 void BeehiveTower::OnUpdate()
 {
 	if (Globals::gGame->IsFirstFrameOfRound())
+	{
 		mAmoutOfCashGenerated = 0; // Reset cash counter
+
+		mCashGenerationTimer = mAttackSpeed;
+	}
 
 	// Check for selection
 	HandleSelection();
 
+	TryBuffBeenests();
+
 	if (mAmoutOfCashGenerated == MAX_AMOUNT_OF_CASH_GENERATION)
 		return;
 
-	TryBuffBeenests();
 	
 	mCashGenerationTimer -= Globals::gGame->GetPlayingSpeedDeltaTime();
 
