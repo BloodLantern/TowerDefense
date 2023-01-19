@@ -13,8 +13,10 @@ public:
 
 private:
     const Texture* mHealthBar;
+	float_t mAntSpawnAroundCooldown = 0;
 	float_t mAntSpawnCooldown = 0;
 
-	void SpawnAnts(uint8_t count);
+	void SpawnAntsAround(uint8_t count);
+	void SpawnAnt();
     void DrawHealthBar(ImVec2& pos) override;
 };

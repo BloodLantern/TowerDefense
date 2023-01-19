@@ -12,6 +12,14 @@ static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
 	"Recursive cluster: cluster bombs now also release more cluster bombs!\nThe counterpart is even less attack speed."
 };
 
+enum CannonCustomUpgrades
+{
+	FASTER_BOMBS = 1,
+	DAMAGE_INCREASE = 2,
+	CLUSTER_BOMBS = 3,
+	RECURSIVE_CLUSTER = 4
+};
+
 CannonTower::CannonTower(Texture* texture)
 	: Tower(new CannonBallProjectile(), 0.4f, 5.5f, "Cannon", 350, texture),
 	mHandleTexture(Globals::gResources->GetTexture("towers\\cannon_handle")),
@@ -27,29 +35,31 @@ void CannonTower::OnCustomUpgrade()
 {
 	switch (mCustomUpgradeLevel)
 	{
-		case 1:
+		case FASTER_BOMBS:
 			mProjectileTemplate->SetSpeed(30);
 
 			mCustomUpgradeCost = 200;
             break;
-		case 2:
-		    mDamage += 1;
+		case DAMAGE_INCREASE:
+		    mDamage = 5;
 
 			mCustomUpgradeCost = 1500;
             break;
-		case 3:
+		case CLUSTER_BOMBS:
 			delete mProjectileTemplate;
 			mProjectileTemplate = new CannonClusterProjectile(false);
 			mProjectileTemplate->SetOwner(this);
-			mAttackSpeed *= 0.9f;
+			mProjectileTemplate->SetPierce(80);
+			mAttackSpeed -= 0.1f;
 
 			mCustomUpgradeCost = 3000;
             break;
-		case 4:
+		case RECURSIVE_CLUSTER:
 			delete mProjectileTemplate;
 			mProjectileTemplate = new CannonClusterProjectile(true);
 			mProjectileTemplate->SetOwner(this);
-			mAttackSpeed *= 0.8f;
+			mProjectileTemplate->SetPierce(500);
+			mAttackSpeed -= 0.2f;
             break;
 	}
 }

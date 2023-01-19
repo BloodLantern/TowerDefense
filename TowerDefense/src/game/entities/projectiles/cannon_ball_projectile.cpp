@@ -5,7 +5,7 @@
 #define CANNON_BALL_PROJECTILE_EXPLOSION_ANIMATION_TIME 20
 
 CannonBallProjectile::CannonBallProjectile()
-    : CannonBallProjectile(15, 2, 0.5f, 0.05f, Vector2::Zero)
+    : CannonBallProjectile(15, 5, 0.5f, 0.05f, Vector2::Zero)
 {
     mCollidesWithEnemies = true;
 }

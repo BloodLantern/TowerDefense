@@ -24,6 +24,8 @@ public:
 	void SetTarget(Enemy* target) { mTarget = target; }
 	uint32_t GetDamage() const { return mDamage; }
 	void SetDamage(uint32_t damage) { mDamage = damage; }
+	uint16_t GetPierce() const { return mPierce; }
+	void SetPierce(uint16_t pierce) { mPierce = pierce; }
 	Tower* GetOwner() const { return mOwner; }
 	void SetOwner(Tower* owner) { mOwner = owner; }
 	void SetSpeed(float_t speed) { mSpeed = speed; }

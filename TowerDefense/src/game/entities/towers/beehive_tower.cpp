@@ -21,6 +21,8 @@ static const char* const sCustomUpgradeTooltips[CUSTOM_UPGRADE_LEVEL_MAX] = {
 BeehiveTower::BeehiveTower(Texture* texture)
 	: Tower(new BeeProjectile(this), 0.33f, 7.f, "Beehive", 500, texture)
 {
+	mDamage = 5;
+
 	mMaxAmountOfBees = 5;
 	mAmountOfBees = 0;
 
@@ -82,7 +84,7 @@ void BeehiveTower::OnCustomUpgrade()
 			break;
 
 		case ANGRY_BEES:
-			mDamage++;
+			mDamage += 3;
 			mCustomUpgradeCost = 5000;
 			break;
 	}

@@ -8,6 +8,7 @@
 CannonClusterProjectile::CannonClusterProjectile(bool recursive)
     : CannonBallProjectile(), mRecursive(recursive)
 {
+    mDamage = 10;
     //TODO: mTexture = RED BOMB
 }
 
@@ -32,13 +33,16 @@ void CannonClusterProjectile::Explode()
     const Vector2 up = Vector2(0, -1) * 100;
     const float_t dangle = (float_t) M_PI * 2.f / CLUSTER_BOMB_COUNT;
 
+    uint16_t pierce = mPierce / CLUSTER_BOMB_COUNT;
+
     for (int i = 0; i < CLUSTER_BOMB_COUNT; i++)
     {
         Projectile* proj = nullptr;
         if (mRecursive)
-            proj = new CannonClusterProjectile(2, 2, 0.3f, 0.03f, up.Rotate(dangle * i));
+            proj = new CannonClusterProjectile(2, 7, 0.3f, 0.03f, up.Rotate(dangle * i));
         else
-            proj = new CannonBallProjectile(2, 1, 0.3f, 0.03f, up.Rotate(dangle * i));
+            proj = new CannonBallProjectile(2, 5, 0.3f, 0.03f, up.Rotate(dangle * i));
+        proj->SetPierce(pierce);
         proj->SetPixelPosition(GetPixelPosition());
         proj->SetOwner(mOwner);
         Globals::gGame->projectilesQueue.push_back(proj);

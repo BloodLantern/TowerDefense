@@ -26,6 +26,7 @@ public:
 	uint32_t GetHealth() const { return mHealth; }
 	void SetHealth(uint32_t newHealth) { mHealth = newHealth; }
 	void SetCurrentPathIndex(uint16_t newCurrentPathIndex) { mCurrentPathIndex = newCurrentPathIndex; }
+	void SetMoneyDrop(uint32_t newMoneyDrop) { mMoneyDrop = newMoneyDrop; }
 
 protected:
 	float mSpeed;

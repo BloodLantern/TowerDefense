@@ -10,7 +10,7 @@
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
 
 BeeProjectile::BeeProjectile(BeehiveTower* hive)
-	: Projectile(5.f, 1.f, 0, INFINITY)
+	: Projectile(5.f, 8.f, 0, INFINITY)
 {
 	mHive = hive;
 	mHookedTimer = 0;
