@@ -30,8 +30,19 @@ void Gui::HandleMenuBar()
 
 	Gui::HandleNetworkMenuBar();
 
-	if (ImGui::MenuItem("Quit"))
-		Globals::gClosingGame = true;
+	if (ImGui::BeginMenu("Menus"))
+	{
+		if (ImGui::MenuItem("Main menu"))
+			Globals::gGame->SetScene(Scene::MAIN_MENU);
+
+		ImGui::Separator();
+
+		if (ImGui::MenuItem("Close game"))
+			Globals::gClosingGame = true;
+
+		ImGui::EndMenu();
+	}
+
 
 	ImGui::EndMainMenuBar();
 }

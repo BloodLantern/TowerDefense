@@ -146,13 +146,12 @@ void Hud::DrawWinScreen(ImVec2 position)
         if (ImGui::Button("Retry", ImVec2(120, 40)))
             Globals::gGame->Restart();
 
-        // FIXME: After going back to main menu, starting a new game will cause the first round to be skipped
-        /*ImGui::SetCursorPosX(250.f - 200.f / 2);
+        ImGui::SetCursorPosX(250.f - 200.f / 2);
         if (ImGui::Button("Back to main menu", ImVec2(200, 40)))
         {
-            Globals::gGame->Reset();
+            Globals::gGame->Restart();
             Globals::gGame->SetScene(Scene::MAIN_MENU);
-        }*/
+        }
         ImGui::PopFont();
     }
 

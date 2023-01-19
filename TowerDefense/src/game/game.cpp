@@ -9,13 +9,14 @@
 Game::Game()
 {
     // Temp
-    maxWave = 20;
+    maxWave = 5;
 
     mCurrentScene = Scene::MAIN_MENU;
     mCurrentLevel = 0;
     mAmountOfLevels = 0;
 
     Hud::canInteract = true;
+    mIsFirstFrameOfRound = false;
 }
 
 Game::~Game()
@@ -75,6 +76,9 @@ void Game::Cleanup()
     for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
         delete* _p;
     projectiles.clear();
+
+    enemiesQueue.clear();
+    projectilesQueue.clear();
 }
 
 void Game::Update()
@@ -144,6 +148,9 @@ void Game::CheckEndRound()
 
     mIsFirstFrameOfRound = true;
     Round::GrantEndRoundMoney();
+    
+    if (currentWave == maxWave)
+        EndGame(false);
 
     // Kill all projectiles
     for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); )
