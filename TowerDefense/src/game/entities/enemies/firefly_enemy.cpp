@@ -9,7 +9,7 @@ FireflyEnemy::FireflyEnemy(Point2 position)
 	mHealTimer = 1.f;
 
 	mHealParticlesEmitter = new ParticleEmitter(GetPixelPosition(), *Globals::gResources->GetTexture("particles\\heart_heal"));
-	mHealParticlesEmitter->ConfigureEmitter(5, .3f, 0.05f, 0.1f, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), Vector2(0, -10), 10.f, 1.f, false);
+	mHealParticlesEmitter->ConfigureEmitter(5, 1.f, .1f, 0.1f, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), Vector2(0, -10), 100.f, 10.f, false);
 }
 
 void FireflyEnemy::OnUpdate()
@@ -18,6 +18,8 @@ void FireflyEnemy::OnUpdate()
 
 	FindHealTarget();
 	HealTarget();
+
+	mHealParticlesEmitter->Update();
 }
 
 void FireflyEnemy::FindHealTarget()
