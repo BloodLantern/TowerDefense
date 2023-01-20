@@ -25,6 +25,8 @@ MinigunTower::MinigunTower(Texture* texture)
 	mMinigunTexture(Globals::gResources->GetTexture("towers\\minigun")),
 	mFlameTexture(Globals::gResources->GetTexture("particles\\flame"))
 {
+	mStartDamage = 1;
+	mDamage = 1;
 
     mScale = 0.1f;
 
