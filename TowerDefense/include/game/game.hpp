@@ -16,7 +16,7 @@ public:
     void Shutdown();
 
     PlayField* GetPlayField() const { return mPlayField; }
-    Player* GetPlayer() const { return mPlayer; }
+    Player* GetPlayerSelf() const { return mPlayers[0]; }
 
     std::vector<Enemy*> enemies;
     std::vector<Enemy*> enemiesQueue;
@@ -36,14 +36,20 @@ public:
     void EndGame(bool lost);
     void Restart();
 
+    uint16_t GetLife() { return mLife; }
+    void DecreaseLife(uint16_t amount);
+    void IncreaseLife(uint16_t amount);
+
     uint8_t CountLevels();
     void StartLevel(uint8_t level);
 
     bool IsFirstFrameOfRound() { return mIsFirstFrameOfRound; }
 
 private:
+    uint16_t mLife = PLAYER_DEFAULT_HEALTH;
+
     PlayField* mPlayField = nullptr;
-    Player* mPlayer = nullptr;
+    std::vector<Player*> mPlayers;
 
     bool mEnded = false;
 

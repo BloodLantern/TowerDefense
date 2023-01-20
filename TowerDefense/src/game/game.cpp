@@ -23,13 +23,16 @@ Game::Game()
 Game::~Game()
 {
     delete mPlayField;
-    delete mPlayer;
+
+    for (size_t i = 0; i < mPlayers.size(); i++)
+        delete mPlayers[i];
 }
 
 void Game::Init()
 {
     mPlayField = new PlayField;
-    mPlayer = new Player;
+    // Create player instance representing self, aka the client
+    mPlayers.push_back(new Player());
     mPlayingSpeed = 1;
     currentWave = 1;
     mDeltaTime = 0;
@@ -44,7 +47,10 @@ void Game::Reset()
     Hud::canInteract = true;
     currentWave = 1;
     SetPlayingSpeed(1);
-    mPlayer->Reset();
+
+    for (size_t i = 0; i < mPlayers.size(); i++)
+        mPlayers[i]->Reset();
+    
     mPlayField->ResetEntireClipdata();
 
     Cleanup();
@@ -66,11 +72,14 @@ void Game::Restart()
 
 void Game::Cleanup()
 {
-    std::vector<Tower*>* towers = mPlayer->GetTowers();
+    for (size_t i = 0; i < mPlayers.size(); i++)
+    {
+        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
 
-    for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
-        delete* _t;
-    towers->clear();
+        for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
+            delete* _t;
+        towers->clear();
+    }
 
     for (std::vector<Enemy*>::iterator _e = enemies.begin(); _e != enemies.end(); _e++)
         delete* _e;
@@ -149,7 +158,9 @@ void Game::Update()
 void Game::Shutdown()
 {
     delete mPlayField;
-    delete mPlayer;
+
+    for (size_t i = 0; i < mPlayers.size(); i++)
+        delete mPlayers[i];
 }
 
 void Game::DrawHud()
@@ -170,7 +181,7 @@ void Game::DrawHud()
     if (mEnded)
     {
         position = ImVec2(Globals::gGridX + Globals::gWindowWidth / 2 - 250, Globals::gGridY + Globals::gWindowHeight / 2 - 125);
-        if (mPlayer->GetLife() == 0)
+        if (mLife == 0)
             Hud::DrawGameOver(position);
         else
             Hud::DrawWinScreen(position);
@@ -197,8 +208,12 @@ void Game::CheckEndRound()
     }
 
     // Reset attack cooldown for towers
-    for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); _t++)
-        (*_t)->SetTimeSinceLastAttack(DBL_MAX);
+    for (size_t i = 0; i < mPlayers.size(); i++)
+    {
+        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
+        for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
+            (*_t)->SetTimeSinceLastAttack(DBL_MAX);
+    }
 
     currentWave++;
 
@@ -211,32 +226,37 @@ void Game::CheckEndRound()
 
 void Game::UpdateTowers()
 {
-    for (std::vector<Tower*>::iterator _t = mPlayer->GetTowers()->begin(); _t != mPlayer->GetTowers()->end(); )
+    for (size_t i = 0; i < mPlayers.size(); i++)
     {
-        Tower* t = *_t;
+        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
 
-        t->OnUpdate();
-        t->OnRender();
-
-        if (t->toDelete)
+        for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); )
         {
-            // Destroy tower
-            _t = mPlayer->GetTowers()->erase(_t);
+            Tower* t = *_t;
 
-            // Set its projectiles' pointers to nullptr
-            for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
+            t->OnUpdate();
+            t->OnRender();
+
+            if (t->toDelete)
             {
-                Projectile* p = *_p;
-                if (p->GetOwner() == t)
-                    p->SetOwner(nullptr);
+                // Destroy tower
+                _t = towers->erase(_t);
 
+                // Set its projectiles' pointers to nullptr
+                for (std::vector<Projectile*>::iterator _p = projectiles.begin(); _p != projectiles.end(); _p++)
+                {
+                    Projectile* p = *_p;
+                    if (p->GetOwner() == t)
+                        p->SetOwner(nullptr);
+                }
+                delete t;
+                continue;
             }
-            delete t;
-            continue;
-        }
 
-        _t++;
+            _t++;
+        }
     }
+
 }
 void Game::UpdateEnemies()
 {
@@ -313,8 +333,6 @@ void Game::Scene_InGame()
     UpdateEnemies();
     UpdateProjectiles();
 
-    mPlayer->OnUpdate();
-
     DrawHud();
 
     mIsFirstFrameOfRound = false;
@@ -333,6 +351,27 @@ void Game::Scene_Options()
 void Game::Scene_Bestiary()
 {
     mCurrentScene = Bestiary::Update();
+}
+
+
+void Game::DecreaseLife(uint16_t amount)
+{
+    // Prevent underflow
+    if (amount > mLife)
+        mLife = 0;
+    else
+        mLife -= amount;
+}
+
+void Game::IncreaseLife(uint16_t amount)
+{
+    uint32_t max = mLife + amount;
+
+    // Prevent overflow
+    if (max > USHRT_MAX)
+        mLife = USHRT_MAX;
+    else
+        mLife = max;
 }
 
 uint8_t Game::CountLevels()

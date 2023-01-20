@@ -25,7 +25,7 @@ void ChatConsole::Draw()
 	ImGui::End();
 }
 
-void ChatConsole::AddMessage(std::string message)
+void ChatConsole::AddMessage(uint32_t playerId, std::string message)
 {
 	mMessages.push_back(message);
 }

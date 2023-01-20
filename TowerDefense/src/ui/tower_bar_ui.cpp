@@ -117,7 +117,7 @@ void TowerBarUI::ShowCost(const ImVec2 &mousePos, const float_t y)
 	Globals::gDrawList->AddRectFilled(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_BACKGROUND_COLOR);
 	Globals::gDrawList->AddRect(pos, ImVec2(pos.x + textSize.x, pos.y + textSize.y), TOWER_BAR_UI_OUTLINE_COLOR);
 	// If the tower is affordable
-	if (cost <= Globals::gGame->GetPlayer()->GetMoney())
+	if (cost <= Globals::gGame->GetPlayerSelf()->GetMoney())
 		Globals::gDrawList->AddText(pos, TOWER_BAR_UI_TOWER_COST_COLOR, text.c_str());
 	else
 		Globals::gDrawList->AddText(pos, IM_COL32(0xFF, 0x40, 0x40, 0xFF), text.c_str());
@@ -138,7 +138,7 @@ void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, cons
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
 		// Don't allow dragging if the player doesn't have enough money
-		if (mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayer()->GetMoney())
+		if (mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayerSelf()->GetMoney())
 			return;
 
 		// Create the tower if it doesn't already exist
@@ -229,7 +229,7 @@ void TowerBarUI::HandleDrag(const bool& isOnGrid, const bool& available)
 
 void TowerBarUI::HandleDrop(const bool& available, const Point2& tilePosition)
 {
-	Player* player = Globals::gGame->GetPlayer();
+	Player* player = Globals::gGame->GetPlayerSelf();
 	if (available && player->GetMoney() >= mSelectedTower->GetCost())
 	{
 		mSelectedTower->SetOwner(player);

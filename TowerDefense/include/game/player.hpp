@@ -11,16 +11,10 @@
 class Player {
 public:
     Player();
+    Player(std::string username);
     ~Player();
 
     std::vector<Tower*>* GetTowers() { return &mTowers; }
-
-    void OnUpdate();
-
-    uint16_t GetLife() const { return mLife; }
-    uint16_t& GetLife() { return mLife; }
-    void DecreaseLife(uint16_t amount);
-    void IncreaseLife(uint16_t amount);
 
     uint32_t GetMoney() const { return mMoney; }
     uint32_t& GetMoney() { return mMoney; }
@@ -30,8 +24,13 @@ public:
     void Reset();
 
 private:
+    static uint32_t playerGlobalID;
+
     uint32_t mMoney = PLAYER_DEFAULT_MONEY;
-    uint16_t mLife = PLAYER_DEFAULT_HEALTH;
 
     std::vector<Tower*> mTowers;
+
+    // Network related
+    std::string mUsername;
+    uint32_t mPlayerID;
 };

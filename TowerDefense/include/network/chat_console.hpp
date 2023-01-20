@@ -6,7 +6,7 @@ class ChatConsole
 {
 public:
 	static void Draw();
-	static void AddMessage(std::string message);
+	static void AddMessage(uint32_t playerId, std::string message);
 
 private:
 	static std::vector<std::string> mMessages;

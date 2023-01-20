@@ -16,7 +16,7 @@ void Hud::DrawHealth(ImVec2 position)
     ImVec2 pos(posMax.x + 10, posMin.y + 5);
 
     char buff[20];
-    sprintf_s(buff, "%d", Globals::gGame->GetPlayer()->GetLife());
+    sprintf_s(buff, "%d", Globals::gGame->GetLife());
     ImGui::PushFont(Globals::gFontSemiBig);
     Globals::gDrawList->AddText(pos, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), buff);
     ImGui::PopFont();
@@ -33,7 +33,7 @@ void Hud::DrawMoney(ImVec2 position)
     ImVec2 pos(posMax.x + 10, posMin.y + 5);
 
     char buff[20];
-    sprintf_s(buff, "%d", Globals::gGame->GetPlayer()->GetMoney());
+    sprintf_s(buff, "%d", Globals::gGame->GetPlayerSelf()->GetMoney());
     ImGui::PushFont(Globals::gFontSemiBig);
     Globals::gDrawList->AddText(pos, IM_COL32(0xFF, 0xFF, 0xFF, 0xFF), buff);
     ImGui::PopFont();

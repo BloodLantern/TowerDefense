@@ -92,7 +92,7 @@ void BeehiveTower::OnUpdate()
 
 	if (mCashGenerationTimer < 0)
 	{
-		Player* player = Globals::gGame->GetPlayer();
+		Player* player = Globals::gGame->GetPlayerSelf();
 		mCashGenerationTimer = mAttackSpeed;
 		mAmoutOfCashGenerated++;
 
@@ -111,7 +111,7 @@ void BeehiveTower::OnUpdate()
 			return;
 
 		if ((rand() % 100) <= 10)
-			player->IncreaseLife(rand() % 3);
+			Globals::gGame->IncreaseLife(rand() % 3);
 	}
 }
 
@@ -134,7 +134,7 @@ void BeehiveTower::TryBuffBeenests()
 	if (mCustomUpgradeLevel < FRIENDLY_BEES)
 		return;
 
-	std::vector<Tower*>* towers = Globals::gGame->GetPlayer()->GetTowers();
+	std::vector<Tower*>* towers = Globals::gGame->GetPlayerSelf()->GetTowers();
 	float_t range = mRange * GRID_SQUARE_SIZE;
 	range *= range;
 

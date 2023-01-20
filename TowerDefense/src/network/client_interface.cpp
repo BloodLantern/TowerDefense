@@ -12,8 +12,6 @@ void NetworkClient::SendUsername()
 	DWORD usernameLen = UNLEN + 1;
 	GetUserName(username, &usernameLen);
 
-	std::cout << usernameLen << std::endl;
-
 	msg.Push(username, usernameLen * sizeof(TCHAR));
 
 	Send(msg);
@@ -52,9 +50,12 @@ void NetworkClient::Listen()
 		case NetworkCommands::CHAT_MESSAGE:
 		{
 			std::string message(msg.header.size, '\0');
+
+			uint32_t playerId;
+			msg.Pop(playerId);
 			msg.Pop(message.data(), message.size());
 
-			ChatConsole::AddMessage(message);
+			ChatConsole::AddMessage(playerId, message);
 			break;
 		}
 

@@ -68,7 +68,7 @@ void Enemy::StickToPath()
 			if (!IsOnGrid())
 			{
 				// Deal damage
-				Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
+				Globals::gGame->DecreaseLife(mDamage);
 				// Flag for deletion
 				toDelete = true;
 			}
@@ -86,7 +86,7 @@ void Enemy::StickToPath()
 			if (!IsOnGrid())
 			{
 				// Deal damage
-				Globals::gGame->GetPlayer()->DecreaseLife(mDamage);
+				Globals::gGame->DecreaseLife(mDamage);
 				// Flag for deletion
 				toDelete = true;
 			}
@@ -116,7 +116,7 @@ bool Enemy::DealDamage(uint32_t damage, uint32_t& damageDealt)
     {
 		damageDealt = mHealth;
         toDelete = true;
-		Globals::gGame->GetPlayer()->IncreaseMoney(mMoneyDrop);
+		Globals::gGame->GetPlayerSelf()->IncreaseMoney(mMoneyDrop);
 		return true;
 	}
 	

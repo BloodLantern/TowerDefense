@@ -50,7 +50,7 @@ bool Round::HasEnded()
 
 void Round::GrantEndRoundMoney()
 {
-	Globals::gGame->GetPlayer()->IncreaseMoney(mRoundInfo[mCurrentCommand].data.dataInt);
+	Globals::gGame->GetPlayerSelf()->IncreaseMoney(mRoundInfo[mCurrentCommand].data.dataInt);
 }
 
 void Round::OnUpdate()
