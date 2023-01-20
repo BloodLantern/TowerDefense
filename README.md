@@ -1,6 +1,4 @@
-<img style="float: left" alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986305793728542/logo.png width=61>
-
-# &emsp; Fourmi Defense
+# Fourmi Defense
 
 ### *A game about ants attacking a non-existent exit*
 
