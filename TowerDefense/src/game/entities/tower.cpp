@@ -229,6 +229,7 @@ void Tower::RotateTowardsTarget()
 
 void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 {
+
 	// Tower panel
 	ImVec2 panelPosition(Globals::gWindowX + Globals::gWindowWidth - TOWER_PANEL_WIDTH - TOWER_PANEL_OFFSET_X, Globals::gGridY);
 
@@ -236,6 +237,9 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 	ImGui::SetNextWindowSize(ImVec2(TOWER_PANEL_WIDTH + TOWER_PANEL_OFFSET_X, Globals::gWindowHeight - TOWER_BAR_HEIGHT - GRID_OFFSET_Y));
 	ImGui::Begin("Tower panel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 	ImDrawList* dl = ImGui::GetWindowDrawList();
+
+	if (Globals::gGame->GetPlayerSelf() != mOwner)
+		ImGui::BeginDisabled();
 
 	// Draw name
 	ImGui::PushFont(Globals::gFontBig);
@@ -273,9 +277,12 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 
 		toDelete = true;
 	}
+	if (Globals::gGame->GetPlayerSelf() != mOwner)
+		ImGui::EndDisabled();
 
 	ImGui::PopFont();
 	ImGui::End();
+
 }
 
 bool Tower::DrawSellingButton()
