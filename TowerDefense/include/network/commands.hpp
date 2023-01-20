@@ -11,4 +11,6 @@ enum class NetworkCommands
 	TOWER_PLACED,
 	TOWER_SOLD,
 	TOWER_UPGRADE,
+
+	SPRAY_SHOT
 };

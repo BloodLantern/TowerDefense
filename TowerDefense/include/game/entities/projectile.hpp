@@ -31,6 +31,7 @@ public:
 	void SetSpeed(float_t speed) { mSpeed = speed; }
 	float_t GetLifetime() const { return mLifetime; }
 	void SetHitboxRadius(float_t radius) { mHitboxRadius = radius; }
+	float_t GetHitboxRadius() const { return mHitboxRadius; }
 	void SetSlowingEnemies() { mSlowEnemies = true; }
 
 protected:

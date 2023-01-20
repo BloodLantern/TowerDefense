@@ -3,6 +3,7 @@
 #include "globals.hpp"
 #include "tower.hpp"
 #include "network/network_interface.hpp"
+#include "spray_projectile.hpp"
 #include <windows.h>
 #include <Lmcons.h>
 
@@ -94,6 +95,27 @@ void NetworkClient::NotifyTowerUpgrade(const Point2 tilePos, UpgradeType type)
 
 	msg.Push(tilePos);
 	msg.Push(type);
+	Send(msg);
+}
+
+void NetworkClient::NotifySprayShot(const Point2 tilePos, const Projectile* proj)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::SPRAY_SHOT;
+
+	msg.Push(tilePos);
+	msg.Push(proj->GetPixelPosition());
+	msg.Push(proj->GetVelocity());
+	msg.Push(proj->GetDamage());
+	msg.Push(proj->GetHitboxRadius());
+	msg.Push(proj->GetScale());
+
 	Send(msg);
 }
 
@@ -269,3 +291,46 @@ void NetworkClient::ProcessTowerUpgrade(net::Message<NetworkCommands>& msg)
 	}
 }
 
+void NetworkClient::ProcessSprayShot(net::Message<NetworkCommands>& msg)
+{
+	Vector2 scale;
+	float_t hitbox;
+	uint32_t damage;
+	Vector2 velocity;
+	Point2 pixelPos;
+	Point2 tilePos;
+
+	msg.Pop(scale);
+	msg.Pop(hitbox);
+	msg.Pop(damage);
+	msg.Pop(velocity);
+	msg.Pop(pixelPos);
+	msg.Pop(tilePos);
+
+	SprayProjectile* proj = new SprayProjectile();
+	proj->SetPixelPosition(pixelPos);
+	proj->SetVelocity(velocity);
+	proj->SetDamage(damage);
+	proj->SetHitboxRadius(hitbox);
+	proj->SetScale(scale);
+
+	Player* player = Globals::gGame->GetPlayerOther();
+	std::vector<Tower*>* towers = player->GetTowers();
+
+	Tower* t = nullptr;
+	for (std::vector<Tower*>::iterator it = towers->begin(); it != towers->end(); it++)
+	{
+		Tower* tower = *it;
+		Point2 pos = tower->GetTilePosition();
+
+		if (tilePos == pos)
+		{
+			tower = t;
+			break;
+		}
+	}
+
+	proj->SetOwner(t);
+
+	Globals::gGame->projectiles.push_back(proj);
+}

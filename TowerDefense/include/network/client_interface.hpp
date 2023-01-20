@@ -14,6 +14,7 @@ public:
 	void NotifyTowerPlaced(const Point2 tilePos, const int32_t toweId);
 	void NotifyTowerSold(const Point2 tilePos);
 	void NotifyTowerUpgrade(const Point2 tilePos, UpgradeType type);
+	void NotifySprayShot(const Point2 tilePos, const Projectile* proj);
 
 	void Listen();
 
@@ -24,4 +25,5 @@ private:
 	void ProcessTowerPlaced(net::Message<NetworkCommands>& msg);
 	void ProcessTowerSold(net::Message<NetworkCommands>& msg);
 	void ProcessTowerUpgrade(net::Message<NetworkCommands>& msg);
+	void ProcessSprayShot(net::Message<NetworkCommands>& msg);
 };

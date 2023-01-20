@@ -2,6 +2,7 @@
 #include "playfield.hpp"
 #include "globals.hpp"
 #include "spray_projectile.hpp"
+#include "network/network_interface.hpp"
 
 #define CUSTOM_UPGRADE_LEVEL_MAX 4
 #define RANDOM_FLOAT(max) (((float_t)rand()/(float_t)(RAND_MAX)) * (max))
@@ -66,6 +67,10 @@ const char* const SprayTower::GetCustomUpgradeTooltip(uint8_t level) const
 
 void SprayTower::Shoot()
 {
+	// Don't shoot if tower isn't ours, this is handled by the actual owner
+	if (GetOwner() != Globals::gGame->GetPlayerSelf())
+		return;
+
 	const float_t deltaAngle = .6f;
 	for (uint8_t i = 0; i < mProjAmount; i++)
 	{
@@ -77,9 +82,12 @@ void SprayTower::Shoot()
 		proj->SetPixelPosition(pixelPosition);
 
 		Vector2 velocity = Vector2(pixelPosition, mTarget->GetPixelPosition()).Normalize() * 60;
+		velocity = velocity.Rotate(dangle);
 
-		proj->SetVelocity(velocity.Rotate(dangle));
+		proj->SetVelocity(velocity);
 		proj->SetOwner(this);
+
+		Globals::gNetwork.client->NotifySprayShot(GetTilePosition(), proj);
 
 		if (customUpgradeLevel >= INTOXICATING_SPRAY)
 			proj->SetSlowingEnemies();
