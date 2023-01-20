@@ -408,6 +408,9 @@ void Game::StartLevel(uint8_t level)
 
     mPlayField->Load(std::string("Level").append(id).append(".bin"));
     mIsFirstFrameOfRound = true;
+
+    if (Globals::gNetwork.IsServerStarted())
+        Globals::gNetwork.client->NotifyStartOfGame(level);
 }
 
 void Game::InstantiatePlayer2(std::string name, uint32_t uid)

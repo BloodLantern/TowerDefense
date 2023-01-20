@@ -34,6 +34,21 @@ void NetworkClient::SendChatMessage(std::string message)
 	Send(msg);
 }
 
+void NetworkClient::NotifyStartOfGame(uint8_t level)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::LEVEL_START;
+
+	msg.Push(level);
+	Send(msg);
+}
+
 void NetworkClient::Listen()
 {
 	if (!IsConnected())
@@ -82,6 +97,15 @@ void NetworkClient::Listen()
 			msg.Pop(uid);
 
 			Globals::gGame->InstantiatePlayer2(username, uid);
+			break;
+		}
+
+		case NetworkCommands::LEVEL_START:
+		{
+			uint8_t level;
+			msg.Pop(level);
+
+			Globals::gGame->StartLevel(level);
 			break;
 		}
 	}

@@ -56,6 +56,11 @@ void NetworkServer::OnMessage(std::shared_ptr<net::Connection<NetworkCommands>> 
 			// Received username from a client
 			ProcessUsername(client, msg);
 			break;
+
+		case NetworkCommands::LEVEL_START:
+			// Notify all clients
+			MessageAllClient(msg, client);
+			break;
 	}
 }
 
