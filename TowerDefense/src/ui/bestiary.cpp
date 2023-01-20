@@ -41,7 +41,11 @@ Scene Bestiary::Update()
 		ImVec2 cursor(Globals::gWindowWidth / 2.f - tex->width / 4.f, ImGui::GetCursorPosY() + 50);
 
 		ImGui::SetCursorPos(cursor);
-		ImGui::Image(tex->id, ImVec2(tex->width / 2.f, tex->height / 2.f));
+		if (mCurrentEnemy == EnemyId::RED_ANT)
+			ImGui::Image(tex->id, ImVec2(tex->width / 2.f, tex->height / 2.f),
+				ImVec2(0, 0), ImVec2(1, 1), ImColor(0xFF, 0, 0, 0xFF));
+		else
+			ImGui::Image(tex->id, ImVec2(tex->width / 2.f, tex->height / 2.f));
 
 		cursor.x -= 200;
 		cursor.y += tex->height / 2.f + 50;
