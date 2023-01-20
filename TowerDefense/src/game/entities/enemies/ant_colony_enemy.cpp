@@ -110,6 +110,8 @@ void AntColonyEnemy::SpawnAnt()
 void AntColonyEnemy::DrawHealthBar(ImVec2 &pos)
 {
 	pos.y -= 70.f;
+    if (pos.y < Globals::gWindowY)
+        pos.y += 110.f;
 	pos.x -= 51.f;
     ImVec2 bottomRight(pos.x + HEALTH_BAR_WIDTH, pos.y + HEALTH_BAR_HEIGHT);
     Globals::gDrawList->AddImage(mHealthBar->id, pos, bottomRight);
