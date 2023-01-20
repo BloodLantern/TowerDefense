@@ -249,7 +249,6 @@ void NetworkClient::ProcessTowerUpgrade(net::Message<NetworkCommands>& msg)
 
 		if (tilePos == pos)
 		{
-			tower->toDelete = true;
 			PlayField* pf = Globals::gGame->GetPlayField();
 
 			switch (upgrade)
