@@ -337,6 +337,12 @@ void Game::Scene_InGame()
 
     DrawHud();
 
+    if (mLife <= 0)
+    {
+        EndGame(true);
+        return;
+    }
+
     mIsFirstFrameOfRound = false;
 
     if (mEnded)
