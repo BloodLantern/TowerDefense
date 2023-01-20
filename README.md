@@ -42,7 +42,7 @@ The only thing left is to open the solution file (TowerDefense.sln) in Visual St
 ### Multiplayer
 **Multiplayer is supported but not as much playtested as the rest of the game so beware of bugs that might happen.**
 
-*Even though the multiplayer should work whatever the amount of players, it was only tested with 2.*
+*Multiplayer is limited to 2 players.*
 
 To play in multiplayer, one instance of the game must start a server through the window menu bar: Network > Start server. This instance will be the host. Another instance, called a client, has to join that server by first going into the options menu and typing in the server hostname. In a local network, this should be the host's computer's name or its IP adress. To play with a remote computer, the host has to redirect port 60000 to its computer and the client needs to use the former's public IP adress instead. After this step, the client has to connect to the server through the window menu bar: Network > Connect to server. If everything was done fine, if the host starts a game it should start for the client too. The client can then disconnect at any time using the window menu bar: Network > Disconnect.  
 To check if the connection succeeded, the client and the host can open the chat by using the window menu bar: Network > Open chat. Any message sent to the chat should be visible to the other players.  
@@ -53,8 +53,8 @@ The current synchronization includes:
 - Tower placing
 - Tower selling
 - Tower upgrading
-
-As the fast forward isn't included in the above list, the game will desynchronize if it is used in either the host or a client.
+- Fast forward
+- Spray shoots (RNG)
 
 [Back to summary](#summary)
 
