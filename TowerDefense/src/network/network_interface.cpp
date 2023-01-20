@@ -39,6 +39,8 @@ void NetworkInterface::StartServer()
 	// Start it
 	server->Start();
 	mServerStarted = true;
+
+	StartClient("127.0.0.1");
 }
 
 void NetworkInterface::StopServer()
