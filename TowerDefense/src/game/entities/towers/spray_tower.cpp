@@ -97,5 +97,5 @@ Tower* SprayTower::Clone() const
 }
 
 
-
+#undef RANDOM_FLOAT
 #undef CUSTOM_UPGRADE_LEVEL_MAX

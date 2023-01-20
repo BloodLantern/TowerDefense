@@ -39,6 +39,13 @@ TowerBarUI::TowerBarUI()
 
 TowerBarUI::~TowerBarUI()
 {
+	for (int i = 0; i < TOWER_COUNT; i++)
+	{
+		Projectile* proj = mTowerTemplates[i]->GetProjectileTemplate();
+		if (proj)
+			delete proj;
+		delete mTowerTemplates[i];
+	}
 }
 
 void TowerBarUI::Draw()

@@ -20,12 +20,11 @@ enum MinigunCustomUpgrades
 };
 
 MinigunTower::MinigunTower(Texture* texture)
-	: Tower(new Projectile(0, 2, 0, 0.f), 8.f, 4.f, "Minigun", 100, texture),
+	: Tower(8.f, 4.f, "Minigun", 100, texture),
 	mHandleTexture(Globals::gResources->GetTexture("towers\\handle")),
 	mMinigunTexture(Globals::gResources->GetTexture("towers\\minigun")),
 	mFlameTexture(Globals::gResources->GetTexture("particles\\flame"))
 {
-    delete mProjectileTemplate;
 
     mScale = 0.1f;
 

@@ -47,9 +47,6 @@ private:
 
     bool mEnded = false;
 
-
-    std::string mRpcDetailsText = "Details text";
-
     double_t mDeltaTime = 0.0;
     double_t mPlayingSpeedDeltaTime = 0.0;
     int32_t mPlayingSpeed = 1;

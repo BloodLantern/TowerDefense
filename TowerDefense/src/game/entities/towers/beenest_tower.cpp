@@ -148,6 +148,8 @@ void BeenestTower::Shoot()
 
 void BeenestTower::RemoveBee(BeeProjectile* bee)
 {
+	if (mAmountOfBees == 0)
+		return;
 	mAmountOfBees--;
 	mBees.erase(std::find(mBees.begin(), mBees.end(), bee));
 }
