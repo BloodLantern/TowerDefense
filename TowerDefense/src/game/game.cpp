@@ -9,7 +9,6 @@
 
 Game::Game()
 {
-    // Temp
     maxWave = 20;
 
     mCurrentScene = Scene::MAIN_MENU;
@@ -24,15 +23,15 @@ Game::~Game()
 {
     delete mPlayField;
 
-    for (size_t i = 0; i < mPlayers.size(); i++)
-        delete mPlayers[i];
+    for (size_t i = 0; i < players.size(); i++)
+        delete players[i];
 }
 
 void Game::Init()
 {
     mPlayField = new PlayField;
     // Create player instance representing self, aka the client
-    mPlayers.push_back(new Player());
+    players.push_back(new Player());
     mPlayingSpeed = 1;
     currentWave = 1;
     mDeltaTime = 0;
@@ -48,8 +47,8 @@ void Game::Reset()
     currentWave = 1;
     SetPlayingSpeed(1);
 
-    for (size_t i = 0; i < mPlayers.size(); i++)
-        mPlayers[i]->Reset();
+    for (size_t i = 0; i < players.size(); i++)
+        players[i]->Reset();
     
     mPlayField->ResetEntireClipdata();
 
@@ -72,9 +71,9 @@ void Game::Restart()
 
 void Game::Cleanup()
 {
-    for (size_t i = 0; i < mPlayers.size(); i++)
+    for (size_t i = 0; i < players.size(); i++)
     {
-        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
+        std::vector<Tower*>* towers = players[i]->GetTowers();
 
         for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
             delete* _t;
@@ -159,8 +158,8 @@ void Game::Shutdown()
 {
     delete mPlayField;
 
-    for (size_t i = 0; i < mPlayers.size(); i++)
-        delete mPlayers[i];
+    for (size_t i = 0; i < players.size(); i++)
+        delete players[i];
 }
 
 void Game::DrawHud()
@@ -208,9 +207,9 @@ void Game::CheckEndRound()
     }
 
     // Reset attack cooldown for towers
-    for (size_t i = 0; i < mPlayers.size(); i++)
+    for (size_t i = 0; i < players.size(); i++)
     {
-        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
+        std::vector<Tower*>* towers = players[i]->GetTowers();
         for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); _t++)
             (*_t)->SetTimeSinceLastAttack(DBL_MAX);
     }
@@ -226,9 +225,9 @@ void Game::CheckEndRound()
 
 void Game::UpdateTowers()
 {
-    for (size_t i = 0; i < mPlayers.size(); i++)
+    for (size_t i = 0; i < players.size(); i++)
     {
-        std::vector<Tower*>* towers = mPlayers[i]->GetTowers();
+        std::vector<Tower*>* towers = players[i]->GetTowers();
 
         for (std::vector<Tower*>::iterator _t = towers->begin(); _t != towers->end(); )
         {
@@ -406,4 +405,14 @@ void Game::StartLevel(uint8_t level)
 
     mPlayField->Load(std::string("Level").append(id).append(".bin"));
     mIsFirstFrameOfRound = true;
+}
+
+void Game::InstantiatePlayer(std::string name, uint32_t uid)
+{
+    players.push_back(new Player(name, uid));
+}
+
+void Game::RemovePlayer(uint32_t id)
+{
+
 }

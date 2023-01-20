@@ -11,7 +11,7 @@
 class Player {
 public:
     Player();
-    Player(std::string username);
+    Player(std::string username, uint32_t uid);
     ~Player();
 
     std::vector<Tower*>* GetTowers() { return &mTowers; }
@@ -23,9 +23,10 @@ public:
 
     void Reset();
 
-private:
-    static uint32_t playerGlobalID;
+    uint32_t GetID() { return mPlayerID; }
+    std::string GetUsername() { return mUsername; }
 
+private:
     uint32_t mMoney = PLAYER_DEFAULT_MONEY;
 
     std::vector<Tower*> mTowers;

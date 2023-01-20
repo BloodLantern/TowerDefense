@@ -16,7 +16,12 @@ public:
     void Shutdown();
 
     PlayField* GetPlayField() const { return mPlayField; }
-    Player* GetPlayerSelf() const { return mPlayers[0]; }
+    Player* GetPlayerSelf() const { return players[0]; }
+
+    void InstantiatePlayer(std::string name, uint32_t uid);
+    void RemovePlayer(uint32_t id);
+    void AssignPlayerID(uint32_t uid) { mAssignedPlayerID = uid; }
+    uint32_t GetAssignedPlayerID() { return mAssignedPlayerID; }
 
     std::vector<Enemy*> enemies;
     std::vector<Enemy*> enemiesQueue;
@@ -45,11 +50,13 @@ public:
 
     bool IsFirstFrameOfRound() { return mIsFirstFrameOfRound; }
 
+    std::vector<Player*> players;
 private:
     uint16_t mLife = PLAYER_DEFAULT_HEALTH;
 
     PlayField* mPlayField = nullptr;
-    std::vector<Player*> mPlayers;
+
+    uint32_t mAssignedPlayerID;
 
     bool mEnded = false;
 

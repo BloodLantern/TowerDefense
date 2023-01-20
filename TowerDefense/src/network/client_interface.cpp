@@ -1,5 +1,6 @@
 #include "network/client_interface.hpp"
 #include "network/chat_console.hpp"
+#include "globals.hpp"
 #include <windows.h>
 #include <Lmcons.h>
 
@@ -22,6 +23,9 @@ void NetworkClient::SendChatMessage(std::string message)
 	net::Message<NetworkCommands> msg;
 	msg.header.id = NetworkCommands::CHAT_MESSAGE;
 
+	uint32_t uid = Globals::gGame->GetAssignedPlayerID();
+	// Push sender
+	msg.Push(uid);
 	// Push string
 	msg.Push(message.data(), message.size());
 
@@ -49,11 +53,11 @@ void NetworkClient::Listen()
 
 		case NetworkCommands::CHAT_MESSAGE:
 		{
-			std::string message(msg.header.size, '\0');
+			std::string message(msg.header.size - sizeof(uint32_t), '\0');
+			msg.Pop(message.data(), message.size());
 
 			uint32_t playerId;
 			msg.Pop(playerId);
-			msg.Pop(message.data(), message.size());
 
 			ChatConsole::AddMessage(playerId, message);
 			break;
@@ -62,5 +66,27 @@ void NetworkClient::Listen()
 		case NetworkCommands::USERNAME:
 			// Username was requested by the server
 			SendUsername();
+			break;
+
+		case NetworkCommands::PLAYER_CONNECTED:
+		{
+			// Register new player
+			uint32_t uid;
+			msg.Pop(uid);
+			std::string username(msg.header.size, '\0');
+			msg.Pop(username.data(), username.size());
+
+			Globals::gGame->InstantiatePlayer(username, uid);
+			break;
+		}
+
+		case NetworkCommands::ID_ASSIGNATION:
+		{
+			uint32_t uid;
+			msg.Pop(uid);
+			// TODO maybe instantiate?
+			Globals::gGame->AssignPlayerID(uid);
+			break;
+		}
 	}
 }

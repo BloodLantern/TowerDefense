@@ -22,5 +22,7 @@ private:
 
 	void ProcessUsername(std::shared_ptr<net::Connection<NetworkCommands>> client, net::Message<NetworkCommands>& msg);
 
-	uint8_t mPlayerCount;
+	void NotifyClientsOfConnection(std::shared_ptr<net::Connection<NetworkCommands>> client);
+
+	uint32_t mPlayerCount;
 };

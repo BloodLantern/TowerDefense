@@ -1,4 +1,5 @@
 #include "network/server_interface.hpp"
+#include "globals.hpp"
 
 bool NetworkServer::OnClientConnect(std::shared_ptr<net::Connection<NetworkCommands>> client)
 {
@@ -21,6 +22,8 @@ bool NetworkServer::OnClientConnect(std::shared_ptr<net::Connection<NetworkComma
 void NetworkServer::OnClientDisconnect(std::shared_ptr<net::Connection<NetworkCommands>> client)
 {
 	mPlayerCount--;
+	uint32_t id = client->GetID();
+	Globals::gGame->RemovePlayer(id);
 }
 
 
@@ -56,5 +59,31 @@ void NetworkServer::ProcessUsername(std::shared_ptr<net::Connection<NetworkComma
 
 	std::string username(messageW.begin(), messageW.end());
 
-	std::cout << username << std::endl;
+	std::string trimUsername;
+
+	for (size_t i = 0; i < username.size(); i++)
+	{
+		if (username[i] == '\0')
+			break;
+
+		trimUsername = trimUsername.append(std::string(1, username[i]));
+	}
+
+	Globals::gGame->InstantiatePlayer(trimUsername, mPlayerCount);
+	NotifyClientsOfConnection(client);
+}
+
+void NetworkServer::NotifyClientsOfConnection(std::shared_ptr<net::Connection<NetworkCommands>> client)
+{
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::PLAYER_CONNECTED;
+	msg.Push(mPlayerCount);
+
+	// Notify everyone that someone new has connected
+	MessageAllClient(msg);
+
+	// Tell the new client his ID
+	msg.header.id = NetworkCommands::ID_ASSIGNATION;
+	msg.Push(mPlayerCount);
+	MessageClient(client, msg);
 }

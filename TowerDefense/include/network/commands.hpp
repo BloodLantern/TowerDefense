@@ -4,5 +4,7 @@ enum class NetworkCommands
 {
 	PING,
 	CHAT_MESSAGE,
-	USERNAME
+	USERNAME,
+	PLAYER_CONNECTED,
+	ID_ASSIGNATION
 };

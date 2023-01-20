@@ -4,32 +4,24 @@
 #include <windows.h>
 #include <Lmcons.h>
 
-uint32_t Player::playerGlobalID;
-
 Player::Player()
 {
-	TCHAR username[UNLEN + 1];
-	DWORD usernameLen = UNLEN + 1;
-	GetUserName(username, &usernameLen);
-	std::wstring messageW(username);
-
-	std::string usernameStr(messageW.begin(), messageW.end());
-
-	mUsername = usernameStr;
-
-	mPlayerID = Player::playerGlobalID++;
+	// Use this constructor only in solo
+	mPlayerID = 0;
+	mUsername = "";
 }
 
-Player::Player(std::string username)
+Player::Player(std::string username, uint32_t uid)
 	: mUsername(username)
 {
-	mPlayerID = Player::playerGlobalID++;
+	// Use this constructor only in multi
+	mPlayerID = uid;
+
+	std::cout << "Created player " << mUsername << " with id " << mPlayerID << std::endl;
 }
 
 Player::~Player()
 {
-	playerGlobalID--;
-
 	for (std::vector<Tower*>::iterator it = mTowers.begin(); it != mTowers.end(); it++)
 		delete *it;
 }

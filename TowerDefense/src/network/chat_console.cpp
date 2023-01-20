@@ -27,5 +27,10 @@ void ChatConsole::Draw()
 
 void ChatConsole::AddMessage(uint32_t playerId, std::string message)
 {
-	mMessages.push_back(message);
+	std::string username = Globals::gGame->players[playerId]->GetUsername();
+
+	std::string result = std::string("[").append(username).append("] : ");
+	result = result.append(message);
+
+	mMessages.push_back(result);
 }
