@@ -4,7 +4,7 @@
 bool NetworkServer::OnClientConnect(std::shared_ptr<net::Connection<NetworkCommands>> client)
 {
 	// Check player limit
-	if (mPlayerCount >= 4)
+	if (mPlayerCount >= 2)
 		return false; // Don't allow connection
 
 	// Increase player count
@@ -69,7 +69,7 @@ void NetworkServer::ProcessUsername(std::shared_ptr<net::Connection<NetworkComma
 		trimUsername = trimUsername.append(std::string(1, username[i]));
 	}
 
-	Globals::gGame->InstantiatePlayer(trimUsername, mPlayerCount);
+	Globals::gGame->InstantiatePlayer2(trimUsername, mPlayerCount);
 	NotifyClientsOfConnection(client);
 }
 
@@ -79,11 +79,6 @@ void NetworkServer::NotifyClientsOfConnection(std::shared_ptr<net::Connection<Ne
 	msg.header.id = NetworkCommands::PLAYER_CONNECTED;
 	msg.Push(mPlayerCount);
 
-	// Notify everyone that someone new has connected
-	MessageAllClient(msg);
-
-	// Tell the new client his ID
-	msg.header.id = NetworkCommands::ID_ASSIGNATION;
-	msg.Push(mPlayerCount);
-	MessageClient(client, msg);
+	// Notify the other possible client that someone new has connected
+	MessageAllClient(msg, client);
 }

@@ -76,16 +76,7 @@ void NetworkClient::Listen()
 			std::string username(msg.header.size, '\0');
 			msg.Pop(username.data(), username.size());
 
-			Globals::gGame->InstantiatePlayer(username, uid);
-			break;
-		}
-
-		case NetworkCommands::ID_ASSIGNATION:
-		{
-			uint32_t uid;
-			msg.Pop(uid);
-			// TODO maybe instantiate?
-			Globals::gGame->AssignPlayerID(uid);
+			Globals::gGame->InstantiatePlayer2(username, uid);
 			break;
 		}
 	}

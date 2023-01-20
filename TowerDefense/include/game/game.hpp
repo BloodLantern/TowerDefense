@@ -16,9 +16,9 @@ public:
     void Shutdown();
 
     PlayField* GetPlayField() const { return mPlayField; }
-    Player* GetPlayerSelf() const { return players[0]; }
+    Player* GetPlayerSelf() const { return players[mAssignedPlayerID]; }
 
-    void InstantiatePlayer(std::string name, uint32_t uid);
+    void InstantiatePlayer2(std::string name, uint32_t uid);
     void RemovePlayer(uint32_t id);
     void AssignPlayerID(uint32_t uid) { mAssignedPlayerID = uid; }
     uint32_t GetAssignedPlayerID() { return mAssignedPlayerID; }

@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "network/network_interface.hpp"
 #include "globals.hpp"
 #include "round_editor.hpp"
 #include "hud.hpp"
@@ -407,9 +408,27 @@ void Game::StartLevel(uint8_t level)
     mIsFirstFrameOfRound = true;
 }
 
-void Game::InstantiatePlayer(std::string name, uint32_t uid)
+void Game::InstantiatePlayer2(std::string name, uint32_t uid)
 {
-    players.push_back(new Player(name, uid));
+    if (Globals::gNetwork.IsServerStarted())
+    {
+        // Server is running, we are player 0
+        players.push_back(new Player(name, uid));
+        // Self;Player 1
+
+        mAssignedPlayerID = 0;
+    }
+    else
+    {
+        // Server isn't running, we are player 1
+        Player* self = players[0];
+        players.clear();
+        players.push_back(new Player(name, uid));
+        players.push_back(self);
+        // Player 0;Self
+        
+        mAssignedPlayerID = 1;
+    }
 }
 
 void Game::RemovePlayer(uint32_t id)
