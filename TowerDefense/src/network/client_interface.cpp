@@ -75,10 +75,11 @@ void NetworkClient::Listen()
 				return;
 
 			// Register new player
+			std::string username(msg.header.size - sizeof(uint32_t), '\0');
+			msg.Pop(username.data(), username.size());
+
 			uint32_t uid;
 			msg.Pop(uid);
-			std::string username(msg.header.size, '\0');
-			msg.Pop(username.data(), username.size());
 
 			Globals::gGame->InstantiatePlayer2(username, uid);
 			break;
