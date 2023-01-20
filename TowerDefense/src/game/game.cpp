@@ -18,6 +18,8 @@ Game::Game()
 
     Hud::canInteract = true;
     mIsFirstFrameOfRound = false;
+
+    mAssignedPlayerID = 0;
 }
 
 Game::~Game()
@@ -412,6 +414,10 @@ void Game::InstantiatePlayer2(std::string name, uint32_t uid)
 {
     if (Globals::gNetwork.IsServerStarted())
     {
+        // Don't instantiate yourself
+        if (uid - 1 == 0)
+            return;
+
         // Server is running, we are player 0
         players.push_back(new Player(name, uid));
         // Self;Player 1

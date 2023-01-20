@@ -15,6 +15,8 @@ void ChatConsole::Draw()
 		{
 			// Send to network
 			Globals::gNetwork.client->SendChatMessage(mMessageBuffer);
+
+			AddMessage(Globals::gGame->GetAssignedPlayerID(), mMessageBuffer);
 			
 			// Clear message
 			memset(mMessageBuffer, 0, sizeof(mMessageBuffer));

@@ -8,7 +8,27 @@ Player::Player()
 {
 	// Use this constructor only in solo
 	mPlayerID = 0;
-	mUsername = "";
+
+	TCHAR username[UNLEN + 1];
+	DWORD usernameLen = UNLEN + 1;
+	GetUserName(username, &usernameLen); 
+	
+	std::wstring messageW(username);
+
+	std::string usernameStr(messageW.begin(), messageW.end());
+
+	std::string trimUsername;
+
+	for (size_t i = 0; i < usernameStr.size(); i++)
+	{
+		if (usernameStr[i] == '\0')
+			break;
+
+		trimUsername = trimUsername.append(std::string(1, usernameStr[i]));
+	}
+
+	mUsername = trimUsername;
+	std::cout << "Created player (SOLO) " << mUsername << " with id " << mPlayerID << std::endl;
 }
 
 Player::Player(std::string username, uint32_t uid)
@@ -17,7 +37,7 @@ Player::Player(std::string username, uint32_t uid)
 	// Use this constructor only in multi
 	mPlayerID = uid;
 
-	std::cout << "Created player " << mUsername << " with id " << mPlayerID << std::endl;
+	std::cout << "Created player (NETWORK) " << mUsername << " with id " << mPlayerID << std::endl;
 }
 
 Player::~Player()
