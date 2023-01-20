@@ -188,7 +188,8 @@ All the information about enemies can be found in the bestiary in the main menu.
 #### Damage:
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986437457125516/generic_upgrade_attack_damage_icon.png width=128>
 
-    Damage is the amount of damage a projectile or tower will deal to its target. Even though you can't see this icon in game, it was originally an upgradable stat like the attack speed and range.
+    Damage is the amount of damage a projectile or tower will deal to its target.  
+    Even though you can't see this icon in game, it was originally an upgradable stat like the attack speed and range.
 #### Attack speed:
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986437809442826/generic_upgrade_attack_speed_icon.png width=128>
 
@@ -198,6 +199,7 @@ All the information about enemies can be found in the bestiary in the main menu.
 
     Range is the distance at which a tower can attack. It represents a circular range in tiles.
 #### Pierce:
-    Pierce is the number of enemies the projectile can hit and go through before the it dies. It does't have an icon because it is a completely hidden stat of the projectiles. The player can only guess its value.
+    Pierce is the number of enemies the projectile can hit and go through before the it dies.  
+    It doesn't have an icon because it is a completely hidden stat of the projectiles. The player can only guess its value.
 
 [Back to summary](#summary)
