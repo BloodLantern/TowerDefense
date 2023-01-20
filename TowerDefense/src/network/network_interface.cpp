@@ -6,6 +6,7 @@ NetworkInterface::NetworkInterface()
 
 	// Don't initialize server because it's not necessary for every client to have it launched
 	server = nullptr;
+	mServerStarted = false;
 }
 
 NetworkInterface::~NetworkInterface()

@@ -3,5 +3,6 @@
 enum class NetworkCommands
 {
 	PING,
-	CHAT_MESSAGE
+	CHAT_MESSAGE,
+	USERNAME
 };

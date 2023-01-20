@@ -1,5 +1,23 @@
 #include "network/client_interface.hpp"
 #include "network/chat_console.hpp"
+#include <windows.h>
+#include <Lmcons.h>
+
+void NetworkClient::SendUsername()
+{
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::USERNAME;
+
+	TCHAR username[UNLEN + 1];
+	DWORD usernameLen = UNLEN + 1;
+	GetUserName(username, &usernameLen);
+
+	std::cout << usernameLen << std::endl;
+
+	msg.Push(username, usernameLen * sizeof(TCHAR));
+
+	Send(msg);
+}
 
 void NetworkClient::SendChatMessage(std::string message)
 {
@@ -32,10 +50,16 @@ void NetworkClient::Listen()
 			break;
 
 		case NetworkCommands::CHAT_MESSAGE:
+		{
 			std::string message(msg.header.size, '\0');
 			msg.Pop(message.data(), message.size());
 
 			ChatConsole::AddMessage(message);
 			break;
+		}
+
+		case NetworkCommands::USERNAME:
+			// Username was requested by the server
+			SendUsername();
 	}
 }

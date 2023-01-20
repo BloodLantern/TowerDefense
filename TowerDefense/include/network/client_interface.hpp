@@ -6,6 +6,8 @@
 class NetworkClient : public net::ClientInterface<NetworkCommands>
 {
 public:
+	void SendUsername();
+
 	void SendChatMessage(std::string message);
 
 	void Listen();
