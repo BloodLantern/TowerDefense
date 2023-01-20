@@ -397,6 +397,8 @@ uint8_t Game::CountLevels()
 
 void Game::StartLevel(uint8_t level)
 {
+    mCurrentScene = Scene::IN_GAME;
+
     Restart();
     mCurrentLevel = level;
 
