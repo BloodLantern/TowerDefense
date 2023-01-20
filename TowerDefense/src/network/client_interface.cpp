@@ -119,6 +119,22 @@ void NetworkClient::NotifySprayShot(const Point2 tilePos, const Projectile* proj
 	Send(msg);
 }
 
+void NetworkClient::NotifyPlayingSpeedChange(int32_t speed)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::PLAYING_SPEED_CHANGE;
+
+	msg.Push(speed);
+
+	Send(msg);
+}
+
 void NetworkClient::Listen()
 {
 	if (!IsConnected())
@@ -168,6 +184,10 @@ void NetworkClient::Listen()
 
 		case NetworkCommands::SPRAY_SHOT:
 			ProcessSprayShot(msg);
+			break;
+
+		case NetworkCommands::PLAYING_SPEED_CHANGE:
+			ProcessPlayingSpeedChange(msg);
 	}
 }
 
@@ -337,4 +357,12 @@ void NetworkClient::ProcessSprayShot(net::Message<NetworkCommands>& msg)
 	proj->SetOwner(t);
 
 	Globals::gGame->projectiles.push_back(proj);
+}
+
+void NetworkClient::ProcessPlayingSpeedChange(net::Message<NetworkCommands>& msg)
+{
+	int32_t speed;
+	msg.Pop(speed);
+
+	Globals::gGame->SetPlayingSpeed(speed);
 }

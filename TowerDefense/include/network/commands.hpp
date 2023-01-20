@@ -12,5 +12,6 @@ enum class NetworkCommands
 	TOWER_SOLD,
 	TOWER_UPGRADE,
 
-	SPRAY_SHOT
+	SPRAY_SHOT,
+	PLAYING_SPEED_CHANGE
 };

@@ -15,6 +15,7 @@ public:
 	void NotifyTowerSold(const Point2 tilePos);
 	void NotifyTowerUpgrade(const Point2 tilePos, UpgradeType type);
 	void NotifySprayShot(const Point2 tilePos, const Projectile* proj);
+	void NotifyPlayingSpeedChange(int32_t speed);
 
 	void Listen();
 
@@ -26,4 +27,5 @@ private:
 	void ProcessTowerSold(net::Message<NetworkCommands>& msg);
 	void ProcessTowerUpgrade(net::Message<NetworkCommands>& msg);
 	void ProcessSprayShot(net::Message<NetworkCommands>& msg);
+	void ProcessPlayingSpeedChange(net::Message<NetworkCommands>& msg);
 };

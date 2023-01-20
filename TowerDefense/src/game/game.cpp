@@ -43,6 +43,13 @@ void Game::Init()
     Bestiary::InitTextures();
 }
 
+void Game::SetPlayingSpeed(int32_t speed)
+{
+    mPlayingSpeed = speed;
+
+    Globals::gNetwork.client->NotifyPlayingSpeedChange(speed);
+}
+
 void Game::Reset()
 {
     mEnded = false;

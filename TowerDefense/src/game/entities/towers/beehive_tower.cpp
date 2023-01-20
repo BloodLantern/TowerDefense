@@ -92,7 +92,7 @@ void BeehiveTower::OnUpdate()
 
 	if (mCashGenerationTimer < 0)
 	{
-		Player* player = Globals::gGame->GetPlayerSelf();
+		Player* player = GetOwner();
 		mCashGenerationTimer = mAttackSpeed;
 		mAmoutOfCashGenerated++;
 

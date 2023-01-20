@@ -81,6 +81,10 @@ void NetworkServer::OnMessage(std::shared_ptr<net::Connection<NetworkCommands>> 
 			// Notify all clients
 			MessageAllClient(msg, client);
 			break;
+
+		case NetworkCommands::PLAYING_SPEED_CHANGE:
+			// Notify all clients
+			MessageAllClient(msg, client);
 	}
 }
 
