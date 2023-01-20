@@ -24,16 +24,18 @@ class Player;
 #endif
 #define TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER 0.15f
 
+enum UpgradeType : uint8_t
+{
+#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
+	DAMAGE = 0,
+#endif
+	ATTACK_SPEED = 1,
+	RANGE = 2,
+	CUSTOM = 3
+};
+
 class Tower : public Entity
 {
-	enum GenericUpgradeType : uint8_t
-	{
-#ifdef TOWER_UPGRADE_GENERIC_DAMAGE
-		DAMAGE = 0,
-#endif
-		ATTACK_SPEED = 1,
-		RANGE = 2
-	};
 
 public:
 	Tower(Projectile* projectileTemplate, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);
@@ -68,6 +70,10 @@ public:
 	void SetTimeSinceLastAttack(double_t newTimeSinceLastAttack) { mTimeSinceLastAttack = newTimeSinceLastAttack; }
 	Projectile* GetProjectileTemplate() const { return mProjectileTemplate; }
 
+	// Needed for network stuff, bad
+	uint16_t genericUpgradeLevels[3] = { 0, 0, 0 };
+	void UpdateGeneric(UpgradeType upgrade);
+	uint8_t customUpgradeLevel = 0;
 protected:
 
 	std::string mName;
@@ -92,7 +98,6 @@ protected:
 
 	bool mRotateTowardsEnemies = true;
 	
-	uint8_t mCustomUpgradeLevel = 0;
 	uint8_t mCustomUpgradeLevelMax = 0;
 	uint32_t mCustomUpgradeCost = 1;
 
@@ -106,9 +111,6 @@ protected:
 private:
 	uint32_t mMoneyInvested;
 	float_t mSellingFactor = 0.7f;
-
-	uint16_t mGenericUpgradeLevels[3] = { 0, 0, 0 };
-
 
 	uint32_t mDamageDealt = 0;
 	uint32_t mKillCount = 0;
@@ -129,10 +131,8 @@ private:
 
 	virtual const char* const GetCustomUpgradeTooltip(uint8_t level) const = 0;
 
-	void UpdateGeneric(GenericUpgradeType upgrade);
-
-	void IncrementGenericUpgrade(GenericUpgradeType upgrade);
-	uint32_t GetGenericUpgradeCost(GenericUpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, mGenericUpgradeLevels[upgrade]); };
+	void IncrementGenericUpgrade(UpgradeType upgrade);
+	uint32_t GetGenericUpgradeCost(UpgradeType upgrade) { return TOWER_UPGRADE_GENERIC_COST_BASE * std::pow(TOWER_UPGRADE_GENERIC_COST_MULTIPLIER, genericUpgradeLevels[upgrade]); };
 
 	void HandleShoot();
 	void RotateTowardsTarget();
@@ -141,9 +141,9 @@ private:
 	bool DrawSellingButton();
 	void DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl);
 	// Returns whether the button was clicked
-	bool DrawUpgradeButton(GenericUpgradeType upgrade);
+	bool DrawUpgradeButton(UpgradeType upgrade);
 	void DrawStats();
-	void DisplayGenericUpgrade(GenericUpgradeType upgrade);
+	void DisplayGenericUpgrade(UpgradeType upgrade);
 	void DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl);
 	void AddTooltip(const char* text);
 	void InitStats(uint32_t damage, float_t attackSpeed, float_t range, std::string name, uint32_t cost, Texture* texture);

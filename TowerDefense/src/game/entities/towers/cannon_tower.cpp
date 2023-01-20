@@ -33,7 +33,7 @@ CannonTower::CannonTower(Texture* texture)
 
 void CannonTower::OnCustomUpgrade()
 {
-	switch (mCustomUpgradeLevel)
+	switch (customUpgradeLevel)
 	{
 		case FASTER_BOMBS:
 			mProjectileTemplate->SetSpeed(30);

@@ -10,4 +10,5 @@ enum class NetworkCommands
 	LEVEL_START,
 	TOWER_PLACED,
 	TOWER_SOLD,
+	TOWER_UPGRADE,
 };

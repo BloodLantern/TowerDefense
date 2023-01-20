@@ -59,7 +59,7 @@ Tower* BeenestTower::Clone() const
 void BeenestTower::OnUpdate()
 {
 	// Check for darts
-	if (mCustomUpgradeLevel >= DARTS)
+	if (customUpgradeLevel >= DARTS)
 	{
 		for (size_t i = 0; i < mBees.size(); i++)
 			mBees[i]->UpdateForDarts();
@@ -92,7 +92,7 @@ void BeenestTower::OnUpdate()
 
 void BeenestTower::OnCustomUpgrade()
 {
-	switch (mCustomUpgradeLevel)
+	switch (customUpgradeLevel)
 	{
 		case MORE_BEES:
 			mMaxAmountOfBees = 8;
@@ -140,7 +140,7 @@ void BeenestTower::Shoot()
 
 	BeeProjectile* bee = dynamic_cast<BeeProjectile*>(projTemplate);
 	
-	if (mCustomUpgradeLevel >= STICKY_HONEY)
+	if (customUpgradeLevel >= STICKY_HONEY)
 		bee->slowEnemies = true;
 
 	mBees.push_back(bee);

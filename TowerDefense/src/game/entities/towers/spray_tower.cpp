@@ -36,7 +36,7 @@ SprayTower::SprayTower(Texture* texture)
 
 void SprayTower::OnCustomUpgrade()
 {
-	switch (mCustomUpgradeLevel)
+	switch (customUpgradeLevel)
 	{
 		case FASTER_SPRAY:
 			mProjectileTemplate->SetSpeed(5.f);
@@ -81,7 +81,7 @@ void SprayTower::Shoot()
 		proj->SetVelocity(velocity.Rotate(dangle));
 		proj->SetOwner(this);
 
-		if (mCustomUpgradeLevel >= INTOXICATING_SPRAY)
+		if (customUpgradeLevel >= INTOXICATING_SPRAY)
 			proj->SetSlowingEnemies();
 
 		Globals::gGame->projectiles.push_back(proj);

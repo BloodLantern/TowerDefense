@@ -81,6 +81,22 @@ void NetworkClient::NotifyTowerSold(const Point2 tilePos)
 	Send(msg);
 }
 
+void NetworkClient::NotifyTowerUpdate(const Point2 tilePos, UpgradeType type)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::TOWER_UPGRADE;
+
+	msg.Push(tilePos);
+	msg.Push(type);
+	Send(msg);
+}
+
 void NetworkClient::Listen()
 {
 	if (!IsConnected())
@@ -122,6 +138,10 @@ void NetworkClient::Listen()
 
 		case NetworkCommands::TOWER_SOLD:
 			ProcessTowerSold(msg);
+			break;
+
+		case NetworkCommands::TOWER_UPGRADE:
+			ProcessTowerUpgrade(msg);
 	}
 }
 
@@ -211,3 +231,42 @@ void NetworkClient::ProcessTowerSold(net::Message<NetworkCommands>& msg)
 		}
 	}
 }
+
+void NetworkClient::ProcessTowerUpgrade(net::Message<NetworkCommands>& msg)
+{
+	UpgradeType upgrade;
+	msg.Pop(upgrade);
+	Point2 tilePos;
+	msg.Pop(tilePos);
+
+	Player* player = Globals::gGame->GetPlayerOther();
+	std::vector<Tower*>* towers = player->GetTowers();
+
+	for (std::vector<Tower*>::iterator it = towers->begin(); it != towers->end(); it++)
+	{
+		Tower* tower = *it;
+		Point2 pos = tower->GetTilePosition();
+
+		if (tilePos == pos)
+		{
+			tower->toDelete = true;
+			PlayField* pf = Globals::gGame->GetPlayField();
+
+			switch (upgrade)
+			{
+				case ATTACK_SPEED:
+				case RANGE:
+					tower->genericUpgradeLevels[upgrade]++;
+					tower->UpdateGeneric(upgrade);
+					break;
+
+				case CUSTOM:
+					tower->customUpgradeLevel++;
+					tower->OnCustomUpgrade();
+			}
+
+			break;
+		}
+	}
+}
+

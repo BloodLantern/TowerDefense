@@ -68,7 +68,7 @@ void MinigunTower::Shoot()
 
 void MinigunTower::OnCustomUpgrade()
 {
-	switch (mCustomUpgradeLevel)
+	switch (customUpgradeLevel)
 	{
 		case LONGER_CANNON:
 			mStartRange += 1.5f;

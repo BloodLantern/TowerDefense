@@ -40,7 +40,7 @@ BeehiveTower::BeehiveTower(Texture* texture)
 
 void BeehiveTower::OnCustomUpgrade()
 {
-	switch (mCustomUpgradeLevel)
+	switch (customUpgradeLevel)
 	{
 		case FASTER_PRODUCTION:
 			mStartAttackSpeed += .5f;
@@ -107,7 +107,7 @@ void BeehiveTower::OnUpdate()
 		mParticles.SpawnParticles(3);
 		mParticles.Update();
 
-		if (mCustomUpgradeLevel < HEALTHY_HONEY)
+		if (customUpgradeLevel < HEALTHY_HONEY)
 			return;
 
 		if ((rand() % 100) <= 10)
@@ -131,7 +131,7 @@ Tower* BeehiveTower::Clone() const
 
 void BeehiveTower::TryBuffBeenests()
 {
-	if (mCustomUpgradeLevel < FRIENDLY_BEES)
+	if (customUpgradeLevel < FRIENDLY_BEES)
 		return;
 
 	std::vector<Tower*>* towers = Globals::gGame->GetPlayerSelf()->GetTowers();

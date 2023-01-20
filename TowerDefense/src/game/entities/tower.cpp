@@ -117,7 +117,7 @@ void Tower::InitUITextures()
 	Tower::mCustomUpgradeStarIcon = Globals::gResources->GetTexture("ui\\star");
 }
 
-void Tower::UpdateGeneric(GenericUpgradeType upgrade)
+void Tower::UpdateGeneric(UpgradeType upgrade)
 {
 	switch (upgrade)
 	{
@@ -127,11 +127,11 @@ void Tower::UpdateGeneric(GenericUpgradeType upgrade)
             break;
 #endif
 			
-        case GenericUpgradeType::ATTACK_SPEED:
+        case UpgradeType::ATTACK_SPEED:
             UpdateAttackSpeed();
 			break;
 			
-        case GenericUpgradeType::RANGE:
+        case UpgradeType::RANGE:
             UpdateRange();
             break;
 	}
@@ -146,20 +146,20 @@ void Tower::UpdateDamage()
 
 void Tower::UpdateAttackSpeed()
 {
-	mAttackSpeed = mStartAttackSpeed + mGenericUpgradeLevels[GenericUpgradeType::ATTACK_SPEED] * TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER;
+	mAttackSpeed = mStartAttackSpeed + genericUpgradeLevels[UpgradeType::ATTACK_SPEED] * TOWER_UPGRADE_GENERIC_ATTACK_SPEED_MULTIPLIER;
 }
 
 void Tower::UpdateRange()
 {
-	mRange = mStartRange + mGenericUpgradeLevels[GenericUpgradeType::RANGE] * TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER;
+	mRange = mStartRange + genericUpgradeLevels[UpgradeType::RANGE] * TOWER_UPGRADE_GENERIC_RANGE_MULTIPLIER;
 }
 
-void Tower::IncrementGenericUpgrade(GenericUpgradeType upgrade)
+void Tower::IncrementGenericUpgrade(UpgradeType upgrade)
 {
 	uint32_t cost = GetGenericUpgradeCost(upgrade);
 	mOwner->DecreaseMoney(cost);
 	mMoneyInvested += cost;
-	mGenericUpgradeLevels[upgrade]++;
+	genericUpgradeLevels[upgrade]++;
 	UpdateGeneric(upgrade);
 }
 
@@ -316,14 +316,14 @@ void Tower::DrawUpgrades(const ImVec2& panelPosition, ImDrawList* dl)
 #ifdef TOWER_UPGRADE_GENERIC_DAMAGE
 	DisplayGenericUpgrade(GenericUpgradeType::DAMAGE);
 #endif
-	DisplayGenericUpgrade(GenericUpgradeType::ATTACK_SPEED);
-	DisplayGenericUpgrade(GenericUpgradeType::RANGE);
+	DisplayGenericUpgrade(UpgradeType::ATTACK_SPEED);
+	DisplayGenericUpgrade(UpgradeType::RANGE);
 
 	if (mCustomUpgradeLevelMax > 0)
 		DisplayCustomUpgrade(panelPosition, dl);
 }
 
-bool Tower::DrawUpgradeButton(GenericUpgradeType upgrade)
+bool Tower::DrawUpgradeButton(UpgradeType upgrade)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button,			IM_COL32(0x1E, 0xFF, 0x3E, 0xC0));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	IM_COL32(0x1A, 0xCF, 0x33, 0xC0));
@@ -374,7 +374,7 @@ void Tower::DrawStats()
 	AddTooltip(TOWER_PANEL_MONEY_GENERATED_TOOLTIP_TEXT);
 }
 
-void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
+void Tower::DisplayGenericUpgrade(UpgradeType upgrade)
 {
 	IMGUI_SET_CURSOR_POS_X(TOWER_PANEL_UPGRADE_TAB_WIDTH);
 	IMGUI_SET_CURSOR_POS_Y(IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
@@ -393,7 +393,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 			break;
 #endif
 
-		case GenericUpgradeType::ATTACK_SPEED:
+		case UpgradeType::ATTACK_SPEED:
 		{
 			ImGui::Image(Tower::mGenericUpgradeAtackSpeedIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_ATTACK_SPEED_TOOLTIP_TEXT);
@@ -408,7 +408,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 			break;
 		}
 
-		case GenericUpgradeType::RANGE:
+		case UpgradeType::RANGE:
 			ImGui::Image(Tower::mGenericUpgradeRangeIconTexture->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM);
 			AddTooltip(TOWER_PANEL_RANGE_TOOLTIP_TEXT);
 
@@ -421,7 +421,7 @@ void Tower::DisplayGenericUpgrade(GenericUpgradeType upgrade)
 
 
 	// If the upgrade level is less than 10, show the button
-	if (mGenericUpgradeLevels[upgrade] < TOWER_UPGRADE_GENERIC_LEVEL_MAX)
+	if (genericUpgradeLevels[upgrade] < TOWER_UPGRADE_GENERIC_LEVEL_MAX)
 	{
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(100);
@@ -467,7 +467,7 @@ void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
 
 	for (uint8_t i = 0; i < mCustomUpgradeLevelMax; i++)
 	{
-		if (mCustomUpgradeLevel > i)
+		if (customUpgradeLevel > i)
 			ImGui::Image(Tower::mCustomUpgradeStarIcon->id, TOWER_PANEL_IMAGE_SIZE_MEDIUM,
 				ImVec2(0, 0), ImVec2(1, 1), ImColor(0xFF, 0xFF, 0x0, 0xFF));
 		else
@@ -478,7 +478,7 @@ void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
 	}
 
 	// Only display if you can upgrade
-	if (mCustomUpgradeLevel < mCustomUpgradeLevelMax)
+	if (customUpgradeLevel < mCustomUpgradeLevelMax)
 	{
 		IMGUI_SET_CURSOR_POS_Y(-IMGUI_IMAGE_BUTTON_OFFSET_Y / 2);
 
@@ -495,7 +495,7 @@ void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
 		{
 			mOwner->DecreaseMoney(mCustomUpgradeCost);
 			mMoneyInvested += mCustomUpgradeCost;
-			mCustomUpgradeLevel++;
+			customUpgradeLevel++;
 
 			OnCustomUpgrade();
 		}
