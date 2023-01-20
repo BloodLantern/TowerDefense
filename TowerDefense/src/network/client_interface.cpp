@@ -364,5 +364,5 @@ void NetworkClient::ProcessPlayingSpeedChange(net::Message<NetworkCommands>& msg
 	int32_t speed;
 	msg.Pop(speed);
 
-	Globals::gGame->SetPlayingSpeed(speed);
+	Globals::gGame->SetPlayingSpeed(speed, false);
 }

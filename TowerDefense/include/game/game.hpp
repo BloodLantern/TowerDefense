@@ -35,7 +35,7 @@ public:
     double_t GetPlayingSpeedDeltaTime() const { return mPlayingSpeedDeltaTime; }
     double_t GetDeltaTime() const { return mDeltaTime; }
     int32_t GetPlayingSpeed() const { return mPlayingSpeed; }
-    void SetPlayingSpeed(int32_t speed);
+    void SetPlayingSpeed(int32_t speed, bool communicate = true);
     void SetScene(Scene scene) { mCurrentScene = scene; }
 
     void Reset();
