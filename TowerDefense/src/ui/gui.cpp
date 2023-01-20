@@ -9,8 +9,8 @@
 
 #include <stdint.h>
 
+char Gui::mServerHostName[100];
 bool Gui::openedWindows[GUI_WINDOW_ID_COUNT];
-
 
 void Gui::HandleMenuBar()
 {
@@ -73,7 +73,7 @@ void Gui::HandleNetworkMenuBar()
 	else
 	{
 		if (ImGui::MenuItem("Connect to server"))
-			Globals::gNetwork.StartClient("ZOTAC-12");
+			Globals::gNetwork.StartClient(mServerHostName);
 	}
 
 	ImGui::Separator();
@@ -278,12 +278,22 @@ Scene Gui::UpdateOptions()
 		ImGui::SetCursorPos(cursor);
 		ImGui::Checkbox("Fullscreen", &Globals::gFullscreen);
 
+		cursor.y += 100;
+		cursor.x = Globals::gWindowWidth / 2.f - ImGui::CalcTextSize("Server hostname :").x / 2.f;
+		ImGui::SetCursorPos(cursor);
+		ImGui::Text("Server hostname : ");
+
+		cursor.y += 50;
+		cursor.x = Globals::gWindowWidth / 2.f - Globals::gWindowWidth / 8.f;
+		ImGui::SetCursorPos(cursor);
+		ImGui::SetNextItemWidth(Globals::gWindowWidth / 4.f);
+		ImGui::InputText("##hostname", mServerHostName, sizeof(mServerHostName));
+
 		cursor.y += 150;
+		cursor.x = Globals::gWindowWidth / 2.f - buttonSize.x / 2.f;
 		ImGui::SetCursorPos(cursor);
 		if (ImGui::Button("Back", buttonSize))
 			result = Scene::MAIN_MENU;
-
-		// TODO network stuff probably
 
 		ImGui::PopFont();
 	}

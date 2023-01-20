@@ -17,6 +17,8 @@ private:
 	static void HandleMenuBar();
 	static void HandleNetworkMenuBar();
 
+	static char mServerHostName[100];
+
 public:
 	static bool openedWindows[GUI_WINDOW_ID_COUNT];
 
