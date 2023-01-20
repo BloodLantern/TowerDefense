@@ -16,6 +16,19 @@ bool NetworkServer::OnClientConnect(std::shared_ptr<net::Connection<NetworkComma
 
 	MessageClient(client, msg);
 
+	if (mPlayerCount >= 2)
+	{
+		net::Message<NetworkCommands> msg;
+		msg.header.id = NetworkCommands::PLAYER_CONNECTED;
+
+		Player* player = Globals::gGame->GetPlayerSelf();
+		std::string username = player->GetUsername();
+
+		msg.Push(0);
+		msg.Push(username.data(), username.size());
+		MessageClient(client, msg);
+	}
+
 	return true;
 }
 

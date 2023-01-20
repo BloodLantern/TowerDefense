@@ -1,6 +1,7 @@
 #include "network/client_interface.hpp"
 #include "network/chat_console.hpp"
 #include "globals.hpp"
+#include "network/network_interface.hpp"
 #include <windows.h>
 #include <Lmcons.h>
 
@@ -70,6 +71,9 @@ void NetworkClient::Listen()
 
 		case NetworkCommands::PLAYER_CONNECTED:
 		{
+			if (Globals::gNetwork.IsServerStarted())
+				return;
+
 			// Register new player
 			uint32_t uid;
 			msg.Pop(uid);
