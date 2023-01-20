@@ -100,7 +100,10 @@ void Game::UpdateRichPresence()
     DiscordRichPresence& rpc = Globals::gDiscordRpc;
     if (mCurrentScene == Scene::IN_GAME)
     {
-        rpc.state = "Playing Solo";
+        if (Globals::gNetwork.client->IsConnected() || Globals::gNetwork.IsServerStarted())
+            rpc.state = "Playing Multiplayer";
+        else
+            rpc.state = "Playing Solo";
         rpcDetails = std::string("Wave ").append(std::to_string(currentWave));
         if (currentWave <= maxWave)
             rpcDetails = rpcDetails.append("/").append(std::to_string(maxWave));
