@@ -10,6 +10,7 @@
 - [How to play](#how-to-play)
     - [Project dependencies](#project-dependencies)
     - [Launching the game](#launching-the-game)
+    - [Multiplayer](#multiplayer)
 - [Gameplay](#gameplay)
     - [Towers](#towers)
     - [Tower list](#tower-list)
@@ -38,52 +39,69 @@ The TowerDefense folder can be obtained by cloning the repository.
 ### Launching the game
 The only thing left is to open the solution file (TowerDefense.sln) in Visual Studio 2022. Compile it using the big green play button on top of the window, and you're done!
 
+### Multiplayer
+**Multiplayer is supported but not as much playtested as the rest of the game so beware of bugs that might happen.**
+
+*Even though the multiplayer should work whatever the amount of players, it was only tested with 2.*
+
+To play in multiplayer, one instance of the game must start a server through the window menu bar: Network > Start server. This instance will be the host. Another instance, called a client, has to join that server by first going into the options menu and typing in the server hostname. In a local network, this should be the host's computer's name or its IP adress. To play with a remote computer, the host has to redirect port 60000 to its computer and the client needs to use the former's public IP adress instead. After this step, the client has to connect to the server through the window menu bar: Network > Connect to server. If everything was done fine, if the host starts a game it should start for the client too. The client can then disconnect at any time using the window menu bar: Network > Disconnect.  
+To check if the connection succeeded, the client and the host can open the chat by using the window menu bar: Network > Open chat. Any message sent to the chat should be visible to the other players.  
+**Currently, if any instance of the game tries to connect to a server more than once, the game will crash.** It is a known bug that should be fixed in future versions.
+
+The current synchronization includes:
+- Game start
+- Tower placing
+- Tower selling
+- Tower upgrading
+
+As the fast forward isn't included in the above list, the game will desynchronize if it is used in either the host or a client.
+
 [Back to summary](#summary)
 
 ## Gameplay
 ### **Towers**
 
-Towers have 4 generic stats that can be upgraded through different upgrades. These are [damage](#damage), [attack speed](#attack-speed), [range](#range) and [pierce](#pierce). While the damage and pierce are linked to the projectile and therefore hidden to the player, the attack speed and range can be seen and upgraded at any time in the tower panel by clicking on the tower.  
-The tower panel is composed of the tower's name, its texture, its upgrades, its stats like the number of enemies it killed, the damage it dealt ang the money it generated. As said before, the player can also see the precise amount of attack speed and range. These two stats can be upgraded up to 5 times using the button in front of them.  
+Towers have 4 generic stats that can be modified through different upgrades. These are [damage](#damage), [attack speed](#attack-speed), [range](#range) and [pierce](#pierce). While the damage and pierce are linked to the projectile and therefore hidden to the player, the attack speed and range can be seen and upgraded at any time in the tower panel by clicking on the tower.  
+The tower panel is composed of the tower's name, its texture, upgrades, and stats like the number of enemies it killed, the damage it dealt ang the money it generated. As said before, the player can also see the precise amount of attack speed and range. These two stats can be upgraded up to 5 times using the button in front of them.  
 On top of that, every tower has unique upgrades that greatly affect the stats and in general the power of the tower. These are described in the [tower upgrades](#tower-upgrades) section.
 
 ### **Tower list**
 1. ### Minigun
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986215075139594/minigun_icon.png width=128>
 
-- Fires at tremendous speeds
-- Deals low damage but is very cheap
-- Perfect for the early and mid-game
+- Fires at tremendous speeds.
+- Deals low damage but is very cheap.
+- Perfect for the early and mid-game.
 
 2. ### Cannon
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986215851085884/cannon_icon.png width=128>
 
-- Low attack speed but AOE (Area Of Effect) damage
-- Very useful for grouped enemies
-- High damage with later upgrades
+- Low attack speed but AOE (Area Of Effect) damage.
+- Very useful for grouped enemies.
+- High damage with later upgrades.
 
 3. ### Beenest
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986215565864960/beehive.png width=128>
 
-- Medium attack speed
-- Spawns bees to attack ants
-- The bees choose a target and then hit it until it dies or goes out of range
-- Can slow enemies with later upgrades
+- Medium attack speed.
+- Spawns bees to attack ants.
+- The bees choose a target and then hit it until it dies or goes out of range.
+- Can slow enemies with later upgrades.
 
 4. ### Ant spray
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986215347757156/spray.png width=128>
 
-- Deals low damage but has a very high pierce and AOE damage
-- Later upgrades help not to miss the target when shooting
-- Can slow enemies with later upgrades
+- Deals low damage but has a very high pierce and AOE damage.
+- Later upgrades help not to miss the target when shooting.
+- Can slow enemies with later upgrades.
 
 5. ### Beehive
 <img alt=BeehiveIcon src=https://cdn.discordapp.com/attachments/1027856325633396798/1065986214831861811/hive.png width=128>
 
 - Doesn't attack enemies. Its only use is support and utility.
-- Generates money each round
-- Can generate live as well with later upgrades
-- Can buff Beenests with later upgrades
+- Generates money each round.
+- Can generate live as well with later upgrades.
+- Can buff Beenests with later upgrades.
 
 ### **Tower upgrades**
 
@@ -180,7 +198,7 @@ As said before, towers have custom upgrades that can either change their stats o
 Keep in mind that most of the above information can be seen in the tower panel either directly or by hovering over a text, image of value.
 
 ### **Enemies**
-All the information about enemies can be found in the bestiary in the main menu.
+All the information about enemies can be found in the bestiary accessible from the main menu.
 
 ### **Glossary**
 #### Damage:
@@ -197,7 +215,7 @@ All the information about enemies can be found in the bestiary in the main menu.
 
     Range is the distance at which a tower can attack. It represents a circular range in tiles.
 #### Pierce:
-    Pierce is the number of enemies the projectile can hit and go through before the it dies.  
+    Pierce is the number of enemies a projectile can hit and go through before it dies.  
     It doesn't have an icon because it is a completely hidden stat of the projectiles. The player can only guess its value.
 
 [Back to summary](#summary)
