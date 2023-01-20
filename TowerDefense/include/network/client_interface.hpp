@@ -13,7 +13,7 @@ public:
 	void NotifyStartOfGame(uint8_t level);
 	void NotifyTowerPlaced(const Point2 tilePos, const int32_t toweId);
 	void NotifyTowerSold(const Point2 tilePos);
-	void NotifyTowerUpdate(const Point2 tilePos, UpgradeType type);
+	void NotifyTowerUpgrade(const Point2 tilePos, UpgradeType type);
 
 	void Listen();
 

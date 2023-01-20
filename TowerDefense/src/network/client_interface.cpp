@@ -81,7 +81,7 @@ void NetworkClient::NotifyTowerSold(const Point2 tilePos)
 	Send(msg);
 }
 
-void NetworkClient::NotifyTowerUpdate(const Point2 tilePos, UpgradeType type)
+void NetworkClient::NotifyTowerUpgrade(const Point2 tilePos, UpgradeType type)
 {
 	if (!IsConnected())
 	{

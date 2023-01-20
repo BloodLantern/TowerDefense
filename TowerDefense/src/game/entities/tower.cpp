@@ -161,6 +161,8 @@ void Tower::IncrementGenericUpgrade(UpgradeType upgrade)
 	mMoneyInvested += cost;
 	genericUpgradeLevels[upgrade]++;
 	UpdateGeneric(upgrade);
+
+	Globals::gNetwork.client->NotifyTowerUpgrade(GetTilePosition(), upgrade);
 }
 
 void Tower::HandleSelection()
@@ -497,6 +499,7 @@ void Tower::DisplayCustomUpgrade(const ImVec2& panelPosition, ImDrawList* dl)
 			mMoneyInvested += mCustomUpgradeCost;
 			customUpgradeLevel++;
 
+			Globals::gNetwork.client->NotifyTowerUpgrade(GetTilePosition(), CUSTOM);
 			OnCustomUpgrade();
 		}
 
