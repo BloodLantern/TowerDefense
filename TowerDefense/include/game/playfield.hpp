@@ -108,7 +108,7 @@ private:
 	PlayFieldDrawFlags mDrawFlags;
 
 	// Tower bar UI, not sure if this is the best place?
-	TowerBarUI towerBarUI;
+	TowerBarUI mTowerBarUI;
 
 	// Draw functions
 	void DrawClipdata();
@@ -241,6 +241,8 @@ public:
 	/// <param name="direction">Node direction</param>
 	/// <returns><Next path node/returns>
 	PathNode GetNextPathNode(uint8_t x, uint8_t y, PathNodeDir direction);
+
+	TowerBarUI* GetTowerBarUI() { return &mTowerBarUI; }
 
 	/// <summary>
 	/// Converts a pixel position to a grid position

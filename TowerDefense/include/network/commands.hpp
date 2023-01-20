@@ -8,4 +8,5 @@ enum class NetworkCommands
 	PLAYER_CONNECTED,
 
 	LEVEL_START,
+	TOWER_PLACED,
 };

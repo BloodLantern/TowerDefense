@@ -265,7 +265,7 @@ void PlayField::Draw()
 		DrawPath();
 
 	// Draw the tower bar UI
-	towerBarUI.Draw();
+	mTowerBarUI.Draw();
 }
 
 void PlayField::Save(std::string dst)

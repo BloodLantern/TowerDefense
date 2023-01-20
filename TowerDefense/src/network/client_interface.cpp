@@ -1,6 +1,7 @@
 #include "network/client_interface.hpp"
 #include "network/chat_console.hpp"
 #include "globals.hpp"
+#include "tower.hpp"
 #include "network/network_interface.hpp"
 #include <windows.h>
 #include <Lmcons.h>
@@ -46,6 +47,22 @@ void NetworkClient::NotifyStartOfGame(uint8_t level)
 	msg.header.id = NetworkCommands::LEVEL_START;
 
 	msg.Push(level);
+	Send(msg);
+}
+
+void NetworkClient::NotifyTowerPlaced(const Point2 tilePos, const int32_t towerId)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::TOWER_PLACED;
+
+	msg.Push(tilePos);
+	msg.Push(towerId);
 	Send(msg);
 }
 
@@ -107,6 +124,27 @@ void NetworkClient::Listen()
 
 			Globals::gGame->StartLevel(level);
 			break;
+		}
+
+		case NetworkCommands::TOWER_PLACED:
+		{
+			int32_t type;
+			msg.Pop(type);
+			Point2 tilePos;
+			msg.Pop(tilePos);
+			PlayField* playfield = Globals::gGame->GetPlayField();
+			
+			Tower* tower = playfield->GetTowerBarUI()->towerTemplates[type]->Clone();
+			tower->SetTilePosition(tilePos);
+
+			for (uint8_t x = 0; x < tower->GetWidth(); x++)
+				for (uint8_t y = 0; y < tower->GetHeight(); y++)
+					playfield->SetClipdataTile(tilePos.x + x, tilePos.y + y, CLIPDATA_TYPE_OCCUPIED);
+
+			Player* player = Globals::gGame->GetPlayerOther();
+			tower->SetOwner(player);
+
+			player->GetTowers()->push_back(tower);
 		}
 	}
 }

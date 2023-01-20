@@ -61,6 +61,11 @@ void NetworkServer::OnMessage(std::shared_ptr<net::Connection<NetworkCommands>> 
 			// Notify all clients
 			MessageAllClient(msg, client);
 			break;
+
+		case NetworkCommands::TOWER_PLACED:
+			// Notify all clients
+			MessageAllClient(msg, client);
+			break;
 	}
 }
 

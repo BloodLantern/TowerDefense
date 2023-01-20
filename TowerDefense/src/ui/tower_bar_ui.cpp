@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "playfield.hpp"
 #include "hud.hpp"
+#include "network/network_interface.hpp"
 
 #include "minigun_tower.hpp"
 #include "cannon_tower.hpp"
@@ -30,21 +31,21 @@ TowerBarUI::TowerBarUI()
 	towerTextures[3] = Globals::gResources->GetTexture("towers\\spray");
 	towerTextures[4] = Globals::gResources->GetTexture("towers\\hive");
 
-	mTowerTemplates[0] = new MinigunTower(towerTextures[0]);
-	mTowerTemplates[1] = new CannonTower(towerTextures[1]);
-	mTowerTemplates[2] = new BeenestTower(towerTextures[2]);
-	mTowerTemplates[3] = new SprayTower(towerTextures[3]);
-	mTowerTemplates[4] = new BeehiveTower(towerTextures[4]);
+	towerTemplates[0] = new MinigunTower(towerTextures[0]);
+	towerTemplates[1] = new CannonTower(towerTextures[1]);
+	towerTemplates[2] = new BeenestTower(towerTextures[2]);
+	towerTemplates[3] = new SprayTower(towerTextures[3]);
+	towerTemplates[4] = new BeehiveTower(towerTextures[4]);
 }
 
 TowerBarUI::~TowerBarUI()
 {
 	for (int i = 0; i < TOWER_COUNT; i++)
 	{
-		Projectile* proj = mTowerTemplates[i]->GetProjectileTemplate();
+		Projectile* proj = towerTemplates[i]->GetProjectileTemplate();
 		if (proj)
 			delete proj;
-		delete mTowerTemplates[i];
+		delete towerTemplates[i];
 	}
 }
 
@@ -105,7 +106,7 @@ void TowerBarUI::DrawOverlay(const ImVec2& mousePos, const float_t y)
 
 void TowerBarUI::ShowCost(const ImVec2 &mousePos, const float_t y)
 {
-	uint32_t cost = mTowerTemplates[((int32_t)mousePos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE]->GetCost();
+	uint32_t cost = towerTemplates[((int32_t)mousePos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE]->GetCost();
 
 	ImVec2 pos(mousePos.x, Globals::gWindowY + y);
 	pos.x = (((int32_t)pos.x - Globals::gWindowX) / TOWER_BAR_TOWER_SIZE) * (float_t) TOWER_BAR_TOWER_SIZE + Globals::gWindowX;
@@ -138,12 +139,12 @@ void TowerBarUI::HandleDragAndDrop(const ImVec2& mousePos, const float_t x, cons
 		&& (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
 		// Don't allow dragging if the player doesn't have enough money
-		if (mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayerSelf()->GetMoney())
+		if (towerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->GetCost() > Globals::gGame->GetPlayerSelf()->GetMoney())
 			return;
 
 		// Create the tower if it doesn't already exist
 		if (!mSelectedTower)
-			mSelectedTower = mTowerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->Clone();
+			mSelectedTower = towerTemplates[((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE]->Clone();
 
 		// Tower size
 		const uint8_t selectedTowerWidthTiles = mSelectedTower->GetWidth();
@@ -236,6 +237,13 @@ void TowerBarUI::HandleDrop(const bool& available, const Point2& tilePosition)
 		player->DecreaseMoney(mSelectedTower->GetCost());
 		mSelectedTower->SnapToGrid();
 		player->GetTowers()->push_back(mSelectedTower);
+
+		{
+			ImVec2 mouseClickedPos = Globals::gIO->MouseClickedPos[ImGuiMouseButton_Left];
+			mouseClickedPos.x -= Globals::gWindowX;
+			int32_t towerId = ((int32_t)mouseClickedPos.x) / TOWER_BAR_TOWER_SIZE;
+			Globals::gNetwork.client->NotifyTowerPlaced(tilePosition, towerId);
+		}
 
 		PlayField* playfield = Globals::gGame->GetPlayField();
 		for (uint8_t x = 0; x < mSelectedTower->GetWidth(); x++)
