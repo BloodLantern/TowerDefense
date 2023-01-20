@@ -66,6 +66,21 @@ void NetworkClient::NotifyTowerPlaced(const Point2 tilePos, const int32_t towerI
 	Send(msg);
 }
 
+void NetworkClient::NotifyTowerSold(const Point2 tilePos)
+{
+	if (!IsConnected())
+	{
+		std::cout << "[Client] server down" << std::endl;
+		return;
+	}
+
+	net::Message<NetworkCommands> msg;
+	msg.header.id = NetworkCommands::TOWER_SOLD;
+
+	msg.Push(tilePos);
+	Send(msg);
+}
+
 void NetworkClient::Listen()
 {
 	if (!IsConnected())
@@ -85,16 +100,8 @@ void NetworkClient::Listen()
 			break;
 
 		case NetworkCommands::CHAT_MESSAGE:
-		{
-			std::string message(msg.header.size - sizeof(uint32_t), '\0');
-			msg.Pop(message.data(), message.size());
-
-			uint32_t playerId;
-			msg.Pop(playerId);
-
-			ChatConsole::AddMessage(playerId, message);
+			ProcessChatMessage(msg);
 			break;
-		}
 
 		case NetworkCommands::USERNAME:
 			// Username was requested by the server
@@ -102,49 +109,95 @@ void NetworkClient::Listen()
 			break;
 
 		case NetworkCommands::PLAYER_CONNECTED:
-		{
-			if (Globals::gNetwork.IsServerStarted())
-				return;
-
-			// Register new player
-			std::string username(msg.header.size - sizeof(uint32_t), '\0');
-			msg.Pop(username.data(), username.size());
-
-			uint32_t uid;
-			msg.Pop(uid);
-
-			Globals::gGame->InstantiatePlayer2(username, uid);
+			ProcessPlayerConnected(msg);
 			break;
-		}
-
+		
 		case NetworkCommands::LEVEL_START:
-		{
-			uint8_t level;
-			msg.Pop(level);
-
-			Globals::gGame->StartLevel(level);
+			ProcessStartOfGame(msg);
 			break;
-		}
 
 		case NetworkCommands::TOWER_PLACED:
+			ProcessTowerPlaced(msg);
+			break;
+
+		case NetworkCommands::TOWER_SOLD:
+			ProcessTowerSold(msg);
+	}
+}
+
+
+void NetworkClient::ProcessChatMessage(net::Message<NetworkCommands>& msg)
+{
+	std::string message(msg.header.size - sizeof(uint32_t), '\0');
+	msg.Pop(message.data(), message.size());
+
+	uint32_t playerId;
+	msg.Pop(playerId);
+
+	ChatConsole::AddMessage(playerId, message);
+}
+
+void NetworkClient::ProcessPlayerConnected(net::Message<NetworkCommands>& msg)
+{
+	if (Globals::gNetwork.IsServerStarted())
+		return;
+
+	// Register new player
+	std::string username(msg.header.size - sizeof(uint32_t), '\0');
+	msg.Pop(username.data(), username.size());
+
+	uint32_t uid;
+	msg.Pop(uid);
+
+	Globals::gGame->InstantiatePlayer2(username, uid);
+}
+
+void NetworkClient::ProcessStartOfGame(net::Message<NetworkCommands>& msg)
+{
+	uint8_t level;
+	msg.Pop(level);
+
+	Globals::gGame->StartLevel(level);
+}
+
+void NetworkClient::ProcessTowerPlaced(net::Message<NetworkCommands>& msg)
+{
+	int32_t type;
+	msg.Pop(type);
+	Point2 tilePos;
+	msg.Pop(tilePos);
+	PlayField* playfield = Globals::gGame->GetPlayField();
+
+	Tower* tower = playfield->GetTowerBarUI()->towerTemplates[type]->Clone();
+	tower->SetTilePosition(tilePos);
+
+	for (uint8_t x = 0; x < tower->GetWidth(); x++)
+		for (uint8_t y = 0; y < tower->GetHeight(); y++)
+			playfield->SetClipdataTile(tilePos.x + x, tilePos.y + y, CLIPDATA_TYPE_OCCUPIED);
+
+	Player* player = Globals::gGame->GetPlayerOther();
+	tower->SetOwner(player);
+
+	player->GetTowers()->push_back(tower);
+}
+
+void NetworkClient::ProcessTowerSold(net::Message<NetworkCommands>& msg)
+{
+	Point2 tilePos;
+	msg.Pop(tilePos);
+
+	Player* player = Globals::gGame->GetPlayerOther();
+	std::vector<Tower*>* towers = player->GetTowers();
+
+	for (std::vector<Tower*>::iterator it = towers->begin(); it != towers->end(); it++)
+	{
+		Tower* tower = *it;
+		Point2 pos = tower->GetTilePosition();
+
+		if (tilePos == pos)
 		{
-			int32_t type;
-			msg.Pop(type);
-			Point2 tilePos;
-			msg.Pop(tilePos);
-			PlayField* playfield = Globals::gGame->GetPlayField();
-			
-			Tower* tower = playfield->GetTowerBarUI()->towerTemplates[type]->Clone();
-			tower->SetTilePosition(tilePos);
-
-			for (uint8_t x = 0; x < tower->GetWidth(); x++)
-				for (uint8_t y = 0; y < tower->GetHeight(); y++)
-					playfield->SetClipdataTile(tilePos.x + x, tilePos.y + y, CLIPDATA_TYPE_OCCUPIED);
-
-			Player* player = Globals::gGame->GetPlayerOther();
-			tower->SetOwner(player);
-
-			player->GetTowers()->push_back(tower);
+			tower->toDelete = true;
+			break;
 		}
 	}
 }
