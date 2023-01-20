@@ -164,6 +164,10 @@ void NetworkClient::Listen()
 
 		case NetworkCommands::TOWER_UPGRADE:
 			ProcessTowerUpgrade(msg);
+			break;
+
+		case NetworkCommands::SPRAY_SHOT:
+			ProcessSprayShot(msg);
 	}
 }
 
