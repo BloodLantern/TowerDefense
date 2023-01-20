@@ -57,6 +57,11 @@ private:
 
     bool mIsFirstFrameOfRound;
 
+    std::string rpcDetails;
+    std::string rpcLevelIndex;
+    std::string rpcLargeImageKey;
+    std::string rpcLargeImageText;
+
     void Scene_MainMenu();
     void Scene_LevelSelection();
     void Scene_FreeplaySelection();

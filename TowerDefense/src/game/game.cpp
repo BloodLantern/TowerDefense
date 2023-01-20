@@ -90,14 +90,17 @@ void Game::UpdateRichPresence()
     if (mCurrentScene == Scene::IN_GAME)
     {
         rpc.state = "Playing Solo";
-        std::string details = std::string("Wave ").append(std::to_string(currentWave));
+        rpcDetails = std::string("Wave ").append(std::to_string(currentWave));
         if (currentWave <= maxWave)
-            details = details.append("/").append(std::to_string(maxWave));
-        rpc.details = details.c_str();
+            rpcDetails = rpcDetails.append("/").append(std::to_string(maxWave));
+        rpc.details = rpcDetails.c_str();
 
-        rpc.largeImageKey = "levelpreview" + mCurrentLevel;
-        // TODO: Map names in discord rpc
-        rpc.largeImageText = "Level " + mCurrentLevel;
+        rpcLevelIndex = std::to_string(mCurrentLevel);
+        rpcLargeImageKey = "levelpreview" + rpcLevelIndex;
+        rpcLargeImageText = "Level " + rpcLevelIndex;
+        
+        rpc.largeImageKey = rpcLargeImageKey.c_str();
+        rpc.largeImageText = rpcLargeImageText.c_str();
         rpc.smallImageKey = "logo";
         rpc.smallImageText = "Fourmi Defense";
     }
