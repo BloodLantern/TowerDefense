@@ -1,5 +1,5 @@
 #include "tower.hpp"
-
+#include "network/network_interface.hpp"
 #include "globals.hpp"
 
 #define _USE_MATH_DEFINES
@@ -266,7 +266,7 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 
 		PlayField* pf = Globals::gGame->GetPlayField();
 		Point2 pos = GetTilePosition();
-		// TODO replace by original tile
+
 		for (int32_t x = 0; x < mWidth; x++)
 		{
 			for (int32_t y = 0; y < mHeight; y++)
@@ -274,6 +274,8 @@ void Tower::HandlePanel(const ImVec2& topLeft, const ImVec2& bottomRight)
 				pf->ResetClipdataTile(pos.x + x, pos.y + y);
 			}
 		}
+
+		Globals::gNetwork.client->NotifyTowerSold(pos);
 
 		toDelete = true;
 	}

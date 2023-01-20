@@ -197,6 +197,16 @@ void NetworkClient::ProcessTowerSold(net::Message<NetworkCommands>& msg)
 		if (tilePos == pos)
 		{
 			tower->toDelete = true;
+			PlayField* pf = Globals::gGame->GetPlayField();
+
+			for (int32_t x = 0; x < tower->GetWidth(); x++)
+			{
+				for (int32_t y = 0; y < tower->GetHeight(); y++)
+				{
+					pf->ResetClipdataTile(pos.x + x, pos.y + y);
+				}
+			}
+
 			break;
 		}
 	}
