@@ -41,7 +41,7 @@ void CannonTower::OnCustomUpgrade()
 			mCustomUpgradeCost = 200;
             break;
 		case DAMAGE_INCREASE:
-		    mDamage = 5;
+		    mDamage = 7;
 
 			mCustomUpgradeCost = 1500;
             break;
@@ -49,6 +49,7 @@ void CannonTower::OnCustomUpgrade()
 			delete mProjectileTemplate;
 			mProjectileTemplate = new CannonClusterProjectile(false);
 			mProjectileTemplate->SetOwner(this);
+			mProjectileTemplate->SetSpeed(30);
 			mProjectileTemplate->SetPierce(80);
 			mAttackSpeed -= 0.1f;
 
@@ -58,6 +59,7 @@ void CannonTower::OnCustomUpgrade()
 			delete mProjectileTemplate;
 			mProjectileTemplate = new CannonClusterProjectile(true);
 			mProjectileTemplate->SetOwner(this);
+			mProjectileTemplate->SetSpeed(30);
 			mProjectileTemplate->SetPierce(500);
 			mAttackSpeed -= 0.2f;
             break;
